@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_carlos112mo/features/auth/presentation/screens/signup_screen.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -51,7 +52,9 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   Text('Or ', style: theme.textTheme.bodySmall),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(SignupScreen());
+                    },
                     child: Text(
                       'create a new account',
                       style: theme.textTheme.bodySmall?.copyWith(
@@ -69,7 +72,8 @@ class LoginScreen extends StatelessWidget {
               TextField(
                 decoration: InputDecoration(
                   labelText: 'Email address',
-                  hintText: 'you@gmail.com',
+                  hintText: 'Your email address',
+
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

@@ -37,5 +37,8 @@ class AppTheme {
       primary: AppColors.primaryGreen,
       onPrimary: AppColors.primaryWhite,
     ).copyWith(surface: AppColors.primaryWhite),
+    inputDecorationTheme: InputDecorationTheme(
+      hintStyle: TextStyle(color: Colors.grey),
+    ),
   );
 }
