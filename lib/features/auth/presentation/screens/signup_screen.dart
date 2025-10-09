@@ -147,7 +147,10 @@ class _SignupScreenState extends State<SignupScreen> {
               // Registering as
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text('I am registering as a', style: theme.textTheme.bodyMedium),
+                child: Text(
+                  'I am registering as a',
+                  style: theme.textTheme.bodyMedium,
+                ),
               ),
               const SizedBox(height: 12),
 
@@ -156,18 +159,34 @@ class _SignupScreenState extends State<SignupScreen> {
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: () => _selectRole('player'),
-                      icon: Icon(Icons.person, color: _selectedRole == 'player' ? AppColors.primaryGreen : AppColors.textGrey),
-                      label: Text('Player', style: TextStyle(
-                        color: _selectedRole == 'player' ? AppColors.primaryGreen : AppColors.textBlack,
-                        fontWeight: FontWeight.w600,
-                      )),
+                      icon: Icon(
+                        Icons.person,
+                        color: _selectedRole == 'player'
+                            ? AppColors.primaryGreen
+                            : AppColors.textGrey,
+                      ),
+                      label: Text(
+                        'Player',
+                        style: TextStyle(
+                          color: _selectedRole == 'player'
+                              ? AppColors.primaryGreen
+                              : AppColors.textBlack,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(
-                          color: _selectedRole == 'player' ? AppColors.primaryGreen : AppColors.containerGrey,
+                          color: _selectedRole == 'player'
+                              ? AppColors.primaryGreen
+                              : AppColors.containerGrey,
                         ),
-                        backgroundColor: _selectedRole == 'player' ? AppColors.primaryLightGreen : Colors.transparent,
+                        backgroundColor: _selectedRole == 'player'
+                            ? AppColors.primaryLightGreen
+                            : Colors.transparent,
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                     ),
                   ),
@@ -175,18 +194,34 @@ class _SignupScreenState extends State<SignupScreen> {
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: () => _selectRole('owner'),
-                      icon: Icon(Icons.sports_tennis, color: _selectedRole == 'owner' ? AppColors.primaryGreen : AppColors.textGrey),
-                      label: Text('Field Owner', style: TextStyle(
-                        color: _selectedRole == 'owner' ? AppColors.primaryGreen : AppColors.textBlack,
-                        fontWeight: FontWeight.w600,
-                      )),
+                      icon: Icon(
+                        Icons.sports_tennis,
+                        color: _selectedRole == 'owner'
+                            ? AppColors.primaryGreen
+                            : AppColors.textGrey,
+                      ),
+                      label: Text(
+                        'Field Owner',
+                        style: TextStyle(
+                          color: _selectedRole == 'owner'
+                              ? AppColors.primaryGreen
+                              : AppColors.textBlack,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(
-                          color: _selectedRole == 'owner' ? AppColors.primaryGreen : AppColors.containerGrey,
+                          color: _selectedRole == 'owner'
+                              ? AppColors.primaryGreen
+                              : AppColors.containerGrey,
                         ),
-                        backgroundColor: _selectedRole == 'owner' ? AppColors.primaryLightGreen : Colors.transparent,
+                        backgroundColor: _selectedRole == 'owner'
+                            ? AppColors.primaryLightGreen
+                            : Colors.transparent,
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                     ),
                   ),
@@ -202,9 +237,14 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: ElevatedButton.icon(
                   onPressed: () {},
                   icon: const Icon(Icons.person_add, size: 20),
-                  label: const Text('Create account', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  label: const Text(
+                    'Create account',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
                   style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                 ),
               ),
@@ -217,7 +257,12 @@ class _SignupScreenState extends State<SignupScreen> {
                   const Expanded(child: Divider(thickness: 1)),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text('Or continue with', style: theme.textTheme.bodySmall?.copyWith(color: AppColors.textGrey)),
+                    child: Text(
+                      'Or continue with',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: AppColors.textGrey,
+                      ),
+                    ),
                   ),
                   const Expanded(child: Divider(thickness: 1)),
                 ],
