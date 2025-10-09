@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
               Center(
                 child: Column(
                   children: [
-                    Image.asset('assets/images/app_logo.png', height: 80),
+                    Image.asset('assets/images/sample_logo.png', height: 80),
                     const SizedBox(height: 8),
                     Text(
                       'App Name',
@@ -165,10 +165,7 @@ class LoginScreen extends StatelessWidget {
                 height: 48,
                 child: OutlinedButton.icon(
                   onPressed: () {},
-                  icon: Image.asset(
-                    'assets/images/google_logo.png',
-                    height: 22,
-                  ),
+                  icon: Image.asset('assets/images/google.png', height: 22),
                   label: const Text('Google'),
                   style: OutlinedButton.styleFrom(
                     shape: RoundedRectangleBorder(

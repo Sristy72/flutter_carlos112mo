@@ -12,12 +12,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // App initialize
-  await AppInitializer.initializeApp();
+  // await AppInitializer.initializeApp();
 
   // Stripe setup
-  Stripe.publishableKey = StripeKey.publishableKey;
-  Stripe.merchantIdentifier = 'merchant.com.yourapp';
-  await Stripe.instance.applySettings();
+  // Stripe.publishableKey = StripeKey.publishableKey;
+  // Stripe.merchantIdentifier = 'merchant.com.yourapp';
+  // await Stripe.instance.applySettings();
 
   // Inject BottomNavController globally
   // Get.put(BottomNavController());
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'GiveAndTake',
+      title: 'carlos112mo',
       theme: AppTheme.light,
       home: LoginScreen(),
     );

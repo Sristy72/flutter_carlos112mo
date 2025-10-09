@@ -7,7 +7,10 @@ class AppTheme {
   static ThemeData get light => ThemeData(
     scaffoldBackgroundColor: AppColors.primaryWhite,
     primaryColor: AppColors.primaryGreen,
-    textTheme: GoogleFonts.interTextTheme(),
+    textTheme: GoogleFonts.interTextTheme().apply(
+      bodyColor: AppColors.textBlack,
+      displayColor: AppColors.textBlack,
+    ),
     appBarTheme: AppBarTheme(
       iconTheme: IconThemeData(color: AppColors.primaryGreen),
       titleTextStyle: TextStyle(
@@ -16,8 +19,23 @@ class AppTheme {
         fontWeight: FontWeight.w600,
       ),
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primaryGreen,
+        foregroundColor: AppColors.primaryWhite,
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(foregroundColor: AppColors.primaryGreen),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      selectedItemColor: AppColors.primaryWhite,
+      unselectedItemColor: AppColors.primaryWhite.withOpacity(0.6),
+      backgroundColor: AppColors.primaryGreen,
+    ),
     colorScheme: ColorScheme.light(
       primary: AppColors.primaryGreen,
+      onPrimary: AppColors.primaryWhite,
     ).copyWith(surface: AppColors.primaryWhite),
   );
 }
