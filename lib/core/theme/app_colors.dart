@@ -5,6 +5,7 @@ class AppColors {
   static const Color primaryWhite = Color(0xFFFFFFFF);
   static const Color primaryLightGreen = Color(0xFFE6F5F3);
   static const Color containerGrey = Color(0xFFCCCCCC);
+  
 
   // * <--- Text Color --->
   static const Color textGrey = Color(0xFF636363);
@@ -21,4 +22,11 @@ class AppColors {
 
   // * <--- Home  --->
   static const Color homeHeadBackground = Color(0xFFFF5F6FF);
+
+  //Marjana
+  static const Color subText = Color(0xFF969696);
+  static const Color titleText = Color(0xFF404040);
+  static const Color reviewText = Color(0xFFF59E0B);
+  static const Color inputText = Color(0xFFCCCCCC);
+
 }

@@ -7,7 +7,7 @@ class AppTheme {
   static ThemeData get light => ThemeData(
     scaffoldBackgroundColor: AppColors.primaryWhite,
     primaryColor: AppColors.primaryGreen,
-    textTheme: GoogleFonts.interTextTheme().apply(
+    textTheme: GoogleFonts.robotoTextTheme().apply(
       bodyColor: AppColors.textBlack,
       displayColor: AppColors.textBlack,
     ),
