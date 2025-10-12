@@ -9,7 +9,6 @@ import 'core/init/app_initializer.dart';
 import 'core/theme/app_theme.dart';
 import 'features/Owner/presentation/screens/owner_home_screen.dart';
 import 'features/bookings/presentation/screens/bookings_screen.dart';
-import 'features/profile/presentation/screens/profile_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
