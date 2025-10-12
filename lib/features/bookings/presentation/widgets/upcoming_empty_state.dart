@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 class UpcomingEmptyState extends StatelessWidget {
   final VoidCallback onFindFields;
 
-  const UpcomingEmptyState({Key? key, required this.onFindFields})
-    : super(key: key);
+  const UpcomingEmptyState({super.key, required this.onFindFields});
 
   @override
   Widget build(BuildContext context) {

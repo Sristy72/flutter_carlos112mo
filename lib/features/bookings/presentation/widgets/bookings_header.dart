@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class BookingsHeader extends StatelessWidget {
   final String location;
   final String avatarUrl;
+  final String userName;
 
   const BookingsHeader({
-    Key? key,
+    super.key,
     required this.location,
     required this.avatarUrl,
-  }) : super(key: key);
+    required this.userName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,19 +18,30 @@ class BookingsHeader extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+          Row(
             children: [
               Text(
                 location,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
-              SizedBox(height: 2),
-              Icon(Icons.location_on, size: 16),
+              SizedBox(width: 4),
+              Image(
+                image: AssetImage("assets/images/location_icon.png"),
+                height: 15,
+                width: 15,
+              ),
             ],
           ),
-          CircleAvatar(radius: 18, backgroundImage: NetworkImage(avatarUrl)),
+          Row(
+            children: [
+              Text(userName, style: TextStyle(fontSize: 18)),
+              SizedBox(width: 8),
+              CircleAvatar(
+                radius: 17,
+                backgroundImage: NetworkImage(avatarUrl),
+              ),
+            ],
+          ),
         ],
       ),
       elevation: 0,

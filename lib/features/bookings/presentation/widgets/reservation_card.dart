@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_colors.dart';
+
 class ReservationCard extends StatelessWidget {
   final String title;
   final String date;
@@ -9,14 +11,14 @@ class ReservationCard extends StatelessWidget {
   final String status;
 
   const ReservationCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.date,
     required this.time,
     required this.address,
     required this.amount,
     required this.status,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +27,13 @@ class ReservationCard extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 16),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
+        color: AppColors.primaryWhite,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 10,
-            offset: Offset(0, 2),
+            color: Colors.grey.withValues(alpha: 0.4),
+            blurRadius: 4,
+            offset: Offset(0, 0),
           ),
         ],
       ),
@@ -71,7 +74,12 @@ class ReservationCard extends StatelessWidget {
           SizedBox(height: 16),
           Row(
             children: [
-              Icon(Icons.calendar_today_outlined, size: 20),
+              Image(
+                height: 16,
+                width: 16,
+                color: AppColors.textGrey,
+                image: AssetImage("assets/images/calender_icon.png"),
+              ),
               SizedBox(width: 8),
               Text(date, style: TextStyle(fontSize: 14)),
             ],
@@ -79,20 +87,39 @@ class ReservationCard extends StatelessWidget {
           SizedBox(height: 12),
           Row(
             children: [
-              Icon(Icons.access_time_outlined, size: 20),
+              Image(
+                height: 16,
+                width: 16,
+                color: AppColors.textGrey,
+                image: AssetImage("assets/images/time_icon.png"),
+              ),
               SizedBox(width: 8),
-              Text(time, style: TextStyle(fontSize: 14)),
+              Text(
+                time,
+                style: TextStyle(fontSize: 14, color: AppColors.textGrey),
+              ),
             ],
           ),
           SizedBox(height: 12),
           Row(
             children: [
-              Icon(Icons.location_on_outlined, size: 20),
+              Image(
+                height: 16,
+                width: 16,
+                color: AppColors.textGrey,
+                image: AssetImage("assets/images/location_icon.png"),
+              ),
               SizedBox(width: 8),
-              Expanded(child: Text(address, style: TextStyle(fontSize: 14))),
+              Expanded(
+                child: Text(
+                  address,
+                  style: TextStyle(fontSize: 14, color: AppColors.textGrey),
+                ),
+              ),
             ],
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 12),
+          Divider(thickness: 1, color: AppColors.textGrey),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

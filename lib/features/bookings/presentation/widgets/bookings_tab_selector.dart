@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_colors.dart';
+
 class BookingsTabSelector extends StatelessWidget {
   final bool isUpcomingSelected;
   final ValueChanged<bool> onChanged;
 
   const BookingsTabSelector({
-    Key? key,
+    super.key,
     required this.isUpcomingSelected,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +27,8 @@ class BookingsTabSelector extends StatelessWidget {
                   border: Border(
                     bottom: BorderSide(
                       color: isUpcomingSelected
-                          ? Colors.green
-                          : Colors.transparent,
+                          ? AppColors.primaryGreen
+                          : AppColors.textFieldLightGrey,
                       width: 2,
                     ),
                   ),
@@ -37,7 +39,9 @@ class BookingsTabSelector extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: isUpcomingSelected ? Colors.green : Colors.grey,
+                    color: isUpcomingSelected
+                        ? AppColors.primaryGreen
+                        : AppColors.textFieldLightGrey,
                   ),
                 ),
               ),
@@ -52,8 +56,8 @@ class BookingsTabSelector extends StatelessWidget {
                   border: Border(
                     bottom: BorderSide(
                       color: !isUpcomingSelected
-                          ? Colors.green
-                          : Colors.transparent,
+                          ? AppColors.primaryGreen
+                          : AppColors.textFieldLightGrey,
                       width: 2,
                     ),
                   ),
@@ -64,7 +68,9 @@ class BookingsTabSelector extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: !isUpcomingSelected ? Colors.green : Colors.grey,
+                    color: !isUpcomingSelected
+                        ? AppColors.primaryGreen
+                        : AppColors.textFieldLightGrey,
                   ),
                 ),
               ),
