@@ -7,6 +7,7 @@ import 'package:get/utils.dart';
 import 'core/common/constants/stripe_key.dart';
 import 'core/init/app_initializer.dart';
 import 'core/theme/app_theme.dart';
+import 'features/Owner/presentation/screens/owner_home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'carlos112mo',
       theme: AppTheme.light,
-      home: LoginScreen(),
+      home: HomeScreen(),
     );
   }
 }
