@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'carlos112mo',
       theme: AppTheme.light,
-      home: ProfileScreen(),
+      home: BookingsScreen(),
     );
   }
 }
