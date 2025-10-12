@@ -24,7 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Text('Arequipa, Peru'),
             CircleAvatar(
-              backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+              backgroundImage: AssetImage('assets/images/profile_sample.jpg'),
             ),
           ],
         ),
@@ -40,8 +40,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('My Profile'),
+                    Text(
+                      'My Profile',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        minimumSize: Size(80, 38),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
                       onPressed: () {
                         setState(() {
                           // Handle edit action
@@ -51,15 +64,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ],
                 ),
-                Card(
+
+                SizedBox(height: 18),
+
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4,
+                        offset: Offset(0, 0),
+                      ),
+                    ],
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
                         CircleAvatar(
                           radius: 50,
-                          backgroundImage: NetworkImage(
-                            'https://via.placeholder.com/150',
+                          backgroundImage: AssetImage(
+                            'assets/images/profile_sample.jpg',
                           ),
                         ),
                         Text('Profile completion'),
@@ -69,12 +96,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
+                            padding: const EdgeInsets.only(
+                              top: 24.0,
+                              bottom: 8.0,
+                            ),
                             child: Text('Position'),
                           ),
                         ),
                         DropdownButtonFormField<String>(
-                          value: _position,
+                          initialValue: _position,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8.0),
@@ -108,7 +138,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+                            padding: const EdgeInsets.only(
+                              top: 24.0,
+                              bottom: 8.0,
+                            ),
                             child: Text('Age'),
                           ),
                         ),
@@ -134,7 +167,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+                            padding: const EdgeInsets.only(
+                              top: 24.0,
+                              bottom: 8.0,
+                            ),
                             child: Text('Favorite Clubs'),
                           ),
                         ),
@@ -155,16 +191,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             });
                           },
                         ),
+
                         // Location label and field
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+                            padding: const EdgeInsets.only(
+                              top: 24.0,
+                              bottom: 8.0,
+                            ),
                             child: Text('Location'),
                           ),
                         ),
                         TextFormField(
                           decoration: InputDecoration(
+                            maintainHintSize: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8.0),
                             ),
@@ -174,30 +215,62 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           initialValue: 'Arequipa, Peru',
-                          enabled: false,
+                          enabled: true,
                         ),
+
+                        SizedBox(height: 24),
+
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
+                            minimumSize: Size(double.infinity, 48),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                12,
-                              ), // <-- radius here
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              // Handle save changes
+                              //* <--- Handle save changes --->
                             }
                           },
-                          child: Text('Save Changes'),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image(
+                                height: 15,
+                                width: 15,
+                                image: AssetImage(
+                                  "assets/images/save_changes_icon.png",
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'Save Changes',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                Card(
+
+                SizedBox(height: 24),
+
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4,
+                        offset: Offset(0, 0),
+                      ),
+                    ],
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -208,7 +281,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                            padding: const EdgeInsets.only(
+                              top: 8.0,
+                              bottom: 8.0,
+                            ),
                             child: Text('Current Password'),
                           ),
                         ),
@@ -233,7 +309,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+                            padding: const EdgeInsets.only(
+                              top: 12.0,
+                              bottom: 8.0,
+                            ),
                             child: Text('New Password'),
                           ),
                         ),
@@ -258,7 +337,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+                            padding: const EdgeInsets.only(
+                              top: 12.0,
+                              bottom: 8.0,
+                            ),
                             child: Text('Confirm New Password'),
                           ),
                         ),
@@ -279,7 +361,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             });
                           },
                         ),
+
+                        SizedBox(height: 24),
+
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            minimumSize: Size(double.infinity, 48),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
                           onPressed: () {
                             // Handle password update
                           },
@@ -289,17 +381,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 24),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    minimumSize: Size(double.infinity, 48),
                     backgroundColor: AppColors.logoutRed,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   onPressed: () {
                     // Handle logout
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [Icon(Icons.exit_to_app), Text('Logout')],
+                    children: [
+                      Image(
+                        height: 15,
+                        width: 15,
+                        image: AssetImage(
+                          "assets/images/logout_button_icon.png",
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Text('Logout'),
+                    ],
                   ),
                 ),
               ],
