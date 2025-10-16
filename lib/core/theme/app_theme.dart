@@ -12,7 +12,7 @@ class AppTheme {
       displayColor: AppColors.textBlack,
     ),
     appBarTheme: AppBarTheme(
-      iconTheme: IconThemeData(color: AppColors.primaryGreen),
+      iconTheme: IconThemeData(color: AppColors.primaryWhite),
       backgroundColor: AppColors.primaryGreen,
       titleTextStyle: TextStyle(
         fontSize: 24,
@@ -31,7 +31,7 @@ class AppTheme {
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       selectedItemColor: AppColors.primaryWhite,
-      unselectedItemColor: AppColors.primaryWhite.withOpacity(0.6),
+      unselectedItemColor: AppColors.primaryWhite.withValues(alpha: 0.6),
       backgroundColor: AppColors.primaryGreen,
     ),
     colorScheme: ColorScheme.light(
