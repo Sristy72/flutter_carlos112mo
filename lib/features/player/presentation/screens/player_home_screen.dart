@@ -29,13 +29,13 @@ class PlayerHomeScreen extends StatelessWidget {
               children: [
                 const Text(
                   "Mr. Raja",
-                  style: TextStyle(fontWeight: FontWeight.w600),
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                 ),
                 const SizedBox(width: 8),
                 const CircleAvatar(
                   radius: 18,
                   backgroundImage: AssetImage(
-                    'assets/images/profile.jpg',
+                    'assets/images/profile_sample.jpg',
                   ), // Replace with your asset
                 ),
               ],
