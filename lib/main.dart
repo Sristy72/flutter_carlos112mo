@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_carlos112mo/features/auth/presentation/screens/login_screen.dart';
+import 'package:flutter_carlos112mo/features/Owner/presentation/screens/owner_home_screen.dart';
+import 'package:flutter_carlos112mo/features/player/presentation/screens/player_fields_screen.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:get/utils.dart';
-
 import 'core/common/constants/stripe_key.dart';
 import 'core/init/app_initializer.dart';
 import 'core/theme/app_theme.dart';
-import 'features/Owner/presentation/screens/owner_home_screen.dart';
 import 'features/bookings/presentation/screens/bookings_screen.dart';
+import 'features/player/presentation/screens/player_home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'carlos112mo',
       theme: AppTheme.light,
-      home: BookingsScreen(),
+      home: PlayerFieldsScreen(),
     );
   }
 }

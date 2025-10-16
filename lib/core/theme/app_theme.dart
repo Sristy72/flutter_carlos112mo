@@ -31,7 +31,7 @@ class AppTheme {
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       selectedItemColor: AppColors.primaryWhite,
-      unselectedItemColor: AppColors.primaryWhite.withOpacity(0.6),
+      unselectedItemColor: AppColors.primaryWhite.withValues(alpha: 0.6),
       backgroundColor: AppColors.primaryGreen,
     ),
     colorScheme: ColorScheme.light(
