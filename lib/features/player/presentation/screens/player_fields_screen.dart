@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_carlos112mo/features/player/presentation/screens/message_screen.dart';
+import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../widgets/features_field_card.dart';
@@ -167,7 +169,7 @@ class PlayerFieldsScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
-          // Handle chat or message action
+          Get.to(const MessageScreen());
         },
         child: const Icon(Icons.chat_bubble, color: Colors.white),
       ),

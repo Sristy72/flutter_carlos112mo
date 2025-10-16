@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../widgets/features_field_card.dart';
+import 'player_fields_screen.dart';
 
 class PlayerHomeScreen extends StatelessWidget {
   const PlayerHomeScreen({super.key});
@@ -11,7 +13,6 @@ class PlayerHomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -136,16 +137,21 @@ class PlayerHomeScreen extends StatelessWidget {
               // Featured Fields Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
                     "Featured Fields",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    "View All",
-                    style: TextStyle(
-                      color: Colors.teal,
-                      fontWeight: FontWeight.w600,
+                  TextButton(
+                    onPressed: () {
+                      Get.to(const PlayerFieldsScreen());
+                    },
+                    child: Text(
+                      "View All",
+                      style: TextStyle(
+                        color: Colors.teal,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
