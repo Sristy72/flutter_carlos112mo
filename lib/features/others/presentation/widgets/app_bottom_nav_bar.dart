@@ -29,17 +29,17 @@ class AppBottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(Icons.home, 'Home', 0),
-          _buildNavItem(Icons.search, 'Fields', 1),
-          _buildNavItem(Icons.calendar_today, 'Bookings', 2),
-          _buildNavItem(Icons.group, 'Teams', 3),
-          _buildNavItem(Icons.chat_bubble_outline, 'Wall', 4),
+          _buildNavItem('assets/images/nav_home.png', 'Home', 0),
+          _buildNavItem('assets/images/nav_fields.png', 'Fields', 1),
+          _buildNavItem('assets/images/nav_bookings.png', 'Bookings', 2),
+          _buildNavItem('assets/images/nav_teams.png', 'Teams', 3),
+          _buildNavItem('assets/images/nav_wall.png', 'Wall', 4),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, int index) {
+  Widget _buildNavItem(String navImage, String label, int index) {
     final bool isSelected = index == currentIndex;
 
     return GestureDetector(
@@ -63,8 +63,10 @@ class AppBottomNavBar extends StatelessWidget {
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(
-                  icon,
+                child: Image(
+                  height: 24,
+                  width: 24,
+                  image: AssetImage(navImage),
                   color: isSelected
                       ? AppColors.primaryGreen
                       : AppColors.textGrey,

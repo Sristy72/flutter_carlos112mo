@@ -21,8 +21,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: BookingsHeader(
           location: 'Arequipa, Peru',
-          avatarUrl:
-              'https://via.placeholder.com/150', //! <--- Change Via API --->
+          //! <--- Change Via API --->
+          assetName: 'assets/images/profile_sample.jpg',
           userName: 'Mr. Raja',
         ),
       ),

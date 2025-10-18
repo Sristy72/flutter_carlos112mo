@@ -9,7 +9,6 @@ import 'core/common/constants/stripe_key.dart';
 import 'core/init/app_initializer.dart';
 import 'core/theme/app_theme.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
