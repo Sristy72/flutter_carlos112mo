@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_carlos112mo/features/bookings/presentation/screens/bookings_screen.dart';
+import 'package:flutter_carlos112mo/features/player/presentation/screens/my_teams_screen.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/screens/player_fields_screen.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/screens/player_home_screen.dart';
 import '../widgets/app_bottom_nav_bar.dart';
@@ -16,8 +18,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final List<Widget> _screens = const [
     Center(child: PlayerHomeScreen()),
     Center(child: PlayerFieldsScreen()),
-    Center(child: Text('Bookings Screen')),
-    Center(child: Text('Teams Screen')),
+    Center(child: BookingsScreen()),
+    Center(child: MyTeamsScreen()),
     Center(child: Text('Wall Screen')),
   ];
 
