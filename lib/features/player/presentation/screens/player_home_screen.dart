@@ -22,7 +22,7 @@ class PlayerHomeScreen extends StatelessWidget {
                 SizedBox(width: 6),
                 Text(
                   "Arequipa, Peru",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                 ),
               ],
             ),

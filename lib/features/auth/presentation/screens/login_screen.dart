@@ -113,7 +113,7 @@ class LoginScreen extends StatelessWidget {
                 height: 48,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    Get.to(() => DashboardScreen());
+                    Get.offAll(() => DashboardScreen());
                   },
                   icon: const Icon(Icons.login, size: 18),
                   label: const Text('Sign in'),
