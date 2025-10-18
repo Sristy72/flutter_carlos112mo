@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class BookingsHeader extends StatelessWidget {
   final String location;
-  final String avatarUrl;
+  final String assetName;
   final String userName;
 
   const BookingsHeader({
     super.key,
     required this.location,
-    required this.avatarUrl,
+    required this.assetName,
     required this.userName,
   });
 
@@ -38,7 +38,7 @@ class BookingsHeader extends StatelessWidget {
               SizedBox(width: 8),
               CircleAvatar(
                 radius: 17,
-                backgroundImage: NetworkImage(avatarUrl),
+                backgroundImage: AssetImage(assetName),
               ),
             ],
           ),

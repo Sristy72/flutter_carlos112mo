@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/features/Owner/presentation/screens/owner_home_screen.dart';
 import 'package:flutter_carlos112mo/features/auth/presentation/screens/signup_screen.dart';
+import 'package:flutter_carlos112mo/features/others/presentation/screens/dashboard_screen.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/screens/player_home_screen.dart';
 import 'package:get/get.dart';
 
@@ -112,7 +113,7 @@ class LoginScreen extends StatelessWidget {
                 height: 48,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    Get.to(() => PlayerHomeScreen());
+                    Get.offAll(() => DashboardScreen());
                   },
                   icon: const Icon(Icons.login, size: 18),
                   label: const Text('Sign in'),
