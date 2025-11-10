@@ -6,9 +6,10 @@ import '../../../../core/theme/app_colors.dart';
 import '../controllers/field_controller.dart';
 import '../widget/feature_field_widget.dart';
 import '../widget/info_card_widget.dart';
+import 'owner_dashboard.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class OwnerHomeScreen extends StatelessWidget {
+  const OwnerHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +17,49 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
+        appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: AppColors.primaryGreen, // Teal-green header
+        elevation: 0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: const [
+                Icon(Icons.location_on_outlined, color: Colors.white, size: 18),
+                SizedBox(width: 4),
+                Text(
+                  'Arequipa, Peru',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const Text(
+                  'Kejim bb',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                const CircleAvatar(
+                  radius: 16,
+                  // backgroundImage: AssetImage(
+                  //   'assets/images/profile_photo.png',
+                  // ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -23,35 +67,37 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: const [
-                      SizedBox(width: 6),
-                      Text(
-                        "Arequipa, Peru",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Icon(Icons.location_on, color: Colors.teal),
-                    ],
-                  ),
-                  const CircleAvatar(
-                    // backgroundImage: NetworkImage(
-                    //   "https://randomuser.me/api/portraits/men/32.jpg",
-                    // ),
-                    radius: 18,
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Row(
+              //       children: const [
+              //         SizedBox(width: 6),
+              //         Text(
+              //           "Arequipa, Peru",
+              //           style: TextStyle(
+              //             fontWeight: FontWeight.w600,
+              //             fontSize: 16,
+              //           ),
+              //         ),
+              //         Icon(Icons.location_on, color: Colors.teal),
+              //       ],
+              //     ),
+              //     const CircleAvatar(
+              //       // backgroundImage: NetworkImage(
+              //       //   "https://randomuser.me/api/portraits/men/32.jpg",
+              //       // ),
+              //       radius: 18,
+              //     ),
+              //   ],
+              // ),
               const SizedBox(height: 20),
 
               // Main card
               Container(
                 padding: const EdgeInsets.all(16),
+                height: 254,
+                width: double.infinity,
                 decoration: BoxDecoration(
                   color: AppColors.primaryGreen,
                   borderRadius: BorderRadius.circular(12),
@@ -76,7 +122,7 @@ class HomeScreen extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 40),
                     SizedBox(
                       height: 48,
                       width: 311,
@@ -192,9 +238,12 @@ class HomeScreen extends StatelessWidget {
         onTap: (index) {
           // Optional navigation logic
           if (index == 0) {
-            Get.toNamed('/home');
+            Get.to(() => const OwnerHomeScreen());
+            
+            // Get.toNamed('/home');
           } else if (index == 1) {
-            Get.toNamed('/dashboard');
+            Get.to(() => const OwnerDashboardScreen());
+            // Get.toNamed('/dashboard');
           } else if (index == 2) {
             Get.toNamed('/myFields');
           } else if (index == 3) {
