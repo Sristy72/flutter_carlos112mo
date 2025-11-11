@@ -6,6 +6,8 @@ import '../../../../core/theme/app_colors.dart';
 import '../controllers/field_controller.dart';
 import '../widget/feature_field_widget.dart';
 import '../widget/info_card_widget.dart';
+import 'add_field_screen.dart';
+import 'dashboard_edit_field.dart';
 import 'owner_dashboard.dart';
 
 class OwnerHomeScreen extends StatelessWidget {
@@ -17,7 +19,7 @@ class OwnerHomeScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
-        appBar: AppBar(
+      appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: AppColors.primaryGreen, // Teal-green header
         elevation: 0,
@@ -49,11 +51,10 @@ class OwnerHomeScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 6),
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 16,
-                  // backgroundImage: AssetImage(
-                  //   'assets/images/profile_photo.png',
-                  // ),
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.person, color: Colors.grey, size: 20),
                 ),
               ],
             ),
@@ -66,31 +67,6 @@ class OwnerHomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     Row(
-              //       children: const [
-              //         SizedBox(width: 6),
-              //         Text(
-              //           "Arequipa, Peru",
-              //           style: TextStyle(
-              //             fontWeight: FontWeight.w600,
-              //             fontSize: 16,
-              //           ),
-              //         ),
-              //         Icon(Icons.location_on, color: Colors.teal),
-              //       ],
-              //     ),
-              //     const CircleAvatar(
-              //       // backgroundImage: NetworkImage(
-              //       //   "https://randomuser.me/api/portraits/men/32.jpg",
-              //       // ),
-              //       radius: 18,
-              //     ),
-              //   ],
-              // ),
               const SizedBox(height: 20),
 
               // Main card
@@ -239,13 +215,14 @@ class OwnerHomeScreen extends StatelessWidget {
           // Optional navigation logic
           if (index == 0) {
             Get.to(() => const OwnerHomeScreen());
-            
+
             // Get.toNamed('/home');
           } else if (index == 1) {
-            Get.to(() => const OwnerDashboardScreen());
+            Get.to(() => const OwnerDashboardEditScreen());
             // Get.toNamed('/dashboard');
           } else if (index == 2) {
-            Get.toNamed('/myFields');
+            // Get.toNamed('/myFields');
+            Get.to(() => AddFieldScreen());
           } else if (index == 3) {
             Get.toNamed('/profile');
           }

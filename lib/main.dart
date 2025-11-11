@@ -9,6 +9,7 @@ import 'core/common/constants/stripe_key.dart';
 import 'core/init/app_initializer.dart';
 import 'core/theme/app_theme.dart';
 import 'features/Owner/presentation/screens/add_field_screen.dart';
+import 'features/Owner/presentation/screens/client_booking_screen.dart';
 import 'features/Owner/presentation/screens/owner_dashboard.dart';
 
 void main() async {
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
       title: 'carlos112mo',
       theme: AppTheme.light,
       // home: LoginScreen(),
-      home : AddFieldScreen(),
+      home : LoginScreen(),
     );
   }
 }

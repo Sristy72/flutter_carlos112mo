@@ -28,5 +28,6 @@ class AppColors {
   static const Color reviewText = Color(0xFFF59E0B);
   static const Color inputText = Color(0xFFCCCCCC);
   static const Color iconBg = Color(0xFFE6F5F3);
+  static const Color bgGreen = Color(0xFFE6F5F3);
   
 }

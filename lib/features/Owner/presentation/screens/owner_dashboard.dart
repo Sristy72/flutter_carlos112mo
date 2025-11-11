@@ -44,11 +44,10 @@ class OwnerDashboardScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 6),
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 16,
-                  // backgroundImage: AssetImage(
-                  //   'assets/images/profile_photo.png',
-                  // ),
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.person, color: Colors.grey, size: 20),
                 ),
               ],
             ),
@@ -146,7 +145,7 @@ class OwnerDashboardScreen extends StatelessWidget {
             Get.to(() => const OwnerDashboardScreen());
             // Get.toNamed('/dashboard');
           } else if (index == 2) {
-            Get.toNamed('/myFields');
+            // Get.toNamed('/myFields');
           } else if (index == 3) {
             Get.toNamed('/profile');
           }
