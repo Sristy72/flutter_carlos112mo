@@ -5,6 +5,7 @@ class AppColors {
   static const Color primaryWhite = Color(0xFFFFFFFF);
   static const Color primaryLightGreen = Color(0xFFE6F5F3);
   static const Color containerGrey = Color(0xFFCCCCCC);
+  static const Color primaryBlack = Color(0xFF404040);
 
   // * <--- Text Color --->
   static const Color textGrey = Color(0xFF636363);
@@ -26,4 +27,7 @@ class AppColors {
   static const Color titleText = Color(0xFF404040);
   static const Color reviewText = Color(0xFFF59E0B);
   static const Color inputText = Color(0xFFCCCCCC);
+  static const Color iconBg = Color(0xFFE6F5F3);
+  static const Color bgGreen = Color(0xFFE6F5F3);
+  
 }

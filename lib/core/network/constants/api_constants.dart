@@ -1,6 +1,6 @@
 class ApiConstants {
   /// [Base Configuration]
-  static const String baseDomain = 'WILL BE UPDATED';
+  static const String baseDomain = 'http://10.10.5.53:8001';
   static const String baseUrl = '$baseDomain/api/v1';
 
 
@@ -41,7 +41,7 @@ class RecruiterAccountApi {
 
 /// [Authentication Endpoints]
 class AuthEndpoints {
-  static const String _base = '${ApiConstants.baseUrl}/user';
+  static const String _base = '${ApiConstants.baseUrl}/auth';
 
   final String login = '$_base/login';
   final String register = '$_base/register';
