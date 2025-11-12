@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 class RegisterResponseModel {
+  final String id;
   final String name;
   final String email;
   final String password;
@@ -13,7 +12,6 @@ class RegisterResponseModel {
   final String refreshToken;
   final double averageRating;
   final int ratingCount;
-  final String id;
   final DateTime lastActive;
   final DateTime dob;
   final List<dynamic> ratings;
@@ -23,6 +21,7 @@ class RegisterResponseModel {
   final String accessToken;
 
   RegisterResponseModel({
+    required this.id,
     required this.name,
     required this.email,
     required this.password,
@@ -35,7 +34,6 @@ class RegisterResponseModel {
     required this.refreshToken,
     required this.averageRating,
     required this.ratingCount,
-    required this.id,
     required this.lastActive,
     required this.dob,
     required this.ratings,
@@ -47,6 +45,7 @@ class RegisterResponseModel {
 
   factory RegisterResponseModel.fromJson(Map<String, dynamic> json) {
     return RegisterResponseModel(
+      id: json['_id'] ?? '',
       name: json['name'] ?? '',
       email: json['email'] ?? '',
       password: json['password'] ?? '',
@@ -54,22 +53,16 @@ class RegisterResponseModel {
       role: json['role'] ?? '',
       location: Location.fromJson(json['location'] ?? {}),
       status: json['status'] ?? '',
-      verificationInfo:
-          VerificationInfo.fromJson(json['verificationInfo'] ?? {}),
+      verificationInfo: VerificationInfo.fromJson(json['verificationInfo'] ?? {}),
       passwordResetToken: json['password_reset_token'] ?? '',
       refreshToken: json['refreshToken'] ?? '',
       averageRating: (json['averageRating'] ?? 0).toDouble(),
       ratingCount: json['ratingCount'] ?? 0,
-      id: json['_id'] ?? '',
-      lastActive: DateTime.tryParse(json['lastActive'] ?? '') ??
-          DateTime.fromMillisecondsSinceEpoch(0),
-      dob: DateTime.tryParse(json['dob'] ?? '') ??
-          DateTime.fromMillisecondsSinceEpoch(0),
+      lastActive: DateTime.parse(json['lastActive'] ?? DateTime.now().toIso8601String()),
+      dob: DateTime.parse(json['dob'] ?? DateTime.now().toIso8601String()),
       ratings: List<dynamic>.from(json['ratings'] ?? []),
-      createdAt: DateTime.tryParse(json['createdAt'] ?? '') ??
-          DateTime.fromMillisecondsSinceEpoch(0),
-      updatedAt: DateTime.tryParse(json['updatedAt'] ?? '') ??
-          DateTime.fromMillisecondsSinceEpoch(0),
+      createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
+      updatedAt: DateTime.parse(json['updatedAt'] ?? DateTime.now().toIso8601String()),
       v: json['__v'] ?? 0,
       accessToken: json['accessToken'] ?? '',
     );
@@ -77,6 +70,7 @@ class RegisterResponseModel {
 
   Map<String, dynamic> toJson() {
     return {
+      '_id': id,
       'name': name,
       'email': email,
       'password': password,
@@ -89,7 +83,6 @@ class RegisterResponseModel {
       'refreshToken': refreshToken,
       'averageRating': averageRating,
       'ratingCount': ratingCount,
-      '_id': id,
       'lastActive': lastActive.toIso8601String(),
       'dob': dob.toIso8601String(),
       'ratings': ratings,
@@ -99,20 +92,13 @@ class RegisterResponseModel {
       'accessToken': accessToken,
     };
   }
-
-  static RegisterResponseModel fromJsonString(String jsonString) =>
-      RegisterResponseModel.fromJson(json.decode(jsonString));
-  String toJsonString() => json.encode(toJson());
 }
 
 class Avatar {
   final String publicId;
   final String url;
 
-  Avatar({
-    required this.publicId,
-    required this.url,
-  });
+  Avatar({required this.publicId, required this.url});
 
   factory Avatar.fromJson(Map<String, dynamic> json) {
     return Avatar(
@@ -121,45 +107,42 @@ class Avatar {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'public_id': publicId,
-        'url': url,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'public_id': publicId,
+      'url': url,
+    };
+  }
 }
 
 class Location {
   final String type;
   final List<double> coordinates;
 
-  Location({
-    required this.type,
-    required this.coordinates,
-  });
+  Location({required this.type, required this.coordinates});
 
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
       type: json['type'] ?? '',
-      coordinates: (json['coordinates'] as List?)
-              ?.map((e) => (e as num).toDouble())
-              .toList() ??
-          [],
+      coordinates: (json['coordinates'] != null)
+          ? List<double>.from(json['coordinates'].map((x) => (x as num).toDouble()))
+          : [],
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'type': type,
-        'coordinates': coordinates,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'coordinates': coordinates,
+    };
+  }
 }
 
 class VerificationInfo {
   final bool verified;
   final String token;
 
-  VerificationInfo({
-    required this.verified,
-    required this.token,
-  });
+  VerificationInfo({required this.verified, required this.token});
 
   factory VerificationInfo.fromJson(Map<String, dynamic> json) {
     return VerificationInfo(
@@ -168,8 +151,10 @@ class VerificationInfo {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'verified': verified,
-        'token': token,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'verified': verified,
+      'token': token,
+    };
+  }
 }

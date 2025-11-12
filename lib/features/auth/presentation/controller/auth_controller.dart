@@ -1,3 +1,4 @@
+import 'package:flutter_carlos112mo/features/Owner/presentation/screens/owner_home_screen.dart';
 import 'package:flutter_carlos112mo/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_carlos112mo/features/others/presentation/screens/dashboard_screen.dart';
 import 'package:get/get.dart';
@@ -49,19 +50,35 @@ class AuthController extends BaseController {
       },
       (success) async {
         final user = success.data.user;
-        await _authStorageService.storeAuthData(
-          accessToken: success.data.accessToken!,
-          refreshToken: success.data.refreshToken!,
-          userId: success.data.user!.id!,
-        );
-        Get.to(() => DashboardScreen());
+        if (user.role == 'user') {
+          await _authStorageService.storeAuthData(
+            accessToken: success.data.accessToken,
+            refreshToken: success.data.refreshToken,
+            userId: success.data.user.id,
+          );
+
+          Get.to(() => DashboardScreen());
+        } else if (user.role == 'owner') {
+          Get.offAll(() => OwnerHomeScreen());
+        }
+        // final user = success.data.user;
+        // await _authStorageService.storeAuthData(
+        //   accessToken: success.data.accessToken!,
+        //   refreshToken: success.data.refreshToken!,
+        //   userId: success.data.user!.id!,
+        // );
+        // Get.to(() => DashboardScreen());
         setLoading(false);
       },
     );
   }
 
-
-   Future<void> register(String name, String email, String password) async {
+  Future<void> register(
+    String name,
+    String email,
+    String password,
+    String role,
+  ) async {
     setLoading(true);
     setError('');
 
@@ -69,6 +86,7 @@ class AuthController extends BaseController {
       name: name,
       email: email,
       password: password,
+      role: role,
     );
 
     final result = await _authRepository.register(request);

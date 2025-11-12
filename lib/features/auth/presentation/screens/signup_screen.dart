@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../controller/auth_controller.dart';
+import 'login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -12,27 +13,29 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  String _selectedRole = 'player';
+  String _selectedRole = '';
   bool _acceptTerms = false;
 
-
-   final _authController = Get.find<AuthController>();
+  final _authController = Get.find<AuthController>();
 
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
   final FocusNode _nameFocus = FocusNode();
 
-  final TextEditingController _nameController =
-  TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   final ValueNotifier<bool> _obscurePassword = ValueNotifier<bool>(true);
 
-  void _submit(){
-    _authController.register(_nameController.text.toString(), _emailController.text, _passwordController.text);
+  void _submit() {
+    _authController.register(
+      _nameController.text.toString(),
+      _emailController.text,
+      _passwordController.text,
+      _selectedRole,
+    );
   }
-
 
   void _selectRole(String role) {
     setState(() => _selectedRole = role);
@@ -86,7 +89,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 children: [
                   Text('Or ', style: theme.textTheme.bodySmall),
                   GestureDetector(
-                    onTap: () => Navigator.of(context).pop(),
+                    onTap: () {
+                      Get.to(()=> LoginScreen());
+                    },
                     child: Text(
                       'sign in to your existing account',
                       style: theme.textTheme.bodySmall?.copyWith(
@@ -182,17 +187,17 @@ class _SignupScreenState extends State<SignupScreen> {
                 children: [
                   Expanded(
                     child: OutlinedButton.icon(
-                      onPressed: () => _selectRole('player'),
+                      onPressed: () => _selectRole('user'),
                       icon: Icon(
                         Icons.person,
-                        color: _selectedRole == 'player'
+                        color: _selectedRole == 'user'
                             ? AppColors.primaryGreen
                             : AppColors.textGrey,
                       ),
                       label: Text(
                         'Player',
                         style: TextStyle(
-                          color: _selectedRole == 'player'
+                          color: _selectedRole == 'user'
                               ? AppColors.primaryGreen
                               : AppColors.textBlack,
                           fontWeight: FontWeight.w600,
@@ -200,11 +205,11 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(
-                          color: _selectedRole == 'player'
+                          color: _selectedRole == 'user'
                               ? AppColors.primaryGreen
                               : AppColors.containerGrey,
                         ),
-                        backgroundColor: _selectedRole == 'player'
+                        backgroundColor: _selectedRole == 'user'
                             ? AppColors.primaryLightGreen
                             : Colors.transparent,
                         padding: const EdgeInsets.symmetric(vertical: 14),
@@ -260,8 +265,8 @@ class _SignupScreenState extends State<SignupScreen> {
                 height: 52,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                  _submit();
-                },
+                    _submit();
+                  },
                   icon: const Icon(Icons.person_add, size: 20),
                   label: const Text(
                     'Create account',
