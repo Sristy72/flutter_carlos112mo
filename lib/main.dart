@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/features/Owner/presentation/screens/owner_home_screen.dart';
 import 'package:flutter_carlos112mo/features/auth/presentation/screens/login_screen.dart';
+import 'package:flutter_carlos112mo/features/auth/presentation/screens/signup_screen.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/screens/player_fields_screen.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
@@ -11,23 +12,30 @@ import 'core/theme/app_theme.dart';
 import 'features/Owner/presentation/screens/add_field_screen.dart';
 import 'features/Owner/presentation/screens/client_booking_screen.dart';
 import 'features/Owner/presentation/screens/owner_dashboard.dart';
+import 'features/player/presentation/screens/find_fields_screen.dart';
+
+
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // App initialize
-  // await AppInitializer.initializeApp();
-
-  // Stripe setup
-  // Stripe.publishableKey = StripeKey.publishableKey;
-  // Stripe.merchantIdentifier = 'merchant.com.yourapp';
-  // await Stripe.instance.applySettings();
-
-  // Inject BottomNavController globally
-  // Get.put(BottomNavController());
-
-  runApp(const MyApp());
+  await AppInitializer.initializeApp();
+  runApp(MyApp());
 }
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+
+//   // App initialize
+//   // await AppInitializer.initializeApp();
+
+//   // Stripe setup
+//   // Stripe.publishableKey = StripeKey.publishableKey;
+//   // Stripe.merchantIdentifier = 'merchant.com.yourapp';
+//   // await Stripe.instance.applySettings();
+
+//   // Inject BottomNavController globally
+//   // Get.put(BottomNavController());
+
+//   runApp(const MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

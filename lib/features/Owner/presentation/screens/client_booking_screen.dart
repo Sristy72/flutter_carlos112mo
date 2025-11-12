@@ -64,7 +64,7 @@ class BookingPageScreen extends StatelessWidget {
               onTap: () => Get.back(),
               child: Row(
                 children: const [
-                  Icon(Icons.arrow_back, color: Colors.black),
+                  Icon(Icons.arrow_back_ios_new, color: Colors.black),
                   SizedBox(width: 6),
                   Text(
                     "Back",
@@ -74,11 +74,11 @@ class BookingPageScreen extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 14),
 
           // 🔖 Tabs
           _buildTabBar(),
-          const SizedBox(height: 24),
+          const SizedBox(height: 14),
 
           // 📋 Booking List
           Expanded(
