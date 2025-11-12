@@ -1,3 +1,4 @@
+import 'package:flutter_carlos112mo/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_carlos112mo/features/others/presentation/screens/dashboard_screen.dart';
 import 'package:get/get.dart';
 
@@ -7,6 +8,7 @@ import '../../../../core/network/services/secure_store_services.dart';
 import '../../../../core/services/get_user_profile_service.dart';
 import '../../../../core/utils/debug_print.dart';
 import '../../data/model/auth_request_model.dart';
+import '../../data/model/register_request_model.dart';
 import '../../domain/auth_repo.dart';
 
 class AuthController extends BaseController {
@@ -53,6 +55,38 @@ class AuthController extends BaseController {
           userId: success.data.user!.id!,
         );
         Get.to(() => DashboardScreen());
+        setLoading(false);
+      },
+    );
+  }
+
+
+   Future<void> register(String name, String email, String password) async {
+    setLoading(true);
+    setError('');
+
+    final request = RegisterRequestModel(
+      name: name,
+      email: email,
+      password: password,
+    );
+
+    final result = await _authRepository.register(request);
+
+    result.fold(
+      (fail) {
+        setError(fail.message);
+        DPrint.log("Register success result : ${fail.message}");
+        setLoading(false);
+      },
+      (success) async {
+        DPrint.log("Register success result : ${success.data.name}");
+        await _authStorageService.storeAuthData(
+          accessToken: success.data.accessToken,
+          refreshToken: success.data.refreshToken,
+          userId: success.data.id,
+        );
+        Get.to(() => LoginScreen());
         setLoading(false);
       },
     );

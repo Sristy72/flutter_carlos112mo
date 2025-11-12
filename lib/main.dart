@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
       title: 'carlos112mo',
       theme: AppTheme.light,
       // home: LoginScreen(),
-      home : LoginScreen(),
+      home : SignupScreen(),
     );
   }
 }

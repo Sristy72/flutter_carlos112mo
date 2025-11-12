@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../controller/auth_controller.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -12,6 +14,25 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   String _selectedRole = 'player';
   bool _acceptTerms = false;
+
+
+   final _authController = Get.find<AuthController>();
+
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
+  final FocusNode _nameFocus = FocusNode();
+
+  final TextEditingController _nameController =
+  TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  final ValueNotifier<bool> _obscurePassword = ValueNotifier<bool>(true);
+
+  void _submit(){
+    _authController.register(_nameController.text.toString(), _emailController.text, _passwordController.text);
+  }
+
 
   void _selectRole(String role) {
     setState(() => _selectedRole = role);
@@ -86,6 +107,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               const SizedBox(height: 8),
               TextField(
+                controller: _nameController,
                 decoration: InputDecoration(
                   hintText: 'John Doe',
                   border: OutlineInputBorder(
@@ -107,6 +129,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               const SizedBox(height: 8),
               TextField(
+                controller: _emailController,
                 decoration: InputDecoration(
                   hintText: 'you@gmail.com',
                   border: OutlineInputBorder(
@@ -129,6 +152,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               const SizedBox(height: 8),
               TextField(
+                controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: '••••••••',
@@ -235,7 +259,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                  _submit();
+                },
                   icon: const Icon(Icons.person_add, size: 20),
                   label: const Text(
                     'Create account',
