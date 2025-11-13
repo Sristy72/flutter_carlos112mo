@@ -4,8 +4,12 @@ import '../../../../core/network/network_result.dart';
 import '../../domain/auth_repo.dart';
 import '../model/auth_request_model.dart';
 import '../model/auth_response_model.dart';
+import '../model/forget_password_request_model.dart';
+import '../model/forget_password_response_model.dart';
 import '../model/register_request_model.dart';
 import '../model/register_response_model.dart';
+import '../model/verify_otp_req_model.dart';
+import '../model/verify_otp_response_model.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final ApiClient _apiClient;
@@ -30,4 +34,28 @@ class AuthRepositoryImpl implements AuthRepository {
       fromJsonT: (json) => RegisterResponseModel.fromJson(json),
     );
   }
+
+  
+  @override
+  NetworkResult<ForgotPassResponseModel> forgotPassword(
+    ForgotPassRequestModel request,
+  ) {
+    return _apiClient.post(
+      ApiConstants.auth.resetPass,
+      data: request.toJson(),
+      fromJsonT: (json) => ForgotPassResponseModel.fromJson(json),
+    );
+  }
+
+    @override
+  NetworkResult<VerifyMailOtpResponseModel> verifyOtp(
+    VerifyMailOtpRequest request,
+  ) {
+    return _apiClient.post(
+      ApiConstants.auth.verify,
+      data: request.toJson(),
+      fromJsonT: (json) => VerifyMailOtpResponseModel.fromJson(json),
+    );
+  }
+
 }

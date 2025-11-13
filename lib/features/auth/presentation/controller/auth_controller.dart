@@ -9,8 +9,11 @@ import '../../../../core/network/services/secure_store_services.dart';
 import '../../../../core/services/get_user_profile_service.dart';
 import '../../../../core/utils/debug_print.dart';
 import '../../data/model/auth_request_model.dart';
+import '../../data/model/forget_password_request_model.dart';
 import '../../data/model/register_request_model.dart';
+import '../../data/model/verify_otp_req_model.dart';
 import '../../domain/auth_repo.dart';
+import '../screens/verify_otp_screen.dart';
 
 class AuthController extends BaseController {
   final AuthRepository _authRepository;
@@ -105,6 +108,49 @@ class AuthController extends BaseController {
           userId: success.data.id,
         );
         Get.to(() => LoginScreen());
+        setLoading(false);
+      },
+    );
+  }
+
+  Future forgotPassword(String email) async {
+    setLoading(true);
+    setError('');
+
+    final request = ForgotPassRequestModel.fromJson({'email': email});
+    final result = await _authRepository.forgotPassword(request);
+
+    result.fold(
+      (fail) {
+        setError(fail.message);
+        DPrint.log("reset pass success result : ${fail.message}");
+        setLoading(false);
+      },
+      (success) {
+        DPrint.log("reset pass success result : ${success.data.message}");
+        Get.offAll(() => OtpVerificationScreen(email: email));
+        setLoading(false);
+      },
+    );
+  }
+
+  
+  Future verifyOTP(String email, String otp) async {
+    setLoading(true);
+    setError("");
+
+    final request = VerifyMailOtpRequest(email: email, otp: otp);
+    final result = await _authRepository.verifyOtp(request);
+
+    result.fold(
+      (fail) {
+        setError(fail.message);
+        DPrint.log("verify otp success result : ${fail.message}");
+        setLoading(false);
+      },
+      (success) {
+        DPrint.log("verify otp success result : ${success.data.message}");
+        // Get.to(SetNewPasswordScreen(email: email, otp: otp));
         setLoading(false);
       },
     );
