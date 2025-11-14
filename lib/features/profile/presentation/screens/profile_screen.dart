@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/core/theme/app_colors.dart';
+import 'package:flutter_carlos112mo/features/profile/presentation/screens/notification_screen.dart';
 import 'package:flutter_carlos112mo/features/profile/presentation/widgets/personal_info_card.dart';
 import 'package:flutter_carlos112mo/features/profile/presentation/widgets/change_password_card.dart';
 import 'package:flutter_carlos112mo/features/profile/presentation/widgets/logout_button.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart' show Get;
+
+import '../../../../core/common/widgets/app_scaffold.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -20,7 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -51,13 +56,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 24),
+                Row(
+                  children: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: Size(0, 0),
+                      ),
+                        onPressed: (){}, child: Row(
+                      children: [
+                        Icon(Icons.arrow_back_ios_new, size: 20, color: Colors.black,),
+                        const SizedBox(width: 5),
+                        Text(
+                          'Back',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black
+
+                          ),
+                        ),
+                      ],
+                    )),
+                    Spacer(),
+                    GestureDetector(
+                      onTap:() {
+                        Get.to(() => NotificationsScreen());
+                      },
+                      child: Image.asset(
+                        'assets/images/notification.png',
+                        height: 40,
+                        width: 40,
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 24,),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -76,17 +116,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          //* <--- Handle edit action --->
-                        });
-                      },
+                      onPressed: () {},
                       child: Text('Edit'),
                     ),
                   ],
                 ),
 
-                SizedBox(height: 18),
+                SizedBox(height: 24),
 
                 PersonalInfoCard(
                   formKey: _formKey,
@@ -118,11 +154,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // Handle logout
                   },
                 ),
+                const SizedBox(height: 24,)
               ],
             ),
           ),
         ),
-      ),
     );
   }
 }

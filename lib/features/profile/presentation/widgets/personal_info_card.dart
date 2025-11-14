@@ -39,16 +39,87 @@ class PersonalInfoCard extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage('assets/images/profile_sample.jpg'),
-            ),
-            SizedBox(height: 8),
-            Text('Profile completion'),
-            Text('75%'),
-            Text('Mr. Raja'),
+            Row(
+              children: [
+                Spacer(),
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: AssetImage('assets/images/profile_sample.jpg'),
+                ),
+                SizedBox(width: 8),
 
-            // Position label and field
+                Column(
+                  children: [
+                    Text('Profile completion',),
+                    SizedBox(height: 8),
+                    Container(
+                      width: 60,
+                      height: 38,
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryGreen,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '75%',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            Text('Mr. Raja', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 24.0, bottom: 8.0),
+                child: Text('Full Name'),
+              ),
+            ),
+            TextFormField(
+              initialValue: 'Mr. Raja',
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 14,
+                ),
+              ),
+              onChanged: onAgeChanged,
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 24.0, bottom: 8.0),
+                child: Text('Phone Number'),
+              ),
+            ),
+            TextFormField(
+              initialValue: "022 22 13 45",
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 14,
+                ),
+              ),
+              keyboardType: TextInputType.number,
+              onChanged: onAgeChanged,
+            ),
+            
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
@@ -70,7 +141,7 @@ class PersonalInfoCard extends StatelessWidget {
               items: ['Goalkeeper', 'Defender', 'Midfielder', 'Forward']
                   .map(
                     (label) =>
-                        DropdownMenuItem(child: Text(label), value: label),
+                        DropdownMenuItem(value: label, child: Text(label)),
                   )
                   .toList(),
               onChanged: (value) {
@@ -78,7 +149,6 @@ class PersonalInfoCard extends StatelessWidget {
               },
             ),
 
-            // Age label and field
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
@@ -133,6 +203,7 @@ class PersonalInfoCard extends StatelessWidget {
             ),
             TextFormField(
               decoration: InputDecoration(
+                suffixIcon: Icon(Icons.my_location),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
@@ -142,7 +213,7 @@ class PersonalInfoCard extends StatelessWidget {
                 ),
               ),
               initialValue: 'Arequipa, Peru',
-              enabled: false,
+
             ),
 
             SizedBox(height: 24),

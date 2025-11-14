@@ -3,6 +3,7 @@ import 'package:flutter_carlos112mo/features/bookings/presentation/screens/booki
 import 'package:flutter_carlos112mo/features/player/presentation/screens/my_teams_screen.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/screens/player_fields_screen.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/screens/player_home_screen.dart';
+import 'package:flutter_carlos112mo/features/wall/presentation/screens/wall_screen.dart';
 import '../widgets/app_bottom_nav_bar.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Center(child: PlayerFieldsScreen()),
     Center(child: BookingsScreen()),
     Center(child: MyTeamsScreen()),
-    Center(child: Text('Wall Screen')),
+    Center(child: WallScreen()),
   ];
 
   void _onTabSelected(int index) {
