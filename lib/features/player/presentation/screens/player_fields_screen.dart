@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_carlos112mo/features/Owner/presentation/controllers/field_controller.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/screens/message_screen.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../controller/field_controller.dart';
 import '../widgets/features_field_card.dart';
 
 class PlayerFieldsScreen extends StatelessWidget {
@@ -10,6 +12,7 @@ class PlayerFieldsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FieldPlayerController controller = Get.find<FieldPlayerController>();  
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -176,3 +179,70 @@ class PlayerFieldsScreen extends StatelessWidget {
     );
   }
 }
+
+
+// class PlayerFieldsScreen extends StatefulWidget {
+//   const PlayerFieldsScreen({super.key});
+
+//   @override
+//   State<PlayerFieldsScreen> createState() => _PlayerFieldsScreenState();
+// }
+
+// class _PlayerFieldsScreenState extends State<PlayerFieldsScreen> {
+//   late FieldPlayerController controller;
+
+//   @override
+//   void initState() {
+//     super.initState();
+
+//     controller = Get.find<FieldPlayerController>();
+
+//     // Call API here
+//     controller.fetchField();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         elevation: 0,
+//         title: const Text("Fields"),
+//       ),
+//       body: Obx(() {
+//         if (controller.isLoading.value) {
+//           return const Center(child: CircularProgressIndicator());
+//         }
+
+//         if (controller.errorMessage.isNotEmpty) {
+//           return Center(child: Text(controller.errorMessage.value));
+//         }
+
+//         if (controller.fields.isEmpty) {
+//           return const Center(child: Text("No fields found"));
+//         }
+
+//         return ListView.builder(
+//           itemCount: controller.fields.length,
+//           itemBuilder: (context, index) {
+//             final field = controller.fields[index];
+
+//             return FeaturedFieldCard(
+//               imagePath: field.image ?? "assets/images/default.jpg",
+//               title: field.name ?? "No Title",
+//               details: field.address ?? "No Address",
+//               price: "\$${field.price}/hr",
+//               rating: field.rating ?? 0.0,
+//               reviews: field.reviews ?? 0,
+//               tags: field.tags ?? [],
+//             );
+//           },
+//         );
+//       }),
+
+//       floatingActionButton: FloatingActionButton(
+//         onPressed: () => Get.to(const MessageScreen()),
+//         child: const Icon(Icons.chat_bubble),
+//       ),
+//     );
+//   }
+// }

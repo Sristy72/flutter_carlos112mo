@@ -1,6 +1,6 @@
 class ApiConstants {
   /// [Base Configuration]
-  static const String baseDomain = 'WILL BE UPDATED';
+  static const String baseDomain = 'http://10.10.5.53:8001';
   static const String baseUrl = '$baseDomain/api/v1';
 
 
@@ -33,6 +33,9 @@ class ApiConstants {
 
   static PaymentEndpoints get payment => PaymentEndpoints();
   static RecruiterAccountApi get recruiter => RecruiterAccountApi();
+
+  static FieldEndpoints get field => FieldEndpoints();
+
 }
 
 class RecruiterAccountApi {
@@ -41,7 +44,7 @@ class RecruiterAccountApi {
 
 /// [Authentication Endpoints]
 class AuthEndpoints {
-  static const String _base = '${ApiConstants.baseUrl}/user';
+  static const String _base = '${ApiConstants.baseUrl}/auth';
 
   final String login = '$_base/login';
   final String register = '$_base/register';
@@ -107,4 +110,12 @@ class PaymentEndpoints {
   final String createPayment = '$_base/create-payment';
 
   final String confirmPayment = '$_base/confirm-payment';
+}
+
+class FieldEndpoints {
+  static const String _base = '${ApiConstants.baseUrl}/field';
+  final String create = '$_base/create';
+  final String getFields = '$_base';
+  final String update = '$_base/update';
+  final String delete = '$_base/delete';
 }
