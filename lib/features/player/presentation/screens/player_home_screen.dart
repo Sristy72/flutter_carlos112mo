@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_carlos112mo/features/profile/presentation/screens/profile_screen.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -26,20 +27,25 @@ class PlayerHomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-            Row(
-              children: [
-                const Text(
-                  "Mr. Raja",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                ),
-                const SizedBox(width: 8),
-                const CircleAvatar(
-                  radius: 18,
-                  backgroundImage: AssetImage(
-                    'assets/images/profile_sample.jpg',
-                  ), // Replace with your asset
-                ),
-              ],
+            GestureDetector(
+              onTap: (){
+                Get.to(() => ProfileScreen());
+              },
+              child: Row(
+                children: [
+                  const Text(
+                    "Mr. Raja",
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                  ),
+                  const SizedBox(width: 8),
+                  const CircleAvatar(
+                    radius: 18,
+                    backgroundImage: AssetImage(
+                      'assets/images/profile_sample.jpg',
+                    ), // Replace with your asset
+                  ),
+                ],
+              ),
             ),
           ],
         ),

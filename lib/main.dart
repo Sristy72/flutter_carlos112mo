@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/features/Owner/presentation/screens/owner_home_screen.dart';
 import 'package:flutter_carlos112mo/features/auth/presentation/screens/login_screen.dart';
-import 'package:flutter_carlos112mo/features/auth/presentation/screens/signup_screen.dart';
+import 'package:flutter_carlos112mo/features/auth/presentation/screens/splash_screen.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/screens/player_fields_screen.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
@@ -47,7 +47,9 @@ class MyApp extends StatelessWidget {
       title: 'carlos112mo',
       theme: AppTheme.light,
       // home: LoginScreen(),
-      home : SignupScreen(),
+      // home : SignupScreen(),
+       home: SplashScreen(),
+      // home : OwnerHomeScreen(),
     );
   }
 }
