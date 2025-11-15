@@ -11,16 +11,12 @@ class FieldRepositoryImpl implements FieldRepository {
 
   FieldRepositoryImpl({required ApiClient apiClient}) : _apiClient = apiClient;
 
-  @override
-  NetworkResult<List<GetAllFieldsResponseModel>> getAllField() {
-    return _apiClient.get<List<GetAllFieldsResponseModel>>(
-      ApiConstants.field.getFields,
-      fromJsonT: (json) {
-        final dataList = json as List<dynamic>;
-        return dataList
-            .map((item) => GetAllFieldsResponseModel.fromJson(item))
-            .toList();
-      },
-    );
-  }
+ @override
+NetworkResult<GetAllFieldsResponseModel> getAllField() {
+  return _apiClient.get<GetAllFieldsResponseModel>(
+    ApiConstants.field.getFields,
+    fromJsonT: (json) => GetAllFieldsResponseModel.fromJson(json),
+  );
+}
+
 }

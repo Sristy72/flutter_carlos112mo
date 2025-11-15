@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 
 import '../../../../core/common/widgets/bottom_navigation_bar.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../auth/presentation/controller/auth_controller.dart';
+import '../../../profile/presentation/widgets/logout_button.dart';
 import '../controllers/field_controller.dart';
 import '../widget/feature_field_widget.dart';
 import '../widget/info_card_widget.dart';
@@ -16,6 +18,7 @@ class OwnerHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(FieldController());
+    final authcontroller = Get.find<AuthController>();
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
@@ -68,6 +71,12 @@ class OwnerHomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
+              LogoutButton(
+                  onLogout: () {
+                    // Handle logout
+                    authcontroller.logout();
+                  },
+                ),
 
               // Main card
               Container(

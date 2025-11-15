@@ -38,12 +38,19 @@ class FeaturedFieldCard extends StatelessWidget {
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
               ),
-              child: Image.asset(
-                imagePath,
-                width: double.infinity,
-                height: 140,
-                fit: BoxFit.cover,
-              ),
+              child: imagePath.startsWith("http")
+                  ? Image.network(
+                      imagePath,
+                      width: double.infinity,
+                      height: 140,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      imagePath,
+                      width: double.infinity,
+                      height: 140,
+                      fit: BoxFit.cover,
+                    ),
             ),
 
             Padding(

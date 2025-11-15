@@ -6,6 +6,8 @@ import '../model/auth_request_model.dart';
 import '../model/auth_response_model.dart';
 import '../model/forget_password_request_model.dart';
 import '../model/forget_password_response_model.dart';
+import '../model/refresh_token_request_model.dart';
+import '../model/refresh_token_response_model.dart';
 import '../model/register_request_model.dart';
 import '../model/register_response_model.dart';
 import '../model/verify_otp_req_model.dart';
@@ -57,5 +59,17 @@ class AuthRepositoryImpl implements AuthRepository {
       fromJsonT: (json) => VerifyMailOtpResponseModel.fromJson(json),
     );
   }
+
+  @override
+  NetworkResult<RefreshTokenResponseModel> refreshToken(
+    RefreshTokenRequestModel request,
+  ) {
+    return _apiClient.post(
+      ApiConstants.auth.refreshToken,
+      data: request.toJson(),
+      fromJsonT: (json) => RefreshTokenResponseModel.fromJson(json),
+    );
+  }
+
 
 }

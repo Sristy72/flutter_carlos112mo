@@ -5,5 +5,5 @@ import '../../../core/network/network_result.dart';
 
 abstract class FieldRepository {
  
-  NetworkResult<List<GetAllFieldsResponseModel>> getAllField();
+  NetworkResult<GetAllFieldsResponseModel> getAllField();
 }

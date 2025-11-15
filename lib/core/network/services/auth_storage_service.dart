@@ -18,13 +18,15 @@ class AuthStorageService {
   Future<void> storeAuthData({
     required String accessToken,
     required String refreshToken,
-    required String userId, // Added required userId parameter
+    required String userId, 
+    required String role,// Added required userId parameter
   }) async {
     // Store tokens and user ID in parallel for better performance
     await Future.wait([
       _secureStorage.write(key: KeyConstants.accessToken, value: accessToken),
       _secureStorage.write(key: KeyConstants.refreshToken, value: refreshToken),
       _secureStorage.write(key: KeyConstants.userId, value: userId),
+      _secureStorage.write(key: KeyConstants.role, value: role),
     ]);
   }
 
@@ -83,6 +85,7 @@ class AuthStorageService {
       _secureStorage.delete(key: KeyConstants.accessToken),
       _secureStorage.delete(key: KeyConstants.refreshToken),
       _secureStorage.delete(key: KeyConstants.userId),
+      _secureStorage.delete(key: KeyConstants.role),
     ]);
     _isAuthenticated = false;
   }
@@ -91,5 +94,15 @@ class AuthStorageService {
   Future<bool> hasUserId() async {
     final userId = await getUserId();
     return userId != null && userId.isNotEmpty;
+  }
+
+   // Store role separately
+  Future<void> storeRole(String role) async {
+    await _secureStorage.write(key: KeyConstants.role, value: role);
+  }
+
+  // Get role
+  Future<String?> getRole() async {
+    return await _secureStorage.read(key: KeyConstants.role);
   }
 }

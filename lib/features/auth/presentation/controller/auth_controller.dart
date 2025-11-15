@@ -10,6 +10,7 @@ import '../../../../core/services/get_user_profile_service.dart';
 import '../../../../core/utils/debug_print.dart';
 import '../../data/model/auth_request_model.dart';
 import '../../data/model/forget_password_request_model.dart';
+import '../../data/model/refresh_token_request_model.dart';
 import '../../data/model/register_request_model.dart';
 import '../../data/model/verify_otp_req_model.dart';
 import '../../domain/auth_repo.dart';
@@ -53,24 +54,23 @@ class AuthController extends BaseController {
       },
       (success) async {
         final user = success.data.user;
-        if (user.role == 'user') {
-          await _authStorageService.storeAuthData(
-            accessToken: success.data.accessToken,
-            refreshToken: success.data.refreshToken,
-            userId: success.data.user.id,
-          );
 
-          Get.to(() => DashboardScreen());
+        // Store tokens + role
+        await _authStorageService.storeAuthData(
+          accessToken: success.data.accessToken,
+          refreshToken: success.data.refreshToken,
+          userId: success.data.user.id,
+          role: success.data.user.role,
+        );
+
+  
+
+        if (user.role == 'user') {
+          Get.offAll(() => DashboardScreen());
         } else if (user.role == 'owner') {
           Get.offAll(() => OwnerHomeScreen());
         }
-        // final user = success.data.user;
-        // await _authStorageService.storeAuthData(
-        //   accessToken: success.data.accessToken!,
-        //   refreshToken: success.data.refreshToken!,
-        //   userId: success.data.user!.id!,
-        // );
-        // Get.to(() => DashboardScreen());
+
         setLoading(false);
       },
     );
@@ -106,6 +106,7 @@ class AuthController extends BaseController {
           accessToken: success.data.accessToken,
           refreshToken: success.data.refreshToken,
           userId: success.data.id,
+          role: success.data.role,
         );
         Get.to(() => LoginScreen());
         setLoading(false);
@@ -134,7 +135,6 @@ class AuthController extends BaseController {
     );
   }
 
-  
   Future verifyOTP(String email, String otp) async {
     setLoading(true);
     setError("");
@@ -154,5 +154,47 @@ class AuthController extends BaseController {
         setLoading(false);
       },
     );
+  }
+
+  Future refreshToken() async {
+    setLoading(true);
+
+    final refreshToken = await _authStorageService.getRefreshToken();
+    DPrint.log("Got refresh token: $refreshToken");
+    final request = RefreshTokenRequestModel(refreshToken: refreshToken);
+
+    final result = await _authRepository.refreshToken(request);
+
+    final navi = result.fold(
+      (fail) {
+        DPrint.log("Refresh token failed: ${fail.message}");
+        setLoading(false);
+        return _isSuccess = false;
+      },
+      (success) async {
+        DPrint.log("Refresh token success: ${success.message}");
+        await _authStorageService.storeAccessToken(success.data.accessToken);
+        await _authStorageService.storeRefreshToken(success.data.refreshToken);
+        // _authStorageService.clearAuthData();
+        setLoading(false);
+        final role = await Get.find<AuthStorageService>().getRole();
+
+      if (role == "user") {
+        Get.offAll(() => DashboardScreen());
+      } else if (role == "owner") {
+        Get.offAll(() => OwnerHomeScreen());
+      } else {
+        Get.offAll(() => LoginScreen());
+      }
+
+        
+      },
+    );
+    return navi;
+  }
+
+  Future<void> logout() async {
+    await _authStorageService.clearAuthData();
+    Get.offAll(() => LoginScreen());
   }
 }

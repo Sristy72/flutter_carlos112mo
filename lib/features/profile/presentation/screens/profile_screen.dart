@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart' show Get;
 
 import '../../../../core/common/widgets/app_scaffold.dart';
+import '../../../auth/presentation/controller/auth_controller.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final authcontroller = Get.find<AuthController>();
   final _formKey = GlobalKey<FormState>();
   String _position = 'Goalkeeper';
   String _age = '20';
@@ -152,6 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 LogoutButton(
                   onLogout: () {
                     // Handle logout
+                    authcontroller.logout();
                   },
                 ),
                 const SizedBox(height: 24,)
