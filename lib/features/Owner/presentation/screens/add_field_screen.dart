@@ -8,11 +8,14 @@ import '../widget/custom_text_field.dart';
 import 'dashboard_edit_field.dart';
 import 'owner_home_screen.dart';
 
-class AddFieldScreen extends StatelessWidget {
+class AddFieldScreen extends StatefulWidget {
+  const AddFieldScreen({super.key});
+
+  @override
+  State<AddFieldScreen> createState() => _AddFieldScreenState();
+}
+class _AddFieldScreenState extends State<AddFieldScreen> {
   final AddFieldController controller = Get.put(AddFieldController());
-
-  AddFieldScreen({super.key});
-
   final List<String> amenities = [
     'showers',
     'parking',
@@ -487,24 +490,24 @@ class AddFieldScreen extends StatelessWidget {
         ),
       ),
 
-      bottomNavigationBar: CustomBottomNavBar(
-        onTap: (index) {
-          // Optional navigation logic
-          if (index == 0) {
-            Get.to(() => const OwnerHomeScreen());
+      // bottomNavigationBar: CustomBottomNavBar(
+      //   onTap: (index) {
+      //     // Optional navigation logic
+      //     if (index == 0) {
+      //       Get.to(() => const OwnerHomeScreen());
 
-            // Get.toNamed('/home');
-          } else if (index == 1) {
-            Get.to(() => const OwnerDashboardEditScreen());
-            // Get.toNamed('/dashboard');
-          } else if (index == 2) {
-            // Get.toNamed('/myFields');
-            Get.to(() => AddFieldScreen());
-          } else if (index == 3) {
-            Get.toNamed('/profile');
-          }
-        },
-      ),
+      //       // Get.toNamed('/home');
+      //     } else if (index == 1) {
+      //       Get.to(() => const OwnerDashboardEditScreen());
+      //       // Get.toNamed('/dashboard');
+      //     } else if (index == 2) {
+      //       // Get.toNamed('/myFields');
+      //       Get.to(() => AddFieldScreen());
+      //     } else if (index == 3) {
+      //       Get.toNamed('/profile');
+      //     }
+      //   },
+      // ),
     );
   }
 

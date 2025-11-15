@@ -137,24 +137,24 @@ class OwnerDashboardEditScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(
-        onTap: (index) {
-          // Optional navigation logic
-          if (index == 0) {
-            Get.to(() => const OwnerHomeScreen());
+      // bottomNavigationBar: CustomBottomNavBar(
+      //   onTap: (index) {
+      //     // Optional navigation logic
+      //     if (index == 0) {
+      //       Get.to(() => const OwnerHomeScreen());
 
-            // Get.toNamed('/home');
-          } else if (index == 1) {
-            Get.to(() => const OwnerDashboardEditScreen());
-            // Get.toNamed('/dashboard');
-          } else if (index == 2) {
-            // Get.toNamed('/myFields');
-            Get.to(() => AddFieldScreen());
-          } else if (index == 3) {
-            Get.toNamed('/profile');
-          }
-        },
-      ),
+      //       // Get.toNamed('/home');
+      //     } else if (index == 1) {
+      //       Get.to(() => const OwnerDashboardEditScreen());
+      //       // Get.toNamed('/dashboard');
+      //     } else if (index == 2) {
+      //       // Get.toNamed('/myFields');
+      //       Get.to(() => AddFieldScreen());
+      //     } else if (index == 3) {
+      //       Get.toNamed('/profile');
+      //     }
+      //   },
+      // ),
     );
   }
 }

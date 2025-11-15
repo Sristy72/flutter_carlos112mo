@@ -31,12 +31,13 @@ class _PlayerHomeScreenState extends State<PlayerHomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
-              children: const [
-                Icon(Icons.location_on_outlined, color: AppColors.primaryWhite),
-                SizedBox(width: 6),
-                Text(
-                  "Arequipa, Peru",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+              children: [
+                Text('Arequipa, Peru', style: TextStyle(fontSize: 18)),
+                SizedBox(width: 8),
+                Image(
+                  height: 15,
+                  width: 15,
+                  image: AssetImage("assets/images/location_icon.png"),
                 ),
               ],
             ),

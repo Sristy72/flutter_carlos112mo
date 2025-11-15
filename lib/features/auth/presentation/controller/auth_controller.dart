@@ -8,6 +8,7 @@ import '../../../../core/network/services/auth_storage_service.dart';
 import '../../../../core/network/services/secure_store_services.dart';
 import '../../../../core/services/get_user_profile_service.dart';
 import '../../../../core/utils/debug_print.dart';
+import '../../../other/screens/owner_nav_screen.dart';
 import '../../data/model/auth_request_model.dart';
 import '../../data/model/forget_password_request_model.dart';
 import '../../data/model/refresh_token_request_model.dart';
@@ -68,7 +69,7 @@ class AuthController extends BaseController {
         if (user.role == 'user') {
           Get.offAll(() => DashboardScreen());
         } else if (user.role == 'owner') {
-          Get.offAll(() => OwnerHomeScreen());
+          Get.offAll(() => OwnerNavScreen());
         }
 
         setLoading(false);
@@ -182,7 +183,7 @@ class AuthController extends BaseController {
       if (role == "user") {
         Get.offAll(() => DashboardScreen());
       } else if (role == "owner") {
-        Get.offAll(() => OwnerHomeScreen());
+        Get.offAll(() => OwnerNavScreen());
       } else {
         Get.offAll(() => LoginScreen());
       }

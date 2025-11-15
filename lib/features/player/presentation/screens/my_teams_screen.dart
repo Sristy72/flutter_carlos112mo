@@ -15,16 +15,17 @@ class MyTeamsScreen extends StatelessWidget {
         elevation: 0,
         title: Row(
           children: [
-            const Text(
-              'Arequipa, Peru',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+             Row(
+              children: [
+                Text('Arequipa, Peru', style: TextStyle(fontSize: 18)),
+                SizedBox(width: 8),
+                Image(
+                  height: 15,
+                  width: 15,
+                  image: AssetImage("assets/images/location_icon.png"),
+                ),
+              ],
             ),
-            const SizedBox(width: 4),
-            const Icon(Icons.location_on, color: Colors.white, size: 18),
           ],
         ),
         actions: [
