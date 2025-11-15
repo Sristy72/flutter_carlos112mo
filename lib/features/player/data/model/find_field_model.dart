@@ -25,28 +25,29 @@ class VenueModel {
 
   // ✅ Ready for API integration
   factory VenueModel.fromJson(Map<String, dynamic> json) => VenueModel(
-        title: json["title"],
-        address: json["address"],
-        rating: (json["rating"] ?? 0).toDouble(),
-        reviewCount: json["reviewCount"] ?? 0,
-        type: json["type"] ?? "",
-        description: json["description"] ?? "",
-        pricePerHour: (json["pricePerHour"] ?? 0).toDouble(),
-        amenities: (json["amenities"] as List<dynamic>)
-            .map((e) => AmenityModel.fromJson(e))
-            .toList(),
-        photos: List<String>.from(json["photos"] ?? []),
-      );
+    title: json["title"] ?? "",
+    address: json["address"] ?? "",
+    rating: (json["rating"] ?? 0).toDouble(),
+    reviewCount: json["reviewCount"] ?? 0,
+    type: json["type"] ?? "",
+    description: json["description"] ?? "",
+    pricePerHour: (json["pricePerHour"] ?? 0).toDouble(),
+
+    amenities: (json["amenities"] as List<dynamic>? ?? [])
+        .map((e) => AmenityModel.fromJson(e))
+        .toList(),
+
+    photos: List<String>.from(json["photos"] ?? []),
+  );
 }
 
 class AmenityModel {
   final String name;
-  final IconData icon;
+  final String image;
 
-  AmenityModel(this.name, this.icon);
+  AmenityModel(this.name, this.image);
 
   factory AmenityModel.fromJson(Map<String, dynamic> json) {
-    // map API icons later
-    return AmenityModel(json["name"], Icons.check);
+    return AmenityModel(json["name"] ?? "", json["image"] ?? "");
   }
 }

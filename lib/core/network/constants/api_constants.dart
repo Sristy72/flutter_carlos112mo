@@ -33,6 +33,9 @@ class ApiConstants {
 
   static PaymentEndpoints get payment => PaymentEndpoints();
   static RecruiterAccountApi get recruiter => RecruiterAccountApi();
+
+  static FieldEndpoints get field => FieldEndpoints();
+
 }
 
 class RecruiterAccountApi {
@@ -107,4 +110,12 @@ class PaymentEndpoints {
   final String createPayment = '$_base/create-payment';
 
   final String confirmPayment = '$_base/confirm-payment';
+}
+
+class FieldEndpoints {
+  static const String _base = '${ApiConstants.baseUrl}/field';
+  final String create = '$_base/create';
+  final String getFields = '$_base';
+  final String update = '$_base/update';
+  final String delete = '$_base/delete';
 }

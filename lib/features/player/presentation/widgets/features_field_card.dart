@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_carlos112mo/features/player/presentation/screens/find_fields_screen.dart';
+import 'package:get/get.dart';
 
 class FeaturedFieldCard extends StatelessWidget {
   final String imagePath;
@@ -143,7 +145,9 @@ class FeaturedFieldCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(() => const FindFieldsScreen());
+                      },
                       child: const Text("View Details"),
                     ),
                   ),

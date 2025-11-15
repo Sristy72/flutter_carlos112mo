@@ -119,7 +119,11 @@ class FindFieldsScreen extends StatelessWidget {
                         Expanded(
                           child: Text(
                             venue.address,
-                            style: const TextStyle(fontSize: 14),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: AppColors.subText,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
                       ],
@@ -131,11 +135,22 @@ class FindFieldsScreen extends StatelessWidget {
                       children: [
                         const Icon(Icons.star, size: 18, color: Colors.orange),
                         const SizedBox(width: 4),
-                        Text("${venue.rating} (${venue.reviewCount} reviews)"),
-                        const SizedBox(width: 16),
-                        const Icon(Icons.sports_soccer, size: 18),
+                        Text("${venue.rating} (${venue.reviewCount} reviews)", style: const TextStyle(fontSize: 14,color: Colors.orange)),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    Row(
+                      children: [
+                        // Image.network(
+                        //   "assets/images/nav_teams.png" ,// or the matching amenity
+                        //   width: 22,
+                        //   height: 22,
+                        // ),
+
+                        const Icon(Icons.person_2_sharp, size: 18),
                         const SizedBox(width: 4),
-                        Text(venue.type),
+                        Text(venue.type, style: const TextStyle(fontSize: 14,color: AppColors.subText)),
                       ],
                     ),
                     const SizedBox(height: 12),
@@ -143,7 +158,12 @@ class FindFieldsScreen extends StatelessWidget {
                     // ---------- Description ----------
                     Text(
                       venue.description,
-                      style: const TextStyle(fontSize: 14, height: 1.4),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        height: 1.4,
+                        color: AppColors.subText,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                     const SizedBox(height: 16),
 
@@ -152,10 +172,10 @@ class FindFieldsScreen extends StatelessWidget {
                       "Services & Amenities",
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 16),
                     Wrap(
                       spacing: 20,
                       runSpacing: 10,
@@ -163,9 +183,21 @@ class FindFieldsScreen extends StatelessWidget {
                         return Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(item.icon, size: 20),
+                            Image.asset(
+                              item.image,
+                              width: 22,
+                              height: 22,
+                              fit: BoxFit.contain,
+                            ),
                             const SizedBox(width: 6),
-                            Text(item.name),
+                            Text(
+                              item.name,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Color(0xFF969696),
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
                           ],
                         );
                       }).toList(),

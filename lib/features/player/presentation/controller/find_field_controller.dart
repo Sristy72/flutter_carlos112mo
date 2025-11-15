@@ -24,11 +24,11 @@ class FindFieldController extends GetxController {
           "Multi-purpose sports facility with several football fields of different sizes.",
       pricePerHour: 120,
       amenities: [
-        AmenityModel("Showers", Icons.shower),
-        AmenityModel("Lights", Icons.light),
-        AmenityModel("Parking", Icons.local_parking),
-        AmenityModel("Changing room", Icons.meeting_room),
-        AmenityModel("Equipment rental", Icons.sports),
+        AmenityModel("Showers", "assets/images/showerIcon.png"),
+        AmenityModel("Lights",  "assets/images/lightIcon.png"),
+        AmenityModel("Parking", "assets/images/parkingIcon.png"),
+        AmenityModel("Changing room", "assets/images/changingIcon.png"),
+        AmenityModel("Equipment rental", "assets/images/equipmentIcon.png"),
       ],
       photos: 
       [
