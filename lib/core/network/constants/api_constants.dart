@@ -118,4 +118,6 @@ class FieldEndpoints {
   final String getFields = '$_base';
   final String update = '$_base/update';
   final String delete = '$_base/delete';
+  String getFieldsById(String id) =>
+      '$_base/$id';
 }

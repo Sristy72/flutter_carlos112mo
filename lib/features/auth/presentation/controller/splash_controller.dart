@@ -11,6 +11,7 @@ class SplashController extends GetxController {
   late VideoPlayerController videoPlayerController;
 
   final _authController = Get.find<AuthController>();
+  final _authStorage = Get.find<AuthStorageService>();
 
   @override
   void onInit() {
@@ -23,15 +24,30 @@ class SplashController extends GetxController {
             videoPlayerController.setVolume(0);
             update();
           });
+          Future.delayed(const Duration(seconds: 4), () async {
+      await checkAuth();
+    });
+  }
 
-    Future.delayed(const Duration(seconds: 4), () async {
-      final success = await _authController.refreshToken();
+          
 
-      if (!success) {
+    Future<void> checkAuth() async {
+      final refreshToken = await _authStorage.getRefreshToken();
+
+      // 🚫 No refresh token? → User not logged in
+      if (refreshToken == null || refreshToken.isEmpty) {
         Get.offAll(() => LoginScreen());
         return;
       }
-    });
+
+      // ✅ Token exists → Try refreshing
+      final success = await _authController.refreshToken();
+
+      if (!success) {
+        // Refresh failed → go to login
+        Get.offAll(() => LoginScreen());
+      }
+    }
 
     // videoPlayerController.addListener((){
 
@@ -39,7 +55,7 @@ class SplashController extends GetxController {
     //   //   Get.off(() => LoginScreen());
     //   // }
     // });
-  }
+  
 
   @override
   void onClose() {

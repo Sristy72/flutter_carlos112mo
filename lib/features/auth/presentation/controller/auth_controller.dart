@@ -191,7 +191,7 @@ class AuthController extends BaseController {
         
       },
     );
-    return navi;
+    return _isSuccess;
   }
 
   Future<void> logout() async {

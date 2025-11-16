@@ -153,7 +153,7 @@ class FeaturedFieldCard extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Get.to(() => const FindFieldsScreen());
+                        Get.to(() =>  FindFieldsScreen());
                       },
                       child: const Text("View Details"),
                     ),

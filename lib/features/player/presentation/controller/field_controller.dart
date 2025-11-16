@@ -1,4 +1,5 @@
 import 'package:flutter_carlos112mo/features/player/data/model/get_all_fields_response_model.dart';
+import 'package:flutter_carlos112mo/features/player/data/model/get_single_fields_response_model.dart';
 import 'package:flutter_carlos112mo/features/player/domain/field_repo.dart';
 import 'package:get/get.dart';
 
@@ -18,6 +19,7 @@ class FieldPlayerController extends BaseController {
 
   FieldPlayerController(this._fieldRepository);
   final Rx<GetAllFieldsResponseModel?> fields = Rx(null);
+  late List<Field> originalFields = [];
 
   Future<void> fetchField() async {
     setLoading(true);
@@ -31,6 +33,8 @@ class FieldPlayerController extends BaseController {
       },
       (success) {
         fields.value = success.data;
+        originalFields = success.data.fields;
+
         setLoading(false);
       },
     );
@@ -62,32 +66,35 @@ class FieldPlayerController extends BaseController {
     double? minPrice,
     double? maxPrice,
   }) {
-    if (fields.value == null) return;
+    if (originalFields.isEmpty) return;
 
-    final allFields = fields.value!.fields;
+    // Always start from original list
+    List<Field> filtered = List.from(originalFields);
 
     // Filter by field type
-    List<Field> filtered = fieldType.isEmpty
-        ? allFields
-        : allFields.where((f) => f.fieldType == fieldType).toList();
+    if (fieldType.isNotEmpty) {
+      filtered = filtered.where((f) => f.fieldType == fieldType).toList();
+    }
 
     // Filter by services
     if (services != null && services.values.any((v) => v)) {
       filtered = filtered.where((f) {
         bool matches = true;
+
         if (services["showers"] == true) matches &= f.servicesAmenities.showers;
         if (services["lights"] == true) matches &= f.servicesAmenities.lights;
         if (services["parking"] == true) matches &= f.servicesAmenities.parking;
-        if (services["changingRooms"] == true)
+        if (services["changing rooms"] == true)
           matches &= f.servicesAmenities.changingRooms;
         if (services["cafe"] == true) matches &= f.servicesAmenities.cafe;
-        if (services["equipmentRental"] == true)
+        if (services["equipment rental"] == true)
           matches &= f.servicesAmenities.equipmentRental;
+
         return matches;
       }).toList();
     }
 
-    // Filter by price
+    // Price range
     if (minPrice != null && maxPrice != null) {
       filtered = filtered
           .where(
@@ -96,7 +103,7 @@ class FieldPlayerController extends BaseController {
           .toList();
     }
 
-    // Apply search query on top of filter
+    // Search query
     if (searchQuery.value.isNotEmpty) {
       final q = searchQuery.value.toLowerCase();
       filtered = filtered.where((f) {
@@ -106,6 +113,7 @@ class FieldPlayerController extends BaseController {
       }).toList();
     }
 
+    // ⛔ Don't overwrite original fields
     fields.value = GetAllFieldsResponseModel(
       fields: filtered,
       totalFields: filtered.length,
@@ -113,4 +121,6 @@ class FieldPlayerController extends BaseController {
       currentPage: 1,
     );
   }
+
+  
 }

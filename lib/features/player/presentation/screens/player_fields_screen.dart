@@ -5,8 +5,10 @@ import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../controller/field_controller.dart';
+import '../controller/find_field_controller.dart';
 import '../widgets/features_field_card.dart';
 import '../widgets/filter_widget.dart';
+import 'find_fields_screen.dart';
 
 class PlayerFieldsScreen extends StatefulWidget {
   const PlayerFieldsScreen({super.key});
@@ -19,6 +21,7 @@ class _PlayerFieldsScreenState extends State<PlayerFieldsScreen> {
   final FieldPlayerController controller = Get.put(
     FieldPlayerController(Get.find()),
   );
+  final FindFieldController findcontroller = Get.find<FindFieldController>();
 
   @override
   void initState() {
@@ -120,14 +123,16 @@ class _PlayerFieldsScreenState extends State<PlayerFieldsScreen> {
                       );
                     },
                     child: Row(
-                      children: const [
-                        Icon(Icons.filter_list, size: 20),
+                      children: [
+                        Image.asset("assets/images/funnelIcon.png", height: 18),
+
                         SizedBox(width: 6),
                         Text(
                           "Filter",
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.textBlack,
                           ),
                         ),
                       ],
@@ -164,26 +169,56 @@ class _PlayerFieldsScreenState extends State<PlayerFieldsScreen> {
 
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 16),
-                            child: FeaturedFieldCard(
-                              imagePath: field.images.isNotEmpty
-                                  ? field.images.first.url
-                                  : "",
-                              title: field.fieldName,
-                              details:
-                                  '${field.fieldType} • ${field.location.address}',
-                              price: '\$${field.pricePerHour}/hr',
-                              rating: field.rating.average,
-                              reviews: field.rating.count,
-                              tags: [
-                                if (field.servicesAmenities.showers) "showers",
-                                if (field.servicesAmenities.lights) "lights",
-                                if (field.servicesAmenities.parking) "parking",
-                                if (field.servicesAmenities.changingRooms)
-                                  "changing rooms",
-                                if (field.servicesAmenities.cafe) "cafe",
-                                if (field.servicesAmenities.equipmentRental)
-                                  "equipment",
-                              ],
+                            child: GestureDetector(
+                              onTap: () {
+                                final findFieldController =
+                                    Get.find<FindFieldController>();
+
+                                if (field.id == null || field.id.isEmpty) {
+                                  print(
+                                    "❌ ERROR: Field ID is null or empty, navigation cancelled!",
+                                  );
+                                  return;
+                                }
+
+                                print(
+                                  "🐞 DEBUG: Navigating with ID: ${field.id}",
+                                );
+
+                                findFieldController.selectedFieldId.value =
+                                    field.id;
+
+                                Get.to(
+                                  () => FindFieldsScreen(),
+                                  arguments: field.id, // must not be null
+                                );
+                                print("🐞 DEBUG: field object -> $field");
+                                print("🐞 DEBUG: field.id -> ${field.id}");
+                              },
+
+                              child: FeaturedFieldCard(
+                                imagePath: field.images.isNotEmpty
+                                    ? field.images.first.url
+                                    : "",
+                                title: field.fieldName,
+                                details:
+                                    '${field.fieldType} • ${field.location.address}',
+                                price: '\$${field.pricePerHour}/hr',
+                                rating: field.rating.average,
+                                reviews: field.rating.count,
+                                tags: [
+                                  if (field.servicesAmenities.showers)
+                                    "showers",
+                                  if (field.servicesAmenities.lights) "lights",
+                                  if (field.servicesAmenities.parking)
+                                    "parking",
+                                  if (field.servicesAmenities.changingRooms)
+                                    "changing rooms",
+                                  if (field.servicesAmenities.cafe) "cafe",
+                                  if (field.servicesAmenities.equipmentRental)
+                                    "equipment",
+                                ],
+                              ),
                             ),
                           );
                         },
