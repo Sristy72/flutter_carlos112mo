@@ -3,6 +3,8 @@ import 'package:flutter_carlos112mo/features/player/presentation/screens/find_fi
 import 'package:get/get.dart';
 
 class FeaturedFieldCard extends StatelessWidget {
+  final String id;
+
   final String imagePath;
   final String title;
   final String details;
@@ -13,6 +15,7 @@ class FeaturedFieldCard extends StatelessWidget {
 
   const FeaturedFieldCard({
     super.key,
+    required this.id,
     required this.imagePath,
     required this.title,
     required this.details,
@@ -153,7 +156,8 @@ class FeaturedFieldCard extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Get.to(() =>  FindFieldsScreen());
+                        print("🐞 Going to details → ID = $id");
+                        Get.to(() => FindFieldsScreen(id: id));
                       },
                       child: const Text("View Details"),
                     ),

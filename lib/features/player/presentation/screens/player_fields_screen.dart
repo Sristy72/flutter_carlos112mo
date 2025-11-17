@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_carlos112mo/core/utils/debug_print.dart';
 import 'package:flutter_carlos112mo/features/Owner/presentation/controllers/field_controller.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/screens/message_screen.dart';
 import 'package:get/get.dart';
@@ -166,37 +167,38 @@ class _PlayerFieldsScreenState extends State<PlayerFieldsScreen> {
                         itemCount: controller.filteredFields.length,
                         itemBuilder: (context, index) {
                           final field = controller.filteredFields[index];
+                          DPrint.log("Player Fields: ${field.id}");
 
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 16),
                             child: GestureDetector(
                               onTap: () {
-                                final findFieldController =
-                                    Get.find<FindFieldController>();
+                                // final findFieldController =
+                                //     Get.find<FindFieldController>();
 
-                                if (field.id == null || field.id.isEmpty) {
-                                  print(
-                                    "❌ ERROR: Field ID is null or empty, navigation cancelled!",
-                                  );
-                                  return;
-                                }
+                                // if (field.id == null || field.id.isEmpty) {
+                                //   print(
+                                //     "❌ ERROR: Field ID is null or empty, navigation cancelled!",
+                                //   );
+                                //   return;
+                                // }
 
-                                print(
-                                  "🐞 DEBUG: Navigating with ID: ${field.id}",
-                                );
+                                // print(
+                                //   "🐞 DEBUG: Navigating with ID: ${field.id}",
+                                // );
 
-                                findFieldController.selectedFieldId.value =
-                                    field.id;
+                                // // findFieldController.selectedFieldId.value =
+                                // //     field.id;
 
-                                Get.to(
-                                  () => FindFieldsScreen(),
-                                  arguments: field.id, // must not be null
-                                );
-                                print("🐞 DEBUG: field object -> $field");
-                                print("🐞 DEBUG: field.id -> ${field.id}");
+                                // print("🐞 Field clicked → ID = ${field.id}");
+                                // Get.to(
+                                //   () => FindFieldsScreen(id: field.id),
+                                //   // must not be null
+                                // );
                               },
 
                               child: FeaturedFieldCard(
+                                id: field.id,
                                 imagePath: field.images.isNotEmpty
                                     ? field.images.first.url
                                     : "",

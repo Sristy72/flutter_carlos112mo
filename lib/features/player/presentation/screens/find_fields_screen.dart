@@ -300,7 +300,8 @@ import '../controller/find_field_controller.dart';
 import '../widgets/availability_dialog.dart';
 
 class FindFieldsScreen extends StatefulWidget {
-  const FindFieldsScreen({super.key});
+  final String id;
+  const FindFieldsScreen({super.key, required this.id});
 
   @override
   State<FindFieldsScreen> createState() => _FindFieldsScreenState();
@@ -309,20 +310,14 @@ class FindFieldsScreen extends StatefulWidget {
 class _FindFieldsScreenState extends State<FindFieldsScreen> {
   // late FindFieldController controller;
   final controller = Get.find<FindFieldController>();
-  late String fieldId;
+  // late String fieldId;
 
   @override
   void initState() {
     super.initState();
-
-    final id = Get.arguments?.toString();
-    if (id != null && id.isNotEmpty) {
-      print("🐞 DEBUG: Received field ID -> $id");
-      controller.selectedFieldId.value = id;
-      controller.fetchSingleField();
-    } else {
-      print("❌ ERROR: No ID passed via arguments!");
-    }
+    print("🐞 FindFieldsScreen → widget.fieldId = ${widget.id}");
+    controller.selectedFieldId.value = widget.id;
+    controller.fetchSingleField();
   }
 
   @override

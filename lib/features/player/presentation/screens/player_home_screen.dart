@@ -197,6 +197,7 @@ class _PlayerHomeScreenState extends State<PlayerHomeScreen> {
                 return Column(
                   children: controller.fields.value!.fields.map((field) {
                     return FeaturedFieldCard(
+                      id: field.id,
                       imagePath: field.images.isNotEmpty
                           ? field.images.first.url
                           : "",

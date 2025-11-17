@@ -10,7 +10,7 @@ class FindFieldController extends GetxController {
   FindFieldController(this._findfieldRepository);
 
   var venue = Rx<SingleFieldsResponseModel?>(null);
-  var selectedFieldId = "".obs;
+  final selectedFieldId = "".obs;
   var isLoading = false.obs;
   var errorMessage = "".obs;
   void setLoading(bool value) => isLoading.value = value;
