@@ -3,53 +3,52 @@ import 'package:flutter_carlos112mo/core/common/widgets/app_scaffold.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../profile/presentation/screens/profile_screen.dart';
+import '../../../profile/presentation/controllers/user_profie_controller.dart';
+import '../../../profile/presentation/screens/user_profile_screen.dart';
 
 class WallScreen extends StatelessWidget {
   const WallScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final UserProfileController userProfileController = Get.find<UserProfileController>();
     bool matchInvitation = true;
     bool comments = false;
     return AppScaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: const [
-                Text(
-                  "Arequipa, Peru",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-                ),
-                SizedBox(width: 8),
-                Icon(Icons.location_on_outlined, color: AppColors.primaryWhite),
-
-
-              ],
-            ),
-            GestureDetector(
-              onTap: (){
-                Get.to(() => ProfileScreen());
-              },
-              child: Row(
+        title: Obx(
+              () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
                 children: [
-                  const Text(
-                    "Mr. Raja",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                  ),
-                  const SizedBox(width: 8),
-                  const CircleAvatar(
-                    radius: 18,
-                    backgroundImage: AssetImage(
-                      'assets/images/profile_sample.jpg',
-                    ), // Replace with your asset
+                  Text('Arequipa, Peru', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                  SizedBox(width: 8),
+                  Image(
+                    height: 18,
+                    width: 18,
+                    image: AssetImage("assets/images/location_icon.png"),
                   ),
                 ],
               ),
-            ),
-          ],
+              Row(
+                children: [
+                  Text(userProfileController.userProfileModel?.name ?? '', style: TextStyle(fontSize: 18)),
+                  SizedBox(width: 8),
+                  CircleAvatar(
+                    backgroundColor: Colors.white70,
+                    radius: 17,
+                    foregroundImage: (userProfileController.userProfileModel?.avatar?.url != null &&
+                        userProfileController.userProfileModel!.avatar!.url!.isNotEmpty)
+                        ? NetworkImage(userProfileController.userProfileModel!.avatar!.url!)
+                        : null,
+                    child: Icon(Icons.person),
+                  ),
+
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       body: SingleChildScrollView(

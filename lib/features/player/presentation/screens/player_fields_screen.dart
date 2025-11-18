@@ -5,6 +5,7 @@ import 'package:flutter_carlos112mo/features/player/presentation/screens/message
 import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../profile/presentation/controllers/user_profie_controller.dart';
 import '../controller/field_controller.dart';
 import '../controller/find_field_controller.dart';
 import '../widgets/features_field_card.dart';
@@ -32,44 +33,43 @@ class _PlayerFieldsScreenState extends State<PlayerFieldsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final UserProfileController userProfileController = Get.find<UserProfileController>();
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        title: Row(
-          children: [
-            Text('Arequipa, Peru', style: TextStyle(fontSize: 18)),
-            SizedBox(width: 8),
-            Image(
-              height: 15,
-              width: 15,
-              image: AssetImage("assets/images/location_icon.png"),
-            ),
-          ],
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Row(
-              children: const [
-                Text(
-                  "Mr. Raja",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    color: AppColors.primaryWhite,
+        title: Obx(
+              () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text('Arequipa, Peru', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                  SizedBox(width: 8),
+                  Image(
+                    height: 18,
+                    width: 18,
+                    image: AssetImage("assets/images/location_icon.png"),
                   ),
-                ),
-                SizedBox(width: 8),
-                CircleAvatar(
-                  radius: 18,
-                  backgroundImage: AssetImage(
-                    'assets/images/profile_sample.jpg',
+                ],
+              ),
+              Row(
+                children: [
+                  Text(userProfileController.userProfileModel?.name ?? '', style: TextStyle(fontSize: 18)),
+                  SizedBox(width: 8),
+                  CircleAvatar(
+                    backgroundColor: Colors.white70,
+                    radius: 17,
+                    foregroundImage: (userProfileController.userProfileModel?.avatar?.url != null &&
+                        userProfileController.userProfileModel!.avatar!.url!.isNotEmpty)
+                        ? NetworkImage(userProfileController.userProfileModel!.avatar!.url!)
+                        : null,
+                    child: Icon(Icons.person),
                   ),
-                ),
-              ],
-            ),
+
+                ],
+              ),
+            ],
           ),
-        ],
+        ),
       ),
 
       body: Obx(() {

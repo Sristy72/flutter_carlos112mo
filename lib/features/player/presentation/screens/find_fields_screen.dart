@@ -293,6 +293,7 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:flutter_carlos112mo/features/profile/presentation/controllers/user_profie_controller.dart';
 import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/find_field_repo.dart';
@@ -322,38 +323,42 @@ class _FindFieldsScreenState extends State<FindFieldsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final UserProfileController userProfileController = Get.find<UserProfileController>();
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: const [
-                Icon(Icons.location_on_outlined, color: AppColors.primaryWhite),
-                SizedBox(width: 6),
-                Text(
-                  "Arequipa, Peru",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const Text(
-                  "Mr. Raja",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                ),
-                const SizedBox(width: 8),
-                const CircleAvatar(
-                  radius: 18,
-                  backgroundImage: AssetImage(
-                    'assets/images/profile_sample.jpg',
+        title: Obx(
+              () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text('Arequipa, Peru', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                  SizedBox(width: 8),
+                  Image(
+                    height: 18,
+                    width: 18,
+                    image: AssetImage("assets/images/location_icon.png"),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+              Row(
+                children: [
+                  Text(userProfileController.userProfileModel?.name ?? '', style: TextStyle(fontSize: 18)),
+                  SizedBox(width: 8),
+                  CircleAvatar(
+                    backgroundColor: Colors.white70,
+                    radius: 17,
+                    foregroundImage: (userProfileController.userProfileModel?.avatar?.url != null &&
+                        userProfileController.userProfileModel!.avatar!.url!.isNotEmpty)
+                        ? NetworkImage(userProfileController.userProfileModel!.avatar!.url!)
+                        : null,
+                    child: Icon(Icons.person),
+                  ),
+
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       body: Obx(() {
