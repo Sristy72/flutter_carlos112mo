@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/common/widgets/bottom_navigation_bar.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../profile/presentation/controllers/user_profie_controller.dart';
 import '../controllers/add_field_controller.dart';
 import '../widget/custom_text_field.dart';
 import 'dashboard_edit_field.dart';
@@ -30,47 +31,42 @@ class _AddFieldScreenState extends State<AddFieldScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final UserProfileController userProfileController = Get.find<UserProfileController>();
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: AppColors.primaryGreen,
-        elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: const [
-                Icon(Icons.location_on_outlined, color: Colors.white, size: 18),
-                SizedBox(width: 4),
-                Text(
-                  'Arequipa, Peru',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
+        title: Obx(
+              () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text('Arequipa, Peru', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                  SizedBox(width: 8),
+                  Image(
+                    height: 18,
+                    width: 18,
+                    image: AssetImage("assets/images/location_icon.png"),
                   ),
-                ),
-              ],
-            ),
-            Row(
-              children: const [
-                Text(
-                  'Kejim bb',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                ],
+              ),
+              Row(
+                children: [
+                  Text(userProfileController.userProfileModel?.name ?? '', style: TextStyle(fontSize: 18)),
+                  SizedBox(width: 8),
+                  CircleAvatar(
+                    backgroundColor: Colors.white70,
+                    radius: 17,
+                    foregroundImage: (userProfileController.userProfileModel?.avatar?.url != null &&
+                        userProfileController.userProfileModel!.avatar!.url!.isNotEmpty)
+                        ? NetworkImage(userProfileController.userProfileModel!.avatar!.url!)
+                        : null,
+                    child: Icon(Icons.person),
                   ),
-                ),
-                SizedBox(width: 6),
-                 CircleAvatar(
-                  radius: 16,
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.person, color: Colors.grey, size: 20),
-                ),
-              ],
-            ),
-          ],
+
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       body: SingleChildScrollView(
