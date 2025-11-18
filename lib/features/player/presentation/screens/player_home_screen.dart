@@ -43,6 +43,11 @@ class _PlayerHomeScreenState extends State<PlayerHomeScreen> {
                   ),
                 ],
               ),
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => UserProfileScreen());
+                }
+              ),
               Row(
                 children: [
                   Text(userProfileController.userProfileModel?.name ?? '', style: TextStyle(fontSize: 18)),
