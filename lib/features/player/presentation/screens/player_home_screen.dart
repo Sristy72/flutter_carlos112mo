@@ -27,47 +27,56 @@ class _PlayerHomeScreenState extends State<PlayerHomeScreen> {
   Widget build(BuildContext context) {
     final UserProfileController userProfileController = Get.find<UserProfileController>();
     return Scaffold(
-      appBar: AppBar(
-        title: Obx(
-              () => Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+     appBar: AppBar(
+  title: Obx(
+    () => Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Text(
+              'Arequipa, Peru',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+            SizedBox(width: 8),
+            Image(
+              height: 18,
+              width: 18,
+              image: AssetImage("assets/images/location_icon.png"),
+            ),
+          ],
+        ),
+
+        // 👉 Wrap the profile row inside GestureDetector
+        GestureDetector(
+          onTap: () {
+            Get.to(() => UserProfileScreen());
+          },
+          child: Row(
             children: [
-              Row(
-                children: [
-                  Text('Arequipa, Peru', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-                  SizedBox(width: 8),
-                  Image(
-                    height: 18,
-                    width: 18,
-                    image: AssetImage("assets/images/location_icon.png"),
-                  ),
-                ],
+              Text(
+                userProfileController.userProfileModel?.name ?? '',
+                style: TextStyle(fontSize: 18),
               ),
-              GestureDetector(
-                onTap: () {
-                  Get.to(() => UserProfileScreen());
-                }
-              ),
-              Row(
-                children: [
-                  Text(userProfileController.userProfileModel?.name ?? '', style: TextStyle(fontSize: 18)),
-                  SizedBox(width: 8),
-                  CircleAvatar(
-                    backgroundColor: Colors.white70,
-                    radius: 17,
-                    foregroundImage: (userProfileController.userProfileModel?.avatar?.url != null &&
-                        userProfileController.userProfileModel!.avatar!.url!.isNotEmpty)
+              SizedBox(width: 8),
+              CircleAvatar(
+                backgroundColor: Colors.white70,
+                radius: 17,
+                foregroundImage:
+                    (userProfileController.userProfileModel?.avatar?.url != null &&
+                            userProfileController.userProfileModel!.avatar!.url!.isNotEmpty)
                         ? NetworkImage(userProfileController.userProfileModel!.avatar!.url!)
                         : null,
-                    child: Icon(Icons.person),
-                  ),
-
-                ],
+                child: Icon(Icons.person),
               ),
             ],
           ),
         ),
-      ),
+      ],
+    ),
+  ),
+),
+
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
