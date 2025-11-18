@@ -3,7 +3,6 @@ class ApiConstants {
   static const String baseDomain = 'http://10.10.5.53:8001';
   static const String baseUrl = '$baseDomain/api/v1';
 
-
   /// [Headers]
   static Map<String, String> get defaultHeaders => {
     'Content-Type': 'application/json',
@@ -35,7 +34,6 @@ class ApiConstants {
   static RecruiterAccountApi get recruiter => RecruiterAccountApi();
 
   static FieldEndpoints get field => FieldEndpoints();
-
 }
 
 class RecruiterAccountApi {
@@ -86,12 +84,6 @@ class NotificationEndpoints {
   final String getnotifications = '$_base/getnotifications';
 }
 
-class TeamEndpointcs {
-  static const String _base = '${ApiConstants.baseUrl}/team';
-
-  final String create = '$_base/create';
-}
-
 class LeagueEndpoints {
   static const String _base = '${ApiConstants.baseUrl}/league';
 
@@ -118,6 +110,15 @@ class FieldEndpoints {
   final String getFields = '$_base';
   final String update = '$_base/update';
   final String delete = '$_base/delete';
-  String getFieldsById(String id) =>
-      '$_base/$id';
+  String getFieldsById(String id) => '$_base/$id';
+}
+
+class TeamEndpointcs {
+  static const String _base = '${ApiConstants.baseUrl}/team';
+
+  final String create = '$_base';
+  final String getTeams = '$_base';
+  final String update = '$_base/update';
+  final String delete = '$_base/delete';
+  String getTeamsById(String id) => '$_base/$id';
 }

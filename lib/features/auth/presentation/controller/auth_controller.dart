@@ -8,7 +8,7 @@ import '../../../../core/network/services/auth_storage_service.dart';
 import '../../../../core/network/services/secure_store_services.dart';
 import '../../../../core/services/get_user_profile_service.dart';
 import '../../../../core/utils/debug_print.dart';
-import '../../../other/screens/owner_nav_screen.dart';
+import '../../../others/presentation/screens/owner_nav_screen.dart';
 import '../../data/model/auth_request_model.dart';
 import '../../data/model/forget_password_request_model.dart';
 import '../../data/model/refresh_token_request_model.dart';

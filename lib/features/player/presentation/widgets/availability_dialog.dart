@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/core/theme/app_colors.dart';
-import 'package:intl/intl.dart'; 
+import 'package:flutter_carlos112mo/features/player/presentation/widgets/schedule_matching_dialog.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class AvailabilityDialog extends StatefulWidget {
-  const AvailabilityDialog({super.key});
+  final preselectedDate;
+  final preselectedTime;
+  const AvailabilityDialog({
+    super.key,
+    this.preselectedDate,
+    this.preselectedTime,
+  });
 
   @override
   State<AvailabilityDialog> createState() => _AvailabilityDialogState();
@@ -15,16 +23,29 @@ class _AvailabilityDialogState extends State<AvailabilityDialog> {
   int? selectedHour;
 
   final List<int> times = [
-    8, 9, 10, 11, 12, 13,
-    14, 15, 16, 17, 18, 19,
-    20, 21, 22
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
   ];
 
   @override
   void initState() {
     super.initState();
     days = List.generate(7, (i) => DateTime.now().add(Duration(days: i)));
-    selectedDate = days.first;
+    selectedDate = widget.preselectedDate ?? days.first;
+    selectedHour = widget.preselectedTime;
   }
 
   @override
@@ -48,10 +69,7 @@ class _AvailabilityDialogState extends State<AvailabilityDialog> {
                   Icon(Icons.calendar_today, color: AppColors.primaryGreen),
                   Text(
                     "Select Date & Time",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   SizedBox(width: 24),
                 ],
@@ -74,10 +92,14 @@ class _AvailabilityDialogState extends State<AvailabilityDialog> {
                       child: Container(
                         width: 60,
                         decoration: BoxDecoration(
-                          color: isSelected ? AppColors.bgGreen : Colors.grey.shade200,
+                          color: isSelected
+                              ? AppColors.bgGreen
+                              : Colors.grey.shade200,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: isSelected ? AppColors.primaryGreen : Colors.transparent,
+                            color: isSelected
+                                ? AppColors.primaryGreen
+                                : Colors.transparent,
                           ),
                         ),
                         child: Column(
@@ -86,7 +108,9 @@ class _AvailabilityDialogState extends State<AvailabilityDialog> {
                             Text(
                               dateFormatter.format(day),
                               style: TextStyle(
-                                color: isSelected ? AppColors.primaryGreen : Colors.black,
+                                color: isSelected
+                                    ? AppColors.primaryGreen
+                                    : Colors.black,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -95,7 +119,9 @@ class _AvailabilityDialogState extends State<AvailabilityDialog> {
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: isSelected ? AppColors.primaryGreen : Colors.black,
+                                color: isSelected
+                                    ? AppColors.primaryGreen
+                                    : Colors.black,
                               ),
                             ),
                           ],
@@ -136,7 +162,9 @@ class _AvailabilityDialogState extends State<AvailabilityDialog> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: isSelected ? AppColors.primaryGreen : Colors.grey.shade300,
+                          color: isSelected
+                              ? AppColors.primaryGreen
+                              : Colors.grey.shade300,
                         ),
                         color: isSelected ? AppColors.bgGreen : Colors.white,
                       ),
@@ -144,7 +172,9 @@ class _AvailabilityDialogState extends State<AvailabilityDialog> {
                       child: Text(
                         "${hour.toString().padLeft(2, '0')}:00",
                         style: TextStyle(
-                          color: isSelected ? AppColors.primaryGreen : Colors.black,
+                          color: isSelected
+                              ? AppColors.primaryGreen
+                              : Colors.black,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -161,7 +191,17 @@ class _AvailabilityDialogState extends State<AvailabilityDialog> {
                   onPressed: selectedHour == null
                       ? null
                       : () {
-                          Navigator.pop(context);
+                          Navigator.pop(context); // CLOSE AvailabilityDialog
+
+                          showDialog(
+                            context: context,
+                            barrierDismissible: true,
+                            builder: (_) => ScheduleMatchDialog(
+                              selectedDate: selectedDate,
+                              selectedHour: selectedHour!,
+                            ),
+                          );
+
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -170,7 +210,6 @@ class _AvailabilityDialogState extends State<AvailabilityDialog> {
                             ),
                           );
                         },
-                       
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryGreen,
                     shape: RoundedRectangleBorder(

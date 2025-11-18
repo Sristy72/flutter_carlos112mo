@@ -3,12 +3,12 @@ import 'package:flutter_carlos112mo/features/Owner/presentation/screens/dashboar
 import 'package:flutter_carlos112mo/features/Owner/presentation/screens/owner_home_screen.dart';
 import 'package:flutter_carlos112mo/features/bookings/presentation/screens/bookings_screen.dart';
 import 'package:flutter_carlos112mo/features/others/presentation/widgets/owner_app_bottom_nav_bar.dart';
-import 'package:flutter_carlos112mo/features/player/presentation/screens/my_teams_screen.dart';
+import 'package:flutter_carlos112mo/features/team/presentation/screens/my_teams_screen.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/screens/player_fields_screen.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/screens/player_home_screen.dart';
 import 'package:flutter_carlos112mo/features/wall/presentation/screens/wall_screen.dart';
-import '../../Owner/presentation/screens/add_field_screen.dart';
-import '../../others/presentation/widgets/app_bottom_nav_bar.dart';
+import '../../../Owner/presentation/screens/add_field_screen.dart';
+import '../widgets/app_bottom_nav_bar.dart';
 
 
 class OwnerNavScreen extends StatefulWidget {

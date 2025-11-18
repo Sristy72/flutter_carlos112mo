@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_carlos112mo/features/others/presentation/screens/dashboard_screen.dart';
+import 'package:flutter_carlos112mo/features/team/data/model/create_team_request_model.dart';
+import 'package:flutter_carlos112mo/features/team/data/model/get_all_team_response_model.dart';
+import 'package:flutter_carlos112mo/features/team/domain/team_repo.dart';
+import 'package:flutter_carlos112mo/features/team/presentation/screens/my_teams_screen.dart';
+import 'package:get/get.dart';
+
+import '../../../../core/base/base_controller.dart';
+
+class TeamController extends BaseController {
+  final TeamRepository _teamRepository;
+
+  var isLoading = false.obs;
+  var errorMessage = "".obs;
+  var searchQuery = "".obs;
+
+  void setLoading(bool value) => isLoading.value = value;
+  void setError(String message) => errorMessage.value = message;
+
+  TeamController(this._teamRepository);
+  final Rx<GetAllTeamResponseModel?> teams = Rx(null);
+
+  Future<void> fetchTeam() async {
+    setLoading(true);
+
+    final result = await _teamRepository.getAllTeam();
+
+    result.fold(
+      (fail) {
+        setError(fail.message);
+        setLoading(false);
+      },
+      (success) {
+        teams.value = success.data;
+
+        setLoading(false);
+      },
+    );
+  }
+
+  Future<void> createTeam(CreateTeamRequest request) async {
+    final result = await _teamRepository.createTeam(request);
+
+    result.fold(
+      (failure) {
+        Get.snackbar(
+          "Error",
+          failure.message,
+          backgroundColor: Colors.red.shade50,
+          colorText: Colors.red.shade800,
+        );
+      },
+      (success) {
+        Get.snackbar(
+          "Success",
+          "Session scheduled successfully",
+          backgroundColor: Colors.green.shade50,
+          colorText: Colors.green.shade800,
+        );
+        fetchTeam();
+        Get.to(()=> MyTeamsScreen());
+      },
+    );
+  }
+}
