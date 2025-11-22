@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/widgets/chat_item.dart';
-
 import '../../../../core/theme/app_colors.dart';
 
 class MessageScreen extends StatelessWidget {
