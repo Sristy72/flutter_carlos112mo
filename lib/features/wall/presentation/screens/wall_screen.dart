@@ -1,56 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/core/common/widgets/app_scaffold.dart';
+import 'package:flutter_carlos112mo/features/wall/presentation/screens/create_post_screen.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../profile/presentation/controllers/user_profie_controller.dart';
-import '../../../profile/presentation/screens/user_profile_screen.dart';
 
 class WallScreen extends StatelessWidget {
   const WallScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final UserProfileController userProfileController = Get.find<UserProfileController>();
     bool matchInvitation = true;
     bool comments = false;
     return AppScaffold(
-      appBar: AppBar(
-        title: Obx(
-              () => Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Text('Arequipa, Peru', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-                  SizedBox(width: 8),
-                  Image(
-                    height: 18,
-                    width: 18,
-                    image: AssetImage("assets/images/location_icon.png"),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text(userProfileController.userProfileModel?.name ?? '', style: TextStyle(fontSize: 18)),
-                  SizedBox(width: 8),
-                  CircleAvatar(
-                    backgroundColor: Colors.white70,
-                    radius: 17,
-                    foregroundImage: (userProfileController.userProfileModel?.avatar?.url != null &&
-                        userProfileController.userProfileModel!.avatar!.url!.isNotEmpty)
-                        ? NetworkImage(userProfileController.userProfileModel!.avatar!.url!)
-                        : null,
-                    child: Icon(Icons.person),
-                  ),
-
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+      showDefaultAppBar: true,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,38 +24,43 @@ class WallScreen extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),),
             const SizedBox(height: 16),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withValues(alpha: 0.4),
-                    blurRadius: 4,
-                    offset: Offset(0, 0),
-                  )
-
-                ]
-              ),
+            GestureDetector(
+              onTap: (){
+                Get.to(() => CreatePostScreen());
+              },
               child: Container(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: Color(0xFF969696)),
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withValues(alpha: 0.4),
+                      blurRadius: 4,
+                      offset: Offset(0, 0),
+                    )
+
+                  ]
                 ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(Icons.messenger_outline, size: 20, color: Color(0xFF969696),),
-                    SizedBox(width: 8),
-                    Text('What\'s on your mind?', style: TextStyle(
-                      color: Color(0xFF969696)
-                    ),),
-                  ],
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: Color(0xFF969696)),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.messenger_outline, size: 20, color: Color(0xFF969696),),
+                      SizedBox(width: 8),
+                      Text('What\'s on your mind?', style: TextStyle(
+                        color: Color(0xFF969696)
+                      ),),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -17,58 +17,7 @@ class UserProfileScreen extends StatelessWidget {
     final AuthController authController = Get.find<AuthController>();
 
     return AppScaffold(
-      appBar: AppBar(
-        title: Obx(
-          () => Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    'Arequipa, Peru',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(width: 8),
-                  Image(
-                    height: 18,
-                    width: 18,
-                    image: AssetImage("assets/images/location_icon.png"),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text(
-                    userProfileController.userProfileModel?.name ?? '',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  SizedBox(width: 8),
-                  CircleAvatar(
-                    backgroundColor: Colors.white70,
-                    radius: 17,
-                    foregroundImage:
-                        (userProfileController.userProfileModel?.avatar?.url !=
-                                null &&
-                            userProfileController
-                                .userProfileModel!
-                                .avatar!
-                                .url!
-                                .isNotEmpty)
-                        ? NetworkImage(
-                            userProfileController
-                                .userProfileModel!
-                                .avatar!
-                                .url!,
-                          )
-                        : null,
-                    child: Icon(Icons.person),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+      showDefaultAppBar: true,
       body: Obx(
         () => userProfileController.isLoading.value
             ? Center(child: CircularProgressIndicator())
@@ -140,9 +89,13 @@ class UserProfileScreen extends StatelessWidget {
                           ),
                           onPressed: () {
                             userProfileController.isFieldEditable.value =
-                                true;
+                                !userProfileController.isFieldEditable.value;
                           },
-                          child: Text('Edit'),
+                          child: Text(
+                            userProfileController.isFieldEditable.value
+                                ? 'Cancel'
+                                : 'Edit',
+                          ),
                         ),
                       ],
                     ),
@@ -170,32 +123,55 @@ class UserProfileScreen extends StatelessWidget {
                               Row(
                                 children: [
                                   Spacer(),
-                                  CircleAvatar(
-                                    backgroundColor: Colors.grey.shade200,
-                                    radius: 50,
-                                    foregroundImage:
-                                        (userProfileController
-                                                    .userProfileModel
-                                                    ?.avatar
-                                                    ?.url !=
-                                                null &&
-                                            userProfileController
-                                                .userProfileModel!
-                                                .avatar!
-                                                .url!
-                                                .isNotEmpty)
-                                        ? NetworkImage(
-                                            userProfileController
-                                                .userProfileModel!
-                                                .avatar!
-                                                .url!,
-                                          )
-                                        : null,
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 80,
-                                      color: Colors.grey,
-                                    ),
+                                  Stack(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor: Colors.grey.shade200,
+                                        radius: 50,
+                                        foregroundImage:
+                                            (userProfileController
+                                                        .userProfileModel
+                                                        ?.avatar
+                                                        ?.url !=
+                                                    null &&
+                                                userProfileController
+                                                    .userProfileModel!
+                                                    .avatar!
+                                                    .url!
+                                                    .isNotEmpty)
+                                            ? NetworkImage(
+                                                userProfileController
+                                                    .userProfileModel!
+                                                    .avatar!
+                                                    .url!,
+                                              )
+                                            : null,
+                                        child: Icon(
+                                          Icons.person,
+                                          size: 80,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      userProfileController
+                                              .isFieldEditable
+                                              .value
+                                          ? Positioned(
+                                              bottom: 0,
+                                              right: 0,
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  userProfileController
+                                                      .pickImage();
+                                                },
+                                                child: Image.asset(
+                                                  'assets/images/edit_circle.png',
+                                                  height: 35,
+                                                  width: 35,
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                    ],
                                   ),
                                   SizedBox(width: 8),
 
@@ -316,7 +292,11 @@ class UserProfileScreen extends StatelessWidget {
                                     userProfileController.position.value.isEmpty
                                     ? null
                                     : userProfileController.position.value,
+
                                 decoration: InputDecoration(
+                                  enabled: userProfileController
+                                      .isFieldEditable
+                                      .value,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),

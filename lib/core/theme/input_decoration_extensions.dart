@@ -5,37 +5,30 @@ import 'app_colors.dart';
 
 extension InputDecorationExtensions on BuildContext {
   InputDecoration get primaryInputDecoration => InputDecoration(
-    filled: true,
     suffixIconColor: AppColors.textFieldLightGrey,
     fillColor: AppColors.primaryWhite,
-    contentPadding: AppSizes.paddingMd.all,
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(AppSizes.paddingSm.size),
-      borderSide: BorderSide(color: AppColors.textFieldLightGrey),
+      borderSide: BorderSide(color: AppColors.borderGrey),
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(AppSizes.paddingSm.size),
-      borderSide: BorderSide(color: AppColors.textFieldLightGrey),
+      borderSide: BorderSide(color: AppColors.borderGrey),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(AppSizes.paddingSm.size),
-      borderSide: BorderSide(color: AppColors.textBlack, width: 1),
+      borderSide: BorderSide(color: AppColors.primaryGreen),
     ),
     errorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(AppSizes.paddingSm.size),
-      borderSide: const BorderSide(color: AppColors.logoutRed, width: 1),
+      borderSide: const BorderSide(color: AppColors.logoutRed),
     ),
     focusedErrorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(AppSizes.paddingSm.size),
-      borderSide: const BorderSide(color: AppColors.logoutRed, width: 1),
+      borderSide: const BorderSide(color: AppColors.logoutRed),
     ),
     hintStyle: TextStyle(
-      color: AppColors.textFieldLightGrey,
-      fontSize: 16,
+      color: AppColors.borderGrey,
+      fontSize: 14,
       fontWeight: FontWeight.w400,
     ),
     labelStyle: TextStyle(
-      color: AppColors.textBlack,
+      color: AppColors.primaryGreen,
       fontSize: 16,
       fontWeight: FontWeight.w500,
     ),

@@ -17,6 +17,7 @@ class AppColors {
   // * <--- Others --->
   static const Color logoutRed = Color(0xFFDC2626);
   static const Color updateGrey = Color(0xFFE5E7EB);
+  static const Color borderGrey = Color(0xFF969696);
   static const Color lightRed = Color(0xFFFFD3C8);
 
   // * <--- Home  --->
