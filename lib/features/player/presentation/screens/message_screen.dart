@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_carlos112mo/features/message/presentation/screens/chat_screen.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/widgets/chat_item.dart';
+import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
 
@@ -81,7 +83,9 @@ class MessageScreen extends StatelessWidget {
                   time: "2 min ago",
                   unreadCount: 3,
                   avatarPath: 'assets/images/profile_sample.jpg',
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(() => ChatScreen());
+                  },
                 ),
 
                 ChatItem(

@@ -237,7 +237,8 @@ class _MyTeamsScreenState extends State<MyTeamsScreen> {
   @override
   void initState() {
     super.initState();
-    controller.fetchTeam(); // Fetch once
+    controller.fetchTeam();
+    // controller.fetchSingleTeam(); // Fetch once
   }
 
   @override
@@ -324,6 +325,7 @@ class _MyTeamsScreenState extends State<MyTeamsScreen> {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 16),
                     child: _buildTeamCard(
+                      team.id,
                       team.name,
                       "${team.members.length} member(s)",
                       team.description,
@@ -339,6 +341,7 @@ class _MyTeamsScreenState extends State<MyTeamsScreen> {
   }
 
   Widget _buildTeamCard(
+    String id,
     String teamName,
     String memberCount,
     String description,
@@ -348,6 +351,7 @@ class _MyTeamsScreenState extends State<MyTeamsScreen> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -423,12 +427,24 @@ class _MyTeamsScreenState extends State<MyTeamsScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: OutlinedButton.icon(
-                    onPressed: () {
-                       showDialog(
-                            context: context,
-                            builder: (_) => const AvailabilityDialog(),
-                          );
+                    onPressed: () async {
+                      print("👉 CLICKED Schedule Match for Team ID: $id");
+
+                      controller.selectedFieldId.value = id;
+
+                      print(
+                        "👉 selectedFieldId set to: ${controller.selectedFieldId.value}",
+                      );
+
+                      // await controller
+                      //     .fetchSingleTeam(); // wait before showing dialog
+
+                      showDialog(
+                        context: context,
+                        builder: (_) =>  AvailabilityDialog( teamId: id,),
+                      );
                     },
+
                     icon: const Icon(Icons.calendar_today, size: 18),
                     label: const Text('Schedule Match'),
                     style: OutlinedButton.styleFrom(
