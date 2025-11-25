@@ -208,6 +208,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/features/auth/presentation/controller/auth_controller.dart';
+import 'package:flutter_carlos112mo/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:flutter_carlos112mo/features/auth/presentation/screens/signup_screen.dart';
 import 'package:get/get.dart';
 
@@ -376,7 +377,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() =>  EmailVerifyScreen());
+                    },
                     child: Text(
                       'Forgot your password?',
                       style: theme.textTheme.bodySmall?.copyWith(

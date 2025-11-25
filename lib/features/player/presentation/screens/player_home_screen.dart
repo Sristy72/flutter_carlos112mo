@@ -1,49 +1,82 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_carlos112mo/features/profile/presentation/screens/user_profile_screen.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../profile/presentation/controllers/user_profie_controller.dart';
+import '../controller/field_controller.dart';
 import '../widgets/features_field_card.dart';
 import 'player_fields_screen.dart';
 
-class PlayerHomeScreen extends StatelessWidget {
+class PlayerHomeScreen extends StatefulWidget {
   const PlayerHomeScreen({super.key});
 
   @override
+  State<PlayerHomeScreen> createState() => _PlayerHomeScreenState();
+}
+
+class _PlayerHomeScreenState extends State<PlayerHomeScreen> {
+  final controller = Get.find<FieldPlayerController>();
+  @override
+  void initState() {
+    super.initState();
+    controller.fetchField();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final UserProfileController userProfileController = Get.find<UserProfileController>();
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+     appBar: AppBar(
+  title: Obx(
+    () => Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
           children: [
-            Row(
-              children: const [
-                Icon(Icons.location_on_outlined, color: AppColors.primaryWhite),
-                SizedBox(width: 6),
-                Text(
-                  "Arequipa, Peru",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-                ),
-              ],
+            Text(
+              'Arequipa, Peru',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
-            Row(
-              children: [
-                const Text(
-                  "Mr. Raja",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                ),
-                const SizedBox(width: 8),
-                const CircleAvatar(
-                  radius: 18,
-                  backgroundImage: AssetImage(
-                    'assets/images/profile_sample.jpg',
-                  ), // Replace with your asset
-                ),
-              ],
+            SizedBox(width: 8),
+            Image(
+              height: 18,
+              width: 18,
+              image: AssetImage("assets/images/location_icon.png"),
             ),
           ],
         ),
-      ),
+
+        // 👉 Wrap the profile row inside GestureDetector
+        GestureDetector(
+          onTap: () {
+            Get.to(() => UserProfileScreen());
+          },
+          child: Row(
+            children: [
+              Text(
+                userProfileController.userProfileModel?.name ?? '',
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(width: 8),
+              CircleAvatar(
+                backgroundColor: Colors.white70,
+                radius: 17,
+                foregroundImage:
+                    (userProfileController.userProfileModel?.avatar?.url != null &&
+                            userProfileController.userProfileModel!.avatar!.url!.isNotEmpty)
+                        ? NetworkImage(userProfileController.userProfileModel!.avatar!.url!)
+                        : null,
+                child: Icon(Icons.person),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ),
+),
+
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -160,25 +193,46 @@ class PlayerHomeScreen extends StatelessWidget {
               const SizedBox(height: 16),
 
               // Featured Fields List
-              const FeaturedFieldCard(
-                imagePath: 'assets/images/Fieldpic1.jpg',
-                title: 'Green Valley Field',
-                details: '5v5 • 123 Sports Lane, Football City',
-                price: '\$120/hr',
-                rating: 4.5,
-                reviews: 18,
-                tags: ['showers', 'lights', 'parking', '+2 more'],
-              ),
-              const SizedBox(height: 16),
-              const FeaturedFieldCard(
-                imagePath: 'assets/images/Fieldpic2.png',
-                title: 'Urban Futsal Center',
-                details: '11v11 • 45 Downtown Avenue City',
-                price: '\$120/hr',
-                rating: 4.8,
-                reviews: 24,
-                tags: ['showers', 'lights', 'parking', '+2 more'],
-              ),
+              Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (controller.errorMessage.isNotEmpty) {
+                  return Text(controller.errorMessage.value);
+                }
+
+                if (controller.fields.value == null ||
+                    controller.fields.value!.fields.isEmpty) {
+                  return const Text("No fields available");
+                }
+
+                return Column(
+                  children: controller.fields.value!.fields.map((field) {
+                    return FeaturedFieldCard(
+                      id: field.id,
+                      imagePath: field.images.isNotEmpty
+                          ? field.images.first.url
+                          : "",
+                      title: field.fieldName,
+                      details: "${field.fieldType} • ${field.location.address}",
+                      price: "\$${field.pricePerHour}/hr",
+                      rating: field.rating.average,
+                      reviews: field.rating.count,
+                      tags: [
+                        if (field.servicesAmenities.showers) "showers",
+                        if (field.servicesAmenities.lights) "lights",
+                        if (field.servicesAmenities.parking) "parking",
+                        if (field.servicesAmenities.changingRooms)
+                          "changing rooms",
+                        if (field.servicesAmenities.cafe) "cafe",
+                        if (field.servicesAmenities.equipmentRental)
+                          "equipment",
+                      ],
+                    );
+                  }).toList(),
+                );
+              }),
             ],
           ),
         ),

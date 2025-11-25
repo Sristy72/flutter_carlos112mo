@@ -1,49 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../profile/presentation/controllers/user_profie_controller.dart';
 
 class CreateTeamScreen extends StatelessWidget {
   const CreateTeamScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final UserProfileController userProfileController = Get.find<UserProfileController>();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        leading: null,
-        title: Row(
-          children: [
-            const Text(
-              'Arequipa, Peru',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+        title: Obx(
+              () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text('Arequipa, Peru', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                  SizedBox(width: 8),
+                  Image(
+                    height: 18,
+                    width: 18,
+                    image: AssetImage("assets/images/location_icon.png"),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(width: 4),
-            const Icon(Icons.location_on, color: Colors.white, size: 18),
-          ],
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Row(
-              children: [
-                const Text(
-                  'Mr. Raja',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-                const SizedBox(width: 8),
-                CircleAvatar(
-                  radius: 18,
-                  backgroundColor: Colors.grey[300],
-                  child: const Icon(Icons.person, color: Colors.grey),
-                ),
-              ],
-            ),
+              Row(
+                children: [
+                  Text(userProfileController.userProfileModel?.name ?? '', style: TextStyle(fontSize: 18)),
+                  SizedBox(width: 8),
+                  CircleAvatar(
+                    backgroundColor: Colors.white70,
+                    radius: 17,
+                    foregroundImage: (userProfileController.userProfileModel?.avatar?.url != null &&
+                        userProfileController.userProfileModel!.avatar!.url!.isNotEmpty)
+                        ? NetworkImage(userProfileController.userProfileModel!.avatar!.url!)
+                        : null,
+                    child: Icon(Icons.person),
+                  ),
+
+                ],
+              ),
+            ],
           ),
-        ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(

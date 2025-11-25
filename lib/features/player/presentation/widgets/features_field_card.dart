@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_carlos112mo/features/player/presentation/screens/find_fields_screen.dart';
+import 'package:get/get.dart';
 
 class FeaturedFieldCard extends StatelessWidget {
+  final String id;
+
   final String imagePath;
   final String title;
   final String details;
@@ -11,6 +15,7 @@ class FeaturedFieldCard extends StatelessWidget {
 
   const FeaturedFieldCard({
     super.key,
+    required this.id,
     required this.imagePath,
     required this.title,
     required this.details,
@@ -36,12 +41,19 @@ class FeaturedFieldCard extends StatelessWidget {
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
               ),
-              child: Image.asset(
-                imagePath,
-                width: double.infinity,
-                height: 140,
-                fit: BoxFit.cover,
-              ),
+              child: imagePath.startsWith("http")
+                  ? Image.network(
+                      imagePath,
+                      width: double.infinity,
+                      height: 140,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      imagePath,
+                      width: double.infinity,
+                      height: 140,
+                      fit: BoxFit.cover,
+                    ),
             ),
 
             Padding(
@@ -143,7 +155,10 @@ class FeaturedFieldCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        print("🐞 Going to details → ID = $id");
+                        Get.to(() => FindFieldsScreen(id: id));
+                      },
                       child: const Text("View Details"),
                     ),
                   ),

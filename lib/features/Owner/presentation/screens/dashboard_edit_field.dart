@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../../core/common/widgets/bottom_navigation_bar.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../profile/presentation/controllers/user_profie_controller.dart';
 import '../controllers/field_controller.dart';
 import '../widget/dashboard_field_card_widget.dart';
 import '../widget/feature_field_widget.dart';
@@ -18,49 +19,44 @@ class OwnerDashboardEditScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(FieldController());
+    final UserProfileController userProfileController = Get.find<UserProfileController>();
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: AppColors.primaryGreen, // Teal-green header
-        elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: const [
-                Icon(Icons.location_on_outlined, color: Colors.white, size: 18),
-                SizedBox(width: 4),
-                Text(
-                  'Arequipa, Peru',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
+        title: Obx(
+              () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text('Arequipa, Peru', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                  SizedBox(width: 8),
+                  Image(
+                    height: 18,
+                    width: 18,
+                    image: AssetImage("assets/images/location_icon.png"),
                   ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const Text(
-                  'Kejim bb',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                ],
+              ),
+              Row(
+                children: [
+                  Text(userProfileController.userProfileModel?.name ?? '', style: TextStyle(fontSize: 18)),
+                  SizedBox(width: 8),
+                  CircleAvatar(
+                    backgroundColor: Colors.white70,
+                    radius: 17,
+                    foregroundImage: (userProfileController.userProfileModel?.avatar?.url != null &&
+                        userProfileController.userProfileModel!.avatar!.url!.isNotEmpty)
+                        ? NetworkImage(userProfileController.userProfileModel!.avatar!.url!)
+                        : null,
+                    child: Icon(Icons.person),
                   ),
-                ),
-                const SizedBox(width: 6),
-                CircleAvatar(
-                  radius: 16,
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.person, color: Colors.grey, size: 20),
-                ),
-              ],
-            ),
-          ],
+
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       body: SafeArea(
@@ -137,24 +133,24 @@ class OwnerDashboardEditScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(
-        onTap: (index) {
-          // Optional navigation logic
-          if (index == 0) {
-            Get.to(() => const OwnerHomeScreen());
+      // bottomNavigationBar: CustomBottomNavBar(
+      //   onTap: (index) {
+      //     // Optional navigation logic
+      //     if (index == 0) {
+      //       Get.to(() => const OwnerHomeScreen());
 
-            // Get.toNamed('/home');
-          } else if (index == 1) {
-            Get.to(() => const OwnerDashboardEditScreen());
-            // Get.toNamed('/dashboard');
-          } else if (index == 2) {
-            // Get.toNamed('/myFields');
-            Get.to(() => AddFieldScreen());
-          } else if (index == 3) {
-            Get.toNamed('/profile');
-          }
-        },
-      ),
+      //       // Get.toNamed('/home');
+      //     } else if (index == 1) {
+      //       Get.to(() => const OwnerDashboardEditScreen());
+      //       // Get.toNamed('/dashboard');
+      //     } else if (index == 2) {
+      //       // Get.toNamed('/myFields');
+      //       Get.to(() => AddFieldScreen());
+      //     } else if (index == 3) {
+      //       Get.toNamed('/profile');
+      //     }
+      //   },
+      // ),
     );
   }
 }

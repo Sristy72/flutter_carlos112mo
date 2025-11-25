@@ -1,8 +1,8 @@
 class ApiConstants {
   /// [Base Configuration]
-  static const String baseDomain = 'http://10.10.5.53:8001';
+  // static const String baseDomain = 'http://10.10.5.53:8001';
+  static const String baseDomain = 'http://10.10.5.53:8001'; // Farhan
   static const String baseUrl = '$baseDomain/api/v1';
-
 
   /// [Headers]
   static Map<String, String> get defaultHeaders => {
@@ -33,6 +33,8 @@ class ApiConstants {
 
   static PaymentEndpoints get payment => PaymentEndpoints();
   static RecruiterAccountApi get recruiter => RecruiterAccountApi();
+
+  static FieldEndpoints get field => FieldEndpoints();
 }
 
 class RecruiterAccountApi {
@@ -46,7 +48,7 @@ class AuthEndpoints {
   final String login = '$_base/login';
   final String register = '$_base/register';
   final String verify = '$_base/verify';
-  final String refreshToken = '${ApiConstants.baseUrl}/auth/refresh-token';
+  final String refreshToken = '$_base/refresh-token';
 
   // Password Reset Flow
   final String resetPass = '$_base/forget'; // Send OTP for forgot password
@@ -83,12 +85,6 @@ class NotificationEndpoints {
   final String getnotifications = '$_base/getnotifications';
 }
 
-class TeamEndpointcs {
-  static const String _base = '${ApiConstants.baseUrl}/team';
-
-  final String create = '$_base/create';
-}
-
 class LeagueEndpoints {
   static const String _base = '${ApiConstants.baseUrl}/league';
 
@@ -107,4 +103,23 @@ class PaymentEndpoints {
   final String createPayment = '$_base/create-payment';
 
   final String confirmPayment = '$_base/confirm-payment';
+}
+
+class FieldEndpoints {
+  static const String _base = '${ApiConstants.baseUrl}/field';
+  final String create = '$_base/create';
+  final String getFields = '$_base';
+  final String update = '$_base/update';
+  final String delete = '$_base/delete';
+  String getFieldsById(String id) => '$_base/$id';
+}
+
+class TeamEndpointcs {
+  static const String _base = '${ApiConstants.baseUrl}/team';
+
+  final String create = '$_base';
+  final String getTeams = '$_base';
+  final String update = '$_base/update';
+  final String delete = '$_base/delete';
+  String getTeamsById(String id) => '$_base/$id';
 }
