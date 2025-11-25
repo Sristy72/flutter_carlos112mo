@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/core/theme/app_colors.dart';
+import 'package:flutter_carlos112mo/features/Owner/presentation/screens/add_field_screen.dart';
 import 'package:flutter_carlos112mo/features/Owner/presentation/screens/owner_home_screen.dart';
 import 'package:get/get.dart';
 
@@ -103,7 +104,7 @@ class OwnerDashboardScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
                     onPressed: () {
-                      // Handle add field action
+                      Get.to(() => AddFieldScreen());
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryGreen,
@@ -131,46 +132,6 @@ class OwnerDashboardScreen extends StatelessWidget {
           ],
         ),
       ),
-      // bottomNavigationBar: CustomBottomNavBar(
-      //   onTap: (index) {
-      //     // Optional navigation logic
-      //     if (index == 0) {
-      //       Get.to(() => const OwnerHomeScreen());
-      //       // Get.toNamed('/home');
-      //     } else if (index == 1) {
-      //       Get.to(() => const OwnerDashboardScreen());
-      //       // Get.toNamed('/dashboard');
-      //     } else if (index == 2) {
-      //       // Get.toNamed('/myFields');
-      //     } else if (index == 3) {
-      //       Get.toNamed('/profile');
-      //     }
-      //   },
-      // ),
-
-      // bottomNavigationBar: BottomNavigationBar(
-      //   backgroundColor: Colors.white,
-      //   selectedItemColor: const Color(0xFF00897B),
-      //   unselectedItemColor: Colors.grey,
-      //   currentIndex: 1, // Dashboard tab active
-      //   onTap: (index) {
-      //     // handle navigation
-      //   },
-      //   items: const [
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home_outlined),
-      //       label: 'Home',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.dashboard),
-      //       label: 'Dashboard',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.person_outline),
-      //       label: 'Profile',
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

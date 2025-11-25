@@ -12,7 +12,7 @@ class AppTheme {
       displayColor: AppColors.textBlack,
     ),
     appBarTheme: AppBarTheme(
-      iconTheme: IconThemeData(color: AppColors.primaryWhite),
+      iconTheme: IconThemeData(color: Colors.black),
       backgroundColor: AppColors.primaryGreen,
       titleTextStyle: TextStyle(
         fontSize: 24,
