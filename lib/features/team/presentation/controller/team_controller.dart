@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/features/others/presentation/screens/dashboard_screen.dart';
 import 'package:flutter_carlos112mo/features/team/data/model/create_team_request_model.dart';
 import 'package:flutter_carlos112mo/features/team/data/model/get_all_team_response_model.dart';
+import 'package:flutter_carlos112mo/features/team/data/model/get_single_team_response_model.dart';
 import 'package:flutter_carlos112mo/features/team/domain/team_repo.dart';
 import 'package:flutter_carlos112mo/features/team/presentation/screens/my_teams_screen.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,8 @@ import '../../../../core/base/base_controller.dart';
 
 class TeamController extends BaseController {
   final TeamRepository _teamRepository;
+  var venue = Rx<SingleTeamResponse?>(null);
+  final selectedFieldId = "".obs;
 
   var isLoading = false.obs;
   var errorMessage = "".obs;
@@ -59,7 +62,37 @@ class TeamController extends BaseController {
           colorText: Colors.green.shade800,
         );
         fetchTeam();
-        Get.to(()=> MyTeamsScreen());
+        Get.to(() => MyTeamsScreen());
+      },
+    );
+  }
+
+  Future<void> fetchSingleTeam() async {
+    print("🔵 fetchSingleTeam() CALLED");
+
+    if (selectedFieldId.isEmpty) {
+      print("❌ ERROR: selectedFieldId is EMPTY!");
+      return;
+    }
+
+    print("🔵 Fetching team by ID: ${selectedFieldId.value}");
+
+    setLoading(true);
+
+    final result = await _teamRepository.getTeamsById(selectedFieldId.value);
+
+    result.fold(
+      (fail) {
+        print("❌ API FAILED: ${fail.message}");
+        setError(fail.message);
+        setLoading(false);
+      },
+      (success) {
+        print("✅ API SUCCESS, DATA RECEIVED:");
+        print(success.data);
+
+        venue.value = success.data;
+        setLoading(false);
       },
     );
   }

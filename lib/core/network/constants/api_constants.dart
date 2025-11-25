@@ -121,5 +121,5 @@ class TeamEndpointcs {
   final String getTeams = '$_base';
   final String update = '$_base/update';
   final String delete = '$_base/delete';
-  String getTeamsById(String id) => '$_base/$id';
+   String getTeamsById(String id) => '$_base/$id';
 }

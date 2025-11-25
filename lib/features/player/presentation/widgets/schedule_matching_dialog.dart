@@ -4,11 +4,13 @@ import 'package:flutter_carlos112mo/core/theme/app_colors.dart';
 import 'availability_dialog.dart';
 
 class ScheduleMatchDialog extends StatefulWidget {
+  final String teamId;
   final DateTime selectedDate;
   final int selectedHour;
 
   const ScheduleMatchDialog({
     super.key,
+    required this.teamId,
     required this.selectedDate,
     required this.selectedHour,
   });
@@ -108,6 +110,7 @@ class _ScheduleMatchDialogState extends State<ScheduleMatchDialog> {
                               showDialog(
                                 context: context,
                                 builder: (_) => AvailabilityDialog(
+                                  teamId: widget.teamId,
                                   preselectedDate: widget.selectedDate,
                                   preselectedTime: widget.selectedHour,
                                 ),

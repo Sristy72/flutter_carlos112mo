@@ -293,12 +293,14 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:flutter_carlos112mo/features/player/presentation/screens/message_screen.dart';
 import 'package:flutter_carlos112mo/features/profile/presentation/controllers/user_profie_controller.dart';
 import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/find_field_repo.dart';
 import '../controller/find_field_controller.dart';
 import '../widgets/availability_dialog.dart';
+import '../widgets/payment_availability_widget.dart';
 
 class FindFieldsScreen extends StatefulWidget {
   final String id;
@@ -323,16 +325,20 @@ class _FindFieldsScreenState extends State<FindFieldsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final UserProfileController userProfileController = Get.find<UserProfileController>();
+    final UserProfileController userProfileController =
+        Get.find<UserProfileController>();
     return Scaffold(
       appBar: AppBar(
         title: Obx(
-              () => Row(
+          () => Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
-                  Text('Arequipa, Peru', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                  Text(
+                    'Arequipa, Peru',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  ),
                   SizedBox(width: 8),
                   Image(
                     height: 18,
@@ -343,18 +349,31 @@ class _FindFieldsScreenState extends State<FindFieldsScreen> {
               ),
               Row(
                 children: [
-                  Text(userProfileController.userProfileModel?.name ?? '', style: TextStyle(fontSize: 18)),
+                  Text(
+                    userProfileController.userProfileModel?.name ?? '',
+                    style: TextStyle(fontSize: 18),
+                  ),
                   SizedBox(width: 8),
                   CircleAvatar(
                     backgroundColor: Colors.white70,
                     radius: 17,
-                    foregroundImage: (userProfileController.userProfileModel?.avatar?.url != null &&
-                        userProfileController.userProfileModel!.avatar!.url!.isNotEmpty)
-                        ? NetworkImage(userProfileController.userProfileModel!.avatar!.url!)
+                    foregroundImage:
+                        (userProfileController.userProfileModel?.avatar?.url !=
+                                null &&
+                            userProfileController
+                                .userProfileModel!
+                                .avatar!
+                                .url!
+                                .isNotEmpty)
+                        ? NetworkImage(
+                            userProfileController
+                                .userProfileModel!
+                                .avatar!
+                                .url!,
+                          )
                         : null,
                     child: Icon(Icons.person),
                   ),
-
                 ],
               ),
             ],
@@ -622,7 +641,7 @@ class _FindFieldsScreenState extends State<FindFieldsScreen> {
                         onPressed: () {
                           showDialog(
                             context: context,
-                            builder: (_) => const AvailabilityDialog(),
+                            builder: (_) => const PaymentAvailability(),
                           );
                         },
                       ),
@@ -652,6 +671,19 @@ class _FindFieldsScreenState extends State<FindFieldsScreen> {
           ),
         );
       }),
+
+      floatingActionButton: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        child: FloatingActionButton(
+          backgroundColor: Colors.teal,
+          onPressed: () {
+          Get.to(()=> MessageScreen());
+          },
+          child: const Icon(Icons.chat_bubble_outline, color: Colors.white),
+        ),
+      ),
+
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

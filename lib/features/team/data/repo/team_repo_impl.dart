@@ -9,6 +9,7 @@ import '../../../../core/network/api_client.dart';
 import '../../../../core/network/constants/api_constants.dart';
 import '../../../../core/network/network_result.dart';
 import '../../domain/team_repo.dart';
+import '../model/get_single_team_response_model.dart';
 
 
 class TeamRepositoryImpl implements TeamRepository {
@@ -30,6 +31,19 @@ NetworkResult<GetAllTeamResponseModel> getAllTeam() {
       data: request.toJson(),
       fromJsonT: (json) => CreateTeamResponse.fromJson(json),
       // isFormData: true
+    );
+  }
+
+  @override
+  NetworkResult<SingleTeamResponse> getTeamsById(String id) {
+    return _apiClient.get(
+    ApiConstants.team.getTeamsById(id),
+      fromJsonT: (json) {
+        if (json == null) {
+          throw Exception("API returned null for getFieldsById");
+        }
+        return SingleTeamResponse.fromJson(json as Map<String, dynamic>);
+      },
     );
   }
  

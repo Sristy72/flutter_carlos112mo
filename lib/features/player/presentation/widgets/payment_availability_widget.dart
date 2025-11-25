@@ -5,22 +5,22 @@ import 'package:flutter_carlos112mo/features/team/presentation/controller/team_c
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class AvailabilityDialog extends StatefulWidget {
-  final String teamId;
+class PaymentAvailability extends StatefulWidget {
   final preselectedDate;
   final preselectedTime;
-  const AvailabilityDialog({
+
+
+  const PaymentAvailability({
     super.key,
-    required this.teamId,
     this.preselectedDate,
     this.preselectedTime,
   });
 
   @override
-  State<AvailabilityDialog> createState() => _AvailabilityDialogState();
+  State<PaymentAvailability> createState() => _PaymentAvailabilityState();
 }
 
-class _AvailabilityDialogState extends State<AvailabilityDialog> {
+class _PaymentAvailabilityState extends State<PaymentAvailability> {
   late List<DateTime> days;
   late DateTime selectedDate;
   int? selectedHour;
@@ -51,8 +51,8 @@ class _AvailabilityDialogState extends State<AvailabilityDialog> {
     selectedDate = widget.preselectedDate ?? days.first;
     selectedHour = widget.preselectedTime;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.fetchSingleTeam();
-    });
+    controller.fetchSingleTeam();
+  });
   }
 
   @override
@@ -198,21 +198,16 @@ class _AvailabilityDialogState extends State<AvailabilityDialog> {
                   onPressed: selectedHour == null
                       ? null
                       : () {
-                          print("👉 Debug: Passing teamId = ${widget.teamId}");
-                          print(
-                            "👉 Debug: Selected Date = $selectedDate, Hour = $selectedHour",
-                          );
                           Navigator.pop(context); // CLOSE AvailabilityDialog
 
-                          showDialog(
-                            context: context,
-                            barrierDismissible: true,
-                            builder: (_) => ScheduleMatchDialog(
-                              teamId: widget.teamId,
-                              selectedDate: selectedDate,
-                              selectedHour: selectedHour!,
-                            ),
-                          );
+                          // showDialog(
+                          //   context: context,
+                          //   barrierDismissible: true,
+                          //   builder: (_) => ScheduleMatchDialog(
+                          //     selectedDate: selectedDate,
+                          //     selectedHour: selectedHour!,
+                          //   ),
+                          // );
 
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_carlos112mo/core/theme/app_colors.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/screens/find_fields_screen.dart';
 import 'package:get/get.dart';
 
@@ -80,13 +81,13 @@ class FeaturedFieldCard extends StatelessWidget {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.teal.withOpacity(0.1),
+                          color: AppColors.primaryGreen.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
                           price,
                           style: const TextStyle(
-                            color: Colors.teal,
+                            color: AppColors.primaryGreen,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
