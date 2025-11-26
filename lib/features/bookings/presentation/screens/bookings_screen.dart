@@ -67,7 +67,11 @@ class _BookingsScreenState extends State<BookingsScreen> {
           onPressed: () {
             // Handle chat
           },
-          child: Icon(Icons.chat_bubble_outline),
+          child: Image.asset(
+            "assets/images/messageIcon.png",
+            height: 30,
+            width: 30,
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

@@ -1,87 +1,65 @@
 class SingleFieldsResponseModel {
-  final String id;
-  final String fieldName;
-  final String description;
-  final String fieldType;
-  final double pricePerHour;
-  final Location location;
-  final ServicesAmenities servicesAmenities;
-  final Rating rating;
-  final List<FieldImage> images;
-  final Owner owner;
-  final bool isActive;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final int v;
+  Location? location;
+  ServicesAmenities? servicesAmenities;
+  Rating? rating;
+  String? id;
+  String? fieldName;
+  String? description;
+  String? fieldType;
+  bool? promotion;
+  num? basePricePerHour;
+  List<PricePerHour>? pricePerHour;
+  List<FieldImage>? images;
+  Owner? owner;
+  bool? isActive;
+  String? createdAt;
 
   SingleFieldsResponseModel({
-    required this.id,
-    required this.fieldName,
-    required this.description,
-    required this.fieldType,
-    required this.pricePerHour,
-    required this.location,
-    required this.servicesAmenities,
-    required this.rating,
-    required this.images,
-    required this.owner,
-    required this.isActive,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.v,
+    this.location,
+    this.servicesAmenities,
+    this.rating,
+    this.id,
+    this.fieldName,
+    this.description,
+    this.fieldType,
+    this.promotion,
+    this.basePricePerHour,
+    this.pricePerHour,
+    this.images,
+    this.owner,
+    this.isActive,
+    this.createdAt,
   });
 
   factory SingleFieldsResponseModel.fromJson(Map<String, dynamic> json) {
     return SingleFieldsResponseModel(
+      location: Location.fromJson(json['location']),
+      servicesAmenities: ServicesAmenities.fromJson(json['servicesAmenities']),
+      rating: Rating.fromJson(json['rating']),
       id: json['_id'],
       fieldName: json['fieldName'],
       description: json['description'],
       fieldType: json['fieldType'],
-      pricePerHour: (json['pricePerHour'] as num).toDouble(),
-      location: Location.fromJson(json['location']),
-      servicesAmenities: ServicesAmenities.fromJson(json['servicesAmenities']),
-      rating: Rating.fromJson(json['rating']),
-      images: (json['images'] as List)
-          .map((e) => FieldImage.fromJson(e))
-          .toList(),
+      promotion: json['promotion'],
+      basePricePerHour: json['basePricePerHour'],
+      pricePerHour: List.from(
+        json['pricePerHour'].map((e) => PricePerHour.fromJson(e)),
+      ),
+      images: List.from(json['images'].map((e) => FieldImage.fromJson(e))),
       owner: Owner.fromJson(json['owner']),
       isActive: json['isActive'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-      v: json['__v'],
+      createdAt: json['createdAt'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'fieldName': fieldName,
-      'description': description,
-      'fieldType': fieldType,
-      'pricePerHour': pricePerHour,
-      'location': location.toJson(),
-      'servicesAmenities': servicesAmenities.toJson(),
-      'rating': rating.toJson(),
-      'images': images.map((e) => e.toJson()).toList(),
-      'owner': owner.toJson(),
-      'isActive': isActive,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
-      '__v': v,
-    };
   }
 }
 
+// ---------------------- Location ----------------------
 class Location {
-  final Coordinates coordinates;
-  final String address;
-  final String? mapUrl;
+  Coordinates? coordinates;
+  String? address;
+  String? mapUrl;
 
-  Location({
-    required this.coordinates,
-    required this.address,
-    this.mapUrl,
-  });
+  Location({this.coordinates, this.address, this.mapUrl});
 
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
@@ -90,55 +68,33 @@ class Location {
       mapUrl: json['mapUrl'],
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'coordinates': coordinates.toJson(),
-      'address': address,
-      'mapUrl': mapUrl,
-    };
-  }
 }
 
 class Coordinates {
-  final double latitude;
-  final double longitude;
+  double? latitude;
+  double? longitude;
 
-  Coordinates({
-    required this.latitude,
-    required this.longitude,
-  });
+  Coordinates({this.latitude, this.longitude});
 
   factory Coordinates.fromJson(Map<String, dynamic> json) {
     return Coordinates(
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
+      latitude: json['latitude']?.toDouble(),
+      longitude: json['longitude']?.toDouble(),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'latitude': latitude,
-      'longitude': longitude,
-    };
   }
 }
 
+// ------------------ Amenities ------------------
 class ServicesAmenities {
-  final bool showers;
-  final bool lights;
-  final bool parking;
-  final bool changingRooms;
-  final bool cafe;
-  final bool equipmentRental;
+  bool? showers, lights, parking, changingRooms, cafe, equipmentRental;
 
   ServicesAmenities({
-    required this.showers,
-    required this.lights,
-    required this.parking,
-    required this.changingRooms,
-    required this.cafe,
-    required this.equipmentRental,
+    this.showers,
+    this.lights,
+    this.parking,
+    this.changingRooms,
+    this.cafe,
+    this.equipmentRental,
   });
 
   factory ServicesAmenities.fromJson(Map<String, dynamic> json) {
@@ -151,99 +107,71 @@ class ServicesAmenities {
       equipmentRental: json['equipmentRental'],
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'showers': showers,
-      'lights': lights,
-      'parking': parking,
-      'changingRooms': changingRooms,
-      'cafe': cafe,
-      'equipmentRental': equipmentRental,
-    };
-  }
 }
 
+// ------------------ Rating ------------------
 class Rating {
-  final double average;
-  final int count;
+  num? average, count;
 
-  Rating({
-    required this.average,
-    required this.count,
-  });
+  Rating({this.average, this.count});
 
   factory Rating.fromJson(Map<String, dynamic> json) {
-    return Rating(
-      average: (json['average'] as num).toDouble(),
-      count: json['count'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'average': average,
-      'count': count,
-    };
+    return Rating(average: json['average'], count: json['count']);
   }
 }
 
-class FieldImage {
-  final String url;
-  final String originalName;
-  final DateTime uploadDate;
-  final String id;
+// ------------------ PricePerHour ------------------
+class PricePerHour {
+  String? date, startTime, endTime, id;
+  num? pricePerHour;
 
-  FieldImage({
-    required this.url,
-    required this.originalName,
-    required this.uploadDate,
-    required this.id,
+  PricePerHour({
+    this.date,
+    this.startTime,
+    this.endTime,
+    this.pricePerHour,
+    this.id,
   });
+
+  factory PricePerHour.fromJson(Map<String, dynamic> json) {
+    return PricePerHour(
+      date: json['date'],
+      startTime: json['startTime'],
+      endTime: json['endTime'],
+      pricePerHour: json['pricePerHour'],
+      id: json['_id'],
+    );
+  }
+}
+
+// ------------------ Images ------------------
+class FieldImage {
+  String? url, originalName, uploadDate, id;
+
+  FieldImage({this.url, this.originalName, this.uploadDate, this.id});
 
   factory FieldImage.fromJson(Map<String, dynamic> json) {
     return FieldImage(
       url: json['url'],
       originalName: json['originalName'],
-      uploadDate: DateTime.parse(json['uploadDate']),
+      uploadDate: json['uploadDate'],
       id: json['_id'],
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'url': url,
-      'originalName': originalName,
-      'uploadDate': uploadDate.toIso8601String(),
-      '_id': id,
-    };
-  }
 }
 
+// ------------------ Owner ------------------
 class Owner {
-  final String id;
-  final String name;
-  final String email;
+  String? id, name, email, phone;
 
-  Owner({
-    required this.id,
-    required this.name,
-    required this.email,
-  });
+  Owner({this.id, this.name, this.email, this.phone});
 
   factory Owner.fromJson(Map<String, dynamic> json) {
     return Owner(
       id: json['_id'],
       name: json['name'],
       email: json['email'],
+      phone: json['phone'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'name': name,
-      'email': email,
-    };
   }
 }

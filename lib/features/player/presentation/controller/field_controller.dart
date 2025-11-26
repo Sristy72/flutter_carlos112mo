@@ -40,87 +40,101 @@ class FieldPlayerController extends BaseController {
     );
   }
 
-  void setSearchQuery(String value) {
-    searchQuery.value = value;
+  // void setSearchQuery(String value) {
+  //   searchQuery.value = value;
+  // }
+
+  // List<Field> get filteredFields {
+  //   if (fields.value == null) return [];
+
+  //   final allFields = fields.value!.fields;
+
+  //   if (searchQuery.value.isEmpty) return allFields;
+
+  //   return allFields.where((field) {
+  //     final name = field.fieldName.toLowerCase();
+  //     final address = field.location.address.toLowerCase();
+  //     final q = searchQuery.value.toLowerCase();
+
+  //     return name.contains(q) || address.contains(q);
+  //   }).toList();
+  // }
+
+  void applyFilter({
+  String fieldType = "",
+  Map<String, bool>? services,
+  double? minPrice,
+  double? maxPrice,
+}) {
+  if (originalFields.isEmpty) return;
+
+  List<Field> filtered = List.from(originalFields);
+
+  // Filter by field type
+  if (fieldType.isNotEmpty) {
+    filtered = filtered.where((f) => f.fieldType == fieldType).toList();
   }
 
-  List<Field> get filteredFields {
-    if (fields.value == null) return [];
+  // Filter by services (null-safe)
+  if (services != null && services.values.any((v) => v)) {
+    filtered = filtered.where((f) {
+      final amenities = f.servicesAmenities;
+      if (amenities == null) return false;
 
-    final allFields = fields.value!.fields;
+      bool matches = true;
 
-    if (searchQuery.value.isEmpty) return allFields;
+      if (services["showers"] == true) matches &= amenities.showers ?? false;
+      if (services["lights"] == true) matches &= amenities.lights ?? false;
+      if (services["parking"] == true) matches &= amenities.parking ?? false;
+      if (services["changing rooms"] == true) matches &= amenities.changingRooms ?? false;
+      if (services["cafe"] == true) matches &= amenities.cafe ?? false;
+      if (services["equipment rental"] == true) matches &= amenities.equipmentRental ?? false;
 
-    return allFields.where((field) {
-      final name = field.fieldName.toLowerCase();
-      final address = field.location.address.toLowerCase();
-      final q = searchQuery.value.toLowerCase();
+      return matches;
+    }).toList();
+  }
 
+  // Price range (safe comparison)
+  if (minPrice != null && maxPrice != null) {
+    filtered = filtered.where((f) {
+      final price = f.pricePerHour ?? f.basePricePerHour;
+      if (price == null) return false;
+      return price >= minPrice && price <= maxPrice;
+    }).toList();
+  }
+
+  // Search query
+  if (searchQuery.value.isNotEmpty) {
+    final q = searchQuery.value.toLowerCase();
+    filtered = filtered.where((f) {
+      final name = (f.fieldName ?? '').toLowerCase();
+      final address = (f.location?.address ?? '').toLowerCase();
       return name.contains(q) || address.contains(q);
     }).toList();
   }
 
-  void applyFilter({
-    String fieldType = "",
-    Map<String, bool>? services,
-    double? minPrice,
-    double? maxPrice,
-  }) {
-    if (originalFields.isEmpty) return;
+  fields.value = GetAllFieldsResponseModel(
+    fields: filtered,
+    totalFields: filtered.length,
+    totalPages: 1,
+    currentPage: 1,
+  );
+}
 
-    // Always start from original list
-    List<Field> filtered = List.from(originalFields);
+List<Field> get filteredFields {
+  if (fields.value == null) return [];
 
-    // Filter by field type
-    if (fieldType.isNotEmpty) {
-      filtered = filtered.where((f) => f.fieldType == fieldType).toList();
-    }
+  final allFields = fields.value!.fields;
 
-    // Filter by services
-    if (services != null && services.values.any((v) => v)) {
-      filtered = filtered.where((f) {
-        bool matches = true;
+  if (searchQuery.value.isEmpty) return allFields;
 
-        if (services["showers"] == true) matches &= f.servicesAmenities.showers;
-        if (services["lights"] == true) matches &= f.servicesAmenities.lights;
-        if (services["parking"] == true) matches &= f.servicesAmenities.parking;
-        if (services["changing rooms"] == true)
-          matches &= f.servicesAmenities.changingRooms;
-        if (services["cafe"] == true) matches &= f.servicesAmenities.cafe;
-        if (services["equipment rental"] == true)
-          matches &= f.servicesAmenities.equipmentRental;
-
-        return matches;
-      }).toList();
-    }
-
-    // Price range
-    if (minPrice != null && maxPrice != null) {
-      filtered = filtered
-          .where(
-            (f) => f.pricePerHour >= minPrice && f.pricePerHour <= maxPrice,
-          )
-          .toList();
-    }
-
-    // Search query
-    if (searchQuery.value.isNotEmpty) {
-      final q = searchQuery.value.toLowerCase();
-      filtered = filtered.where((f) {
-        final name = f.fieldName.toLowerCase();
-        final address = f.location.address.toLowerCase();
-        return name.contains(q) || address.contains(q);
-      }).toList();
-    }
-
-    // ⛔ Don't overwrite original fields
-    fields.value = GetAllFieldsResponseModel(
-      fields: filtered,
-      totalFields: filtered.length,
-      totalPages: 1,
-      currentPage: 1,
-    );
-  }
+  final q = searchQuery.value.toLowerCase();
+  return allFields.where((field) {
+    final name = (field.fieldName ?? '').toLowerCase();
+    final address = (field.location?.address ?? '').toLowerCase();
+    return name.contains(q) || address.contains(q);
+  }).toList();
+}
 
   
 }
