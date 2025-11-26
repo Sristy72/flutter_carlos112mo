@@ -11,6 +11,8 @@ import '../../../../core/base/base_controller.dart';
 
 class TeamController extends BaseController {
   final TeamRepository _teamRepository;
+
+  var currentTeamId = ''.obs;
   var venue = Rx<SingleTeamResponse?>(null);
   final selectedFieldId = "".obs;
 
@@ -42,30 +44,74 @@ class TeamController extends BaseController {
     );
   }
 
-  Future<void> createTeam(CreateTeamRequest request) async {
-    final result = await _teamRepository.createTeam(request);
+  // Future<String?> createTeam(CreateTeamRequest request) async {
+  //   String? teamId; // Will hold the returned team ID
 
-    result.fold(
-      (failure) {
-        Get.snackbar(
-          "Error",
-          failure.message,
-          backgroundColor: Colors.red.shade50,
-          colorText: Colors.red.shade800,
-        );
-      },
-      (success) {
-        Get.snackbar(
-          "Success",
-          "Session scheduled successfully",
-          backgroundColor: Colors.green.shade50,
-          colorText: Colors.green.shade800,
-        );
-        fetchTeam();
-        Get.to(() => MyTeamsScreen());
-      },
-    );
-  }
+  //   final result = await _teamRepository.createTeam(request);
+
+  //   result.fold(
+  //     (failure) {
+  //       Get.snackbar(
+  //         "Error",
+  //         failure.message,
+  //         backgroundColor: Colors.red.shade50,
+  //         colorText: Colors.red.shade800,
+  //       );
+  //     },
+  //     (success) {
+  //       Get.snackbar(
+  //         "Success",
+  //         "Team created successfully",
+  //         backgroundColor: Colors.green.shade50,
+  //         colorText: Colors.green.shade800,
+  //       );
+
+  //       teamId = success.data.id; // Extract the generated teamId
+  //       fetchTeam();
+  //       Get.to(() => MyTeamsScreen()); // Optional: refresh team list
+  //     },
+  //   );
+
+  //   return teamId; // Return the teamId
+  // }
+
+  Future<String?> createTeam(CreateTeamRequest request) async {
+  String? teamId;
+
+  final result = await _teamRepository.createTeam(request);
+
+  result.fold(
+    (failure) {
+      // Get.snackbar(
+      //   "Error",
+      //   failure.message,
+      //   backgroundColor: Colors.red.shade50,
+      //   colorText: Colors.red.shade800,
+      // );
+    },
+    (success) {
+      // Get.snackbar(
+      //   "Success",
+      //   "Team created successfully",
+      //   backgroundColor: Colors.green.shade50,
+      //   colorText: Colors.green.shade800,
+      // );
+
+      teamId = success.data.id;
+
+      // THIS IS THE KEY LINE YOU WERE MISSING
+      currentTeamId.value = teamId!;  // Save the active team ID globally
+
+      // Optional: Also update local teams list
+      fetchTeam();
+
+      // Navigate to MyTeamsScreen or back
+      Get.off(() => MyTeamsScreen()); // or Get.back() + refresh home
+    },
+  );
+
+  return teamId;
+}
 
   Future<void> fetchSingleTeam() async {
     print("🔵 fetchSingleTeam() CALLED");

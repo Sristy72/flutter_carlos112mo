@@ -1,3 +1,5 @@
+import 'package:flutter_carlos112mo/features/message/data/repo/msg_repo_impl.dart';
+import 'package:flutter_carlos112mo/features/message/domain/msg_repo.dart';
 import 'package:flutter_carlos112mo/features/player/data/repo/field_repo_impl.dart';
 import 'package:flutter_carlos112mo/features/player/data/repo/find_field_repo_impl.dart';
 import 'package:flutter_carlos112mo/features/player/domain/field_repo.dart';
@@ -22,7 +24,7 @@ void setupRepository() {
     fenix: true,
   );
 
-    Get.lazyPut<FindFieldRepository>(
+  Get.lazyPut<FindFieldRepository>(
     () => FindFieldRepositoryImpl(apiClient: Get.find()),
     fenix: true,
   );
@@ -31,8 +33,13 @@ void setupRepository() {
     () => TeamRepositoryImpl(apiClient: Get.find()),
     fenix: true,
   );
-    Get.lazyPut<UserProfileRepository>(
-        () => UserProfileRepositoryImpl(apiClient: Get.find()),
-      fenix: true
-    );
+  Get.lazyPut<UserProfileRepository>(
+    () => UserProfileRepositoryImpl(apiClient: Get.find()),
+    fenix: true,
+  );
+
+  Get.lazyPut<ChatRepository>(
+    () => ChatRepositoryImpl(apiClient: Get.find()),
+    fenix: true,
+  );
 }

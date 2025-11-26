@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/core/theme/app_colors.dart';
 import 'package:get/get.dart';
 
+import '../../data/model/send_message_request_model.dart';
 import '../controller/chat_controller.dart';
+import '../controller/msg_controller.dart';
 import '../widget/chat_widget.dart';
 
-
 class ChatScreen extends StatelessWidget {
-  ChatScreen({super.key});
+  final String chatId;
+  ChatScreen({super.key, required this.chatId});
 
   final ChatController controller = Get.put(ChatController());
+  final MessageController msgcontroller = Get.find<MessageController>();
+  final TextEditingController msg = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,12 +70,12 @@ class ChatScreen extends StatelessWidget {
                   offset: const Offset(0, -1),
                   blurRadius: 4,
                   color: Colors.grey.withOpacity(0.2),
-                )
+                ),
               ],
             ),
             child: Row(
               children: [
-                 const SizedBox(width: 10),
+                const SizedBox(width: 10),
 
                 // Attachment icon
                 Container(
@@ -80,19 +84,19 @@ class ChatScreen extends StatelessWidget {
                     color: Colors.grey.shade100,
                     shape: BoxShape.circle,
                   ),
-                  child: Image.asset( "assets/images/clipIcon.png", height: 22, width: 22,),
+                  child: Image.asset(
+                    "assets/images/clipIcon.png",
+                    height: 22,
+                    width: 22,
+                  ),
                   // const Icon(Icons.attachment_outlined, size: 22),
                 ),
                 // Textfield
                 Expanded(
                   child: Obx(
-                        () => TextField(
+                    () => TextField(
+                      controller: msg,
                       onChanged: (v) => controller.messageText.value = v,
-                      controller: TextEditingController(
-                          text: controller.messageText.value)
-                        ..selection = TextSelection.fromPosition(
-                          TextPosition(offset: controller.messageText.value.length),
-                        ),
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.grey.shade100,
@@ -101,8 +105,10 @@ class ChatScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(25),
                           borderSide: BorderSide.none,
                         ),
-                        contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
                       ),
                     ),
                   ),
@@ -119,25 +125,40 @@ class ChatScreen extends StatelessWidget {
                 //   ),
                 //   child: const Icon(Icons.attachment_outlined, size: 22),
                 // ),
-
                 const SizedBox(width: 12),
 
                 // Send button
                 GestureDetector(
-                  onTap: () {
-                    controller.sendMessage(controller.messageText.value);
+                  onTap: () async {
+                    print("📤 SEND MESSAGE CLICKED = ${msg.text}");
+
+                    final request = SendMessageRequestModel(
+                      chatId: chatId, //  <<=== here we pass
+                      message: msg.text,
+                    );
+
+                    await msgcontroller.sendChats(request);
+
+                    print("✔ API SENT with chatId=$chatId text=${msg.text}");
+                    msg.clear();
                   },
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: const BoxDecoration(
-                      // color: AppColors.primaryGreen,
-                      shape: BoxShape.circle,
-                    ),
-                    child: 
-                    Image.asset("assets/images/sendIcon.png", height: 20, width: 20,)
-                    // const Icon(Icons.send, color: Colors.white, size: 20),
-                  ),
-                )
+                  child: Icon(Icons.send, size: 22, color: Colors.teal),
+                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     controller.sendMessage(controller.messageText.value);
+                //   },
+                //   child: Container(
+                //     padding: const EdgeInsets.all(12),
+                //     decoration: const BoxDecoration(
+                //       // color: AppColors.primaryGreen,
+                //       shape: BoxShape.circle,
+                //     ),
+                //     child:
+                //     Image.asset("assets/images/sendIcon.png", height: 20, width: 20,)
+                //     // const Icon(Icons.send, color: Colors.white, size: 20),
+                //   ),
+                // )
               ],
             ),
           ),
@@ -146,4 +167,3 @@ class ChatScreen extends StatelessWidget {
     );
   }
 }
-

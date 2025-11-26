@@ -13,7 +13,8 @@ import '../widgets/filter_widget.dart';
 import 'find_fields_screen.dart';
 
 class PlayerFieldsScreen extends StatefulWidget {
-  const PlayerFieldsScreen({super.key});
+  final teamId;
+  const PlayerFieldsScreen({super.key, this.teamId});
 
   @override
   State<PlayerFieldsScreen> createState() => _PlayerFieldsScreenState();
@@ -283,7 +284,7 @@ class _PlayerFieldsScreenState extends State<PlayerFieldsScreen> {
             child: FloatingActionButton(
               backgroundColor: Colors.teal,
               onPressed: () {
-                Get.to(() => const MessageScreen());
+                Get.to(() => MessageScreen( teamId: widget.teamId,chatId: '',));
               },
               child: Image.asset(
                 "assets/images/messageIcon.png",

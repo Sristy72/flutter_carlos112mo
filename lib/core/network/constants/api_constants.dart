@@ -35,6 +35,7 @@ class ApiConstants {
   static RecruiterAccountApi get recruiter => RecruiterAccountApi();
 
   static FieldEndpoints get field => FieldEndpoints();
+  static ChatEndpoints get chat => ChatEndpoints();
 }
 
 class RecruiterAccountApi {
@@ -120,6 +121,17 @@ class TeamEndpointcs {
   final String create = '$_base';
   final String getTeams = '$_base';
   final String update = '$_base/update';
+  final String delete = '$_base/delete';
+   String getTeamsById(String id) => '$_base/$id';
+}
+
+
+class ChatEndpoints {
+  static const String _base = '${ApiConstants.baseUrl}/chat';
+
+  final String create = '$_base/create-chat';
+  final String getChat = '$_base/get-chat';
+  final String sendChat = '$_base/send-message';
   final String delete = '$_base/delete';
    String getTeamsById(String id) => '$_base/$id';
 }
