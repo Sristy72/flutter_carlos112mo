@@ -16,17 +16,12 @@ class FindFieldController extends GetxController {
   void setLoading(bool value) => isLoading.value = value;
   void setError(String message) => errorMessage.value = message;
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   fetchSingleField(Get.arguments.toString());
-  // }
-
-
   Future<void> fetchSingleField() async {
     if (selectedFieldId.isEmpty) return;
     setLoading(true);
-    final result = await _findfieldRepository.getFieldsById(selectedFieldId.value);
+    final result = await _findfieldRepository.getFieldsById(
+      selectedFieldId.value,
+    );
 
     result.fold(
       (fail) {
