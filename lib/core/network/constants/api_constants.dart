@@ -4,6 +4,17 @@ class ApiConstants {
   static const String baseDomain = 'http://10.10.5.53:8001'; // Farhan
   static const String baseUrl = '$baseDomain/api/v1';
 
+  /// Dynamically generated WebSocket URL based on baseDomain
+  static String get webSocketUrl {
+    if (baseDomain.startsWith('https://')) {
+      return baseDomain.replaceFirst('https://', 'wss://');
+    } else if (baseDomain.startsWith('http://')) {
+      return baseDomain.replaceFirst('http://', 'ws://');
+    }
+    // Fallback for unexpected cases (e.g., no scheme)
+    return 'ws://$baseDomain';
+  }
+
   /// [Headers]
   static Map<String, String> get defaultHeaders => {
     'Content-Type': 'application/json',
