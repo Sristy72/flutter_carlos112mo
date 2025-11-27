@@ -24,6 +24,7 @@ class CreatePostController extends BaseController {
     setLoading(true);
     final requestModel = CreatePostRequestModel(
       content: contentController.text.trim(),
+      teamId: teamIdController.text.trim(),
     );
     final result = await _createPostRepository.createPost(requestModel);
     result.fold((failure){
