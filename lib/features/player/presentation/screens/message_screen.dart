@@ -113,7 +113,7 @@ import '../widgets/chat_item.dart';
 class MessageScreen extends StatelessWidget {
   final String teamId;
   final String chatId;
-  MessageScreen({super.key, required this.teamId,  required this.chatId});
+  MessageScreen({super.key, required this.teamId, required this.chatId});
 
   final MessageController controller = Get.find<MessageController>();
   // make sure ChatRepositoryImpl is registered in dependencies
@@ -137,28 +137,29 @@ class MessageScreen extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (controller.msgs.isEmpty) {
+        if (controller.allMsg.isEmpty) {
           return const Center(child: Text("No chats found"));
         }
 
-        return
-         ListView.builder(
-          itemCount: controller.msgs.length,
+        return ListView.builder(
+          itemCount: controller.allMsg.length,
           itemBuilder: (context, index) {
-            final chat = controller.msgs[index];
+            final chat = controller.allMsg[index];
 
             return ChatItem(
               name: chat?.name ?? "",
-              message: chat?.messages?.isNotEmpty == true
+              message: chat?.messages.isNotEmpty == true
                   ? chat!.messages.last.text
                   : "No messages yet",
-              time: chat?.updatedAt?.toString() ?? "",
+              time: chat?.updatedAt.toString() ?? "",
               unreadCount:
-                  chat?.messages?.where((m) => m.read == false).length ?? 0,
+                  chat?.messages.where((m) => m.read == false).length ?? 0,
               avatarPath: 'assets/images/profile_sample.jpg',
               onTap: () {
-                if (chat?.id != null) {
-                  Get.to(() => ChatScreen(chatId: chatId ,));
+                if (chat != null) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Get.to(() => ChatScreen(chat: chat));
+                  });
                 }
               },
             );

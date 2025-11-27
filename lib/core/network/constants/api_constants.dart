@@ -133,5 +133,5 @@ class ChatEndpoints {
   final String getChat = '$_base/get-chat';
   final String sendChat = '$_base/send-message';
   final String delete = '$_base/delete';
-   String getTeamsById(String id) => '$_base/$id';
+   String getSingleChatById(String id) => '$_base/get-single-chat/$id';
 }

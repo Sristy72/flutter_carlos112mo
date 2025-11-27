@@ -1,3 +1,5 @@
+import 'message_response_model.dart';
+
 class SendMessageResponseModel {
   final String id;
   final String name;
@@ -35,31 +37,3 @@ class SendMessageResponseModel {
   }
 }
 
-class Message {
-  final String text;
-  final String user;
-  final DateTime date;
-  final bool read;
-  final bool accept;
-  final String id;
-
-  Message({
-    required this.text,
-    required this.user,
-    required this.date,
-    required this.read,
-    required this.accept,
-    required this.id,
-  });
-
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(
-      text: json["text"] ?? "",
-      user: json["user"] ?? "",
-      date: DateTime.parse(json["date"] ?? DateTime.now().toString()),
-      read: json["read"] ?? false,
-      accept: json["accept"] ?? false,
-      id: json["_id"] ?? "",
-    );
-  }
-}

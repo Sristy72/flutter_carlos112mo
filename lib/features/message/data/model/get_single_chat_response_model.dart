@@ -1,3 +1,5 @@
+import 'message_response_model.dart';
+
 class SingleChatResponseModel {
   String id;
   String name;
@@ -19,22 +21,39 @@ class SingleChatResponseModel {
     required this.v,
   });
 
-  factory SingleChatResponseModel.fromJson(Map<String, dynamic> json) {
-    return SingleChatResponseModel(
-      id: json['_id'] ?? '',
-      name: json['name'] ?? '',
-      team: json['team'] ?? '',
-      user: json['user'] ?? '',
-      messages:
-          (json['messages'] as List<dynamic>?)
-              ?.map((x) => Message.fromJson(x as Map<String, dynamic>))
-              .toList() ??
-          [],
-      createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
-      updatedAt: DateTime.tryParse(json['updatedAt'] ?? '') ?? DateTime.now(),
-      v: json['__v'] ?? 0,
-    );
+ factory SingleChatResponseModel.fromJson(Map<String, dynamic> json) {
+  final msgs = json['messages'];
+  List<Message> messageList = [];
+  if (msgs != null && msgs is List) {
+    messageList = msgs.map((x) {
+      if (x != null && x is Map<String, dynamic>) {
+        return Message.fromJson(x);
+      } else {
+        return Message(
+          text: "",
+          user: "",
+          date: DateTime.now(),
+          read: false,
+          accept: false,
+          id: "",
+        );
+      }
+    }).toList();
   }
+
+  return SingleChatResponseModel(
+    id: json['_id'] ?? '',
+    name: json['name'] ?? '',
+    team: json['team'] ?? '',
+    user: json['user'] ?? '',
+    messages: messageList,
+    createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
+    updatedAt: DateTime.tryParse(json['updatedAt'] ?? '') ?? DateTime.now(),
+    v: json['__v'] ?? 0,
+  );
+}
+
+
 
   Map<String, dynamic> toJson() {
     return {
@@ -50,47 +69,7 @@ class SingleChatResponseModel {
   }
 }
 
-class Message {
-  String text;
-  User? user;
-  DateTime date;
-  bool read;
-  bool accept;
-  String id;
 
-  Message({
-    required this.text,
-    this.user,
-    required this.date,
-    required this.read,
-    required this.accept,
-    required this.id,
-  });
-
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(
-      text: json['text'] ?? '',
-      user: json['user'] != null
-          ? User.fromJson(json['user'] as Map<String, dynamic>)
-          : null,
-      date: DateTime.tryParse(json['date'] ?? '') ?? DateTime.now(),
-      read: json['read'] ?? false,
-      accept: json['accept'] ?? false,
-      id: json['_id'] ?? '',
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'text': text,
-      'user': user?.toJson(),
-      'date': date.toIso8601String(),
-      'read': read,
-      'accept': accept,
-      '_id': id,
-    };
-  }
-}
 
 class User {
   String id;

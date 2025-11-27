@@ -3,8 +3,10 @@ import 'package:flutter_carlos112mo/features/message/data/model/get_single_chat_
 import 'package:flutter_carlos112mo/features/message/data/model/send_message_request_model.dart';
 import 'package:flutter_carlos112mo/features/message/data/model/send_message_response_model.dart';
 import 'package:get/get.dart';
+import '../../../../core/network/services/auth_storage_service.dart';
 import '../../data/model/create_chat_request_model.dart';
 import '../../data/model/create_chat_response_model.dart';
+import '../../data/model/message_response_model.dart';
 import '../../domain/msg_repo.dart';
 import '../../../../core/base/base_controller.dart';
 
@@ -13,10 +15,26 @@ class MessageController extends BaseController {
 
   MessageController(this._chatRepository);
 
-  final RxList<SingleChatResponseModel?> msgs = RxList([]);
-  var chats = <CreateChatResponseModel>[].obs; 
-  var sends = <SendMessageResponseModel>[].obs; // <-- LIST TO DISPLAY ON UI
+  // final RxList<SingleChatResponseModel?> msgs = RxList<SingleChatResponseModel>();
+  final RxList<SingleChatResponseModel?> allMsg =
+      RxList<SingleChatResponseModel>();
+
+  final RxList<Message?> msgs = RxList<Message>();
+
+  final RxString currentUserId = ''.obs;
+
+  var chats = <CreateChatResponseModel>[].obs;
+
   var isLoading = false.obs;
+
+  var isSending = false.obs;
+  var chatMessages = <SendMessageResponseModel>[].obs; // store API messages
+
+  @override
+  void onInit() {
+    super.onInit();
+    loadCurrentUserId(); // ← Load it once when controller starts
+  }
 
   // Future<void> createChats(CreateChatRequestModel request) async {
   //   isLoading(true);
@@ -26,7 +44,7 @@ class MessageController extends BaseController {
   //   result.fold(
   //     (failure) {
   //       isLoading(false);
-       
+
   //     },
   //     (success) {
   //       chats.add(success.data); // <-- Add API data into list
@@ -35,7 +53,6 @@ class MessageController extends BaseController {
   //       debugPrint("🚀 Chat Created Successfully");
   //     debugPrint("📌 ChatId = ${success.data.id}");
 
-     
   //     },
   //   );
   // }
@@ -57,7 +74,7 @@ class MessageController extends BaseController {
         debugPrint("🚀 Chat Created Successfully");
         debugPrint("📌 chatId returns = ${success.data.id}");
 
-        return success.data.id;   // << IMPORTANT
+        return success.data.id; // << IMPORTANT
       },
     );
   }
@@ -73,7 +90,7 @@ class MessageController extends BaseController {
         setLoading(false);
       },
       (success) {
-        msgs.value = success.data;
+        allMsg.addAll(success.data); // = success.data;
 
         setLoading(false);
       },
@@ -88,13 +105,33 @@ class MessageController extends BaseController {
     result.fold(
       (failure) {
         isLoading(false);
-       
       },
       (success) {
-        sends.add(success.data); // <-- Add API data into list
+        msgs.add(success.data); // <-- Add API data into list
         isLoading(false);
+        print("📩 Message Sent Successfully ✔");
+      },
+    );
+  }
 
-     
+  Future<void> loadCurrentUserId() async {
+    final userId = await AuthStorageService().getUserId();
+    if (userId != null) {
+      currentUserId.value = userId;
+    }
+  }
+
+  Future<void> getChatById(String id) async {
+    final response = await _chatRepository.getChatbyId(id);
+    response.fold(
+      (fail) {
+        debugPrint("❌ Failed to fetch chat: ${fail.message}");
+      },
+      (success) {
+        msgs.clear();
+        msgs.addAll(
+          success.data.messages,
+        ); // if success.data.messages is List<Message>
       },
     );
   }

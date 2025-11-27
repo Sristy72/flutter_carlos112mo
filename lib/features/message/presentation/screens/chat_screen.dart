@@ -2,18 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/core/theme/app_colors.dart';
 import 'package:get/get.dart';
 
+import '../../data/model/get_single_chat_response_model.dart';
 import '../../data/model/send_message_request_model.dart';
 import '../controller/chat_controller.dart';
 import '../controller/msg_controller.dart';
 import '../widget/chat_widget.dart';
 
-class ChatScreen extends StatelessWidget {
-  final String chatId;
-  ChatScreen({super.key, required this.chatId});
+class ChatScreen extends StatefulWidget {
+  final SingleChatResponseModel chat;
+  const ChatScreen({super.key, required this.chat});
 
-  final ChatController controller = Get.put(ChatController());
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  // final ChatController controller = Get.put(ChatController());
+
   final MessageController msgcontroller = Get.find<MessageController>();
+
   final TextEditingController msg = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch messages from API
+    msgcontroller.getChatById(widget.chat.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +65,15 @@ class ChatScreen extends StatelessWidget {
           Expanded(
             child: Obx(() {
               return ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: controller.messages.length,
+                reverse: true, // latest message at bottom
+                padding: const EdgeInsets.all(16),
+                itemCount: msgcontroller.msgs.length,
                 itemBuilder: (_, index) {
-                  final msg = controller.messages[index];
-                  return ChatBubble(message: msg);
+                  final message = msgcontroller.msgs[index];
+                  return ChatBubble(
+                    message: message!,
+                    currentUserId: msgcontroller.currentUserId.value, // if you have
+                  );
                 },
               );
             }),
@@ -93,22 +112,20 @@ class ChatScreen extends StatelessWidget {
                 ),
                 // Textfield
                 Expanded(
-                  child: Obx(
-                    () => TextField(
-                      controller: msg,
-                      onChanged: (v) => controller.messageText.value = v,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                        hintText: "Write your message",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
+                  child: TextField(
+                    controller: msg,
+                    onChanged: (v) => msgcontroller.chatMessages,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                      hintText: "Write your message",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
                       ),
                     ),
                   ),
@@ -130,20 +147,32 @@ class ChatScreen extends StatelessWidget {
                 // Send button
                 GestureDetector(
                   onTap: () async {
-                    print("📤 SEND MESSAGE CLICKED = ${msg.text}");
+                    if (msg.text.trim().isEmpty) return;
 
-                    final request = SendMessageRequestModel(
-                      chatId: chatId, //  <<=== here we pass
+                    // 1️⃣ Local instant UI update
+                    // msgcontroller.sendMessage(msg.text);
+
+                    // 2️⃣ API request model
+                    final req = SendMessageRequestModel(
+                      chatId: widget.chat.id,
                       message: msg.text,
                     );
 
-                    await msgcontroller.sendChats(request);
+                    // 3️⃣ Hit API
+                    await msgcontroller.sendChats(req);
 
-                    print("✔ API SENT with chatId=$chatId text=${msg.text}");
                     msg.clear();
                   },
-                  child: Icon(Icons.send, size: 22, color: Colors.teal),
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    child: Image.asset(
+                      "assets/images/sendIcon.png",
+                      height: 20,
+                      width: 20,
+                    ),
+                  ),
                 ),
+
                 // GestureDetector(
                 //   onTap: () {
                 //     controller.sendMessage(controller.messageText.value);
