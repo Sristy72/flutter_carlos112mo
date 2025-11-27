@@ -258,6 +258,10 @@ import 'package:flutter_carlos112mo/features/team/presentation/controller/team_c
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../message/data/model/create_chat_request_model.dart';
+import '../../../message/presentation/controller/msg_controller.dart';
+import '../../../player/presentation/screens/message_screen.dart';
+import '../../../player/presentation/screens/player_home_screen.dart';
 import '../../data/model/create_team_request_model.dart';
 
 class CreateTeamScreen extends StatefulWidget {
@@ -297,17 +301,50 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
     }
   }
 
-  Future<void> _onCreateTeam() async {
-    if (!isButtonEnabled) return;
+  // Future<void> _onCreateTeam() async {
+  //   if (!isButtonEnabled) return;
 
-    final request = CreateTeamRequest(
-      name: _teamNameController.text,
-      description: _descriptionController.text,
-      // avatar: _avatar, // send file if API supports
+  //   final request = CreateTeamRequest(
+  //     name: _teamNameController.text,
+  //     description: _descriptionController.text,
+  //     // avatar: _avatar, // send file if API supports
+  //   );
+
+  //   await controller.createTeam(request);
+  // }
+
+Future<void> _onCreateTeam() async {
+  if (!isButtonEnabled) return;
+
+  final request = CreateTeamRequest(
+    name: _teamNameController.text,
+    description: _descriptionController.text,
+  );
+
+  final teamId = await controller.createTeam(request);
+
+  if (teamId != null) {
+    // Initialize chat for the newly created team
+    final messageController = Get.find<MessageController>();
+
+    final chatRequest = CreateChatRequestModel(
+      teamId: teamId,
+      // You can add other required fields like initial message, participants, etc.
     );
 
-    await controller.createTeam(request);
+    await messageController.createChats(chatRequest);
+
+    Get.snackbar(
+      "Success",
+      "Team created and chat initialized",
+      backgroundColor: Colors.green.shade50,
+      colorText: Colors.green.shade800,
+    );
   }
+}
+
+
+
 
   @override
   void dispose() {

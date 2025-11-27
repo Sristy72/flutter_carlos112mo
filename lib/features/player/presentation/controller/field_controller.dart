@@ -9,6 +9,7 @@ import '../../../../core/utils/debug_print.dart';
 
 class FieldPlayerController extends BaseController {
   final FieldRepository _fieldRepository;
+  var currentTeamId = ''.obs;
 
   var isLoading = false.obs;
   var errorMessage = "".obs;
@@ -40,26 +41,7 @@ class FieldPlayerController extends BaseController {
     );
   }
 
-  // void setSearchQuery(String value) {
-  //   searchQuery.value = value;
-  // }
-
-  // List<Field> get filteredFields {
-  //   if (fields.value == null) return [];
-
-  //   final allFields = fields.value!.fields;
-
-  //   if (searchQuery.value.isEmpty) return allFields;
-
-  //   return allFields.where((field) {
-  //     final name = field.fieldName.toLowerCase();
-  //     final address = field.location.address.toLowerCase();
-  //     final q = searchQuery.value.toLowerCase();
-
-  //     return name.contains(q) || address.contains(q);
-  //   }).toList();
-  // }
-
+  
   void applyFilter({
   String fieldType = "",
   Map<String, bool>? services,
