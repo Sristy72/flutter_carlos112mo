@@ -4,6 +4,7 @@ import 'package:flutter_carlos112mo/features/Owner/presentation/screens/add_fiel
 import 'package:get/get.dart';
 
 class DashboardFieldCardWidget extends StatelessWidget {
+  final String id;
   final String name;
   final String address;
   final String price;
@@ -12,15 +13,20 @@ class DashboardFieldCardWidget extends StatelessWidget {
   final List<String> tags;
   final String imagePath;
 
+  // Entire model optional (BEST WAY)
+  final dynamic model;
+
   const DashboardFieldCardWidget({
     super.key,
+    required this.id,
     required this.name,
     required this.address,
     required this.price,
     required this.rating,
     required this.reviews,
     required this.tags,
-    required this.imagePath, required String id,
+    required this.imagePath,
+    this.model,
   });
 
   @override
@@ -120,7 +126,13 @@ class DashboardFieldCardWidget extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    onPressed: () {Get.to(()=> AddFieldScreen());},
+                    onPressed: () {
+                      Get.to(() => AddFieldScreen(
+                        isEdit: true,
+                        model: model, fieldId: id, // <-- send full field model
+                      ));
+                    },
+
                     child: const Text(
                       "Edit Field",
                       style: TextStyle(

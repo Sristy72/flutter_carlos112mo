@@ -41,10 +41,10 @@ class FieldController extends BaseController {
     setLoading(true);
     setError('');
 
-    _multiFormDataManager.clear(); // 👈 ADD THIS FIRST
+    _multiFormDataManager.clear(); // ADD THIS FIRST
 
 
-    // 👉 Normal fields
+    // Normal fields
     _multiFormDataManager.addTextData("fieldName", fieldName);
     _multiFormDataManager.addTextData("description", description);
     _multiFormDataManager.addTextData("fieldType", fieldType);
@@ -57,33 +57,27 @@ class FieldController extends BaseController {
     // _multiFormDataManager.addTextData("servicesAmenities", jsonEncode(servicesAmenities.toJson()));
     //_multiFormDataManager.addTextData("pricePerHour", jsonEncode(pricePerHour.map((e) => e.toJson()).toList()));
     _multiFormDataManager.addTextData("promotion", promotion ? 'true' : 'false'); // safest
-    _multiFormDataManager.addTextData("basePricePerHour", basePricePerHour.toString()); // if server expects string
-    // Add base price per hour as int
-    _multiFormDataManager.addTextData("basePricePerHour", basePricePerHour.toString());
+    _multiFormDataManager.addTextData("pricePerHour", basePricePerHour.toString()); // if server expects string
+
 
 // Add list of PricePerHour as JSON array
     _multiFormDataManager.addTextData(
-      "pricePerHour",
+      "pricing",
       jsonEncode(pricePerHour.map((e) => {
         "date": e.date,
         "startTime": e.startTime,
         "endTime": e.endTime,
         "pricePerHour": e.pricePerHour,
-        "_id": e.id,
+        // "id": e.id,
       }).toList()),
     );
 
+    _multiFormDataManager.addTextData("address", location.address);
+
 // Add Location as JSON object
     _multiFormDataManager.addTextData(
-      "location",
-      jsonEncode({
-        "address": location.address,
-        "coordinates": {
-          "latitude": location.coordinates.latitude,
-          "longitude": location.coordinates.longitude,
-        },
-        "mapUrl": location.mapUrl,
-      }),
+      "coordinates",
+      jsonEncode({"latitude" : location.coordinates.longitude, "longitude": location.coordinates.latitude}), // [lng, lat]
     );
 
 // Add ServicesAmenities as JSON object

@@ -104,7 +104,7 @@ class OwnerDashboardScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
                     onPressed: () {
-                      Get.to(() => AddFieldScreen());
+                      Get.to(() => AddFieldScreen(isEdit: true, fieldId: '', model: true,));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryGreen,

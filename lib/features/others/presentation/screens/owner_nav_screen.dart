@@ -20,7 +20,7 @@ class _OwnerNavScreenState extends State<OwnerNavScreen> {
   final List<Widget> _screens = [
     const Center(child: OwnerHomeScreen()),
     const Center(child: OwnerDashboardScreen()),
-    Center(child: AddFieldScreen()),
+    Center(child: AddFieldScreen(isEdit: true, fieldId: '', model: true,)),
     const Center(child: ProfileScreen()),
    
   ];

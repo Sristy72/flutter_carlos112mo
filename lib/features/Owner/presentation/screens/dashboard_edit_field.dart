@@ -119,7 +119,7 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
-                    onPressed: () => Get.to(() => AddFieldScreen()),
+                    onPressed: () => Get.to(() => AddFieldScreen(isEdit: true, fieldId: '', model: true,)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryGreen,
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -165,40 +165,35 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
                 ),
                 const SizedBox(height: 12),
 
-              Column(
-                children: fieldController.fields.value!.fields.map((field) {
-                  return DashboardFieldCardWidget(
-                    id: field.id,
-                    imagePath: field.images?.isNotEmpty == true
-                        ? field.images!.first.url ?? ''
-                        : "",
-                    name: field.fieldName ?? "Unknown Field",
-                    address:
-                    '${field.fieldType ?? "N/A"} • ${field.location?.address ?? "No address"}',
-                    price: field.pricePerHour != null
-                        ? '\$${field.pricePerHour!.toStringAsFixed(0)}/hr'
-                        : (field.basePricePerHour != null
-                        ? '\$${field.basePricePerHour!.toStringAsFixed(0)}/hr'
-                        : 'Price TBD'),
-                    rating: field.rating?.average ?? 0.0,
-                    reviews: field.rating?.count ?? 0,
-                    tags: [
-                      if (field.servicesAmenities?.showers == true)
-                        "showers",
-                      if (field.servicesAmenities?.lights == true)
-                        "lights",
-                      if (field.servicesAmenities?.parking == true)
-                        "parking",
-                      if (field.servicesAmenities?.changingRooms == true)
-                        "changing rooms",
-                      if (field.servicesAmenities?.cafe == true) "cafe",
-                      if (field.servicesAmenities?.equipmentRental ==
-                          true)
-                        "equipment",
-                    ],
-                  );
-                }).toList(),
-              )
+                Column(
+                  children: fieldController.fields.value!.fields.map((field) {
+                    return DashboardFieldCardWidget(
+                      id: field.id ?? "",
+                      model: field,              // <-- Pass entire model
+                      imagePath: field.images?.isNotEmpty == true
+                          ? field.images!.first.url ?? ''
+                          : "",
+                      name: field.fieldName ?? "Unknown Field",
+                      address:
+                      '${field.fieldType ?? "N/A"} • ${field.location?.address ?? "No address"}',
+                      price: field.pricePerHour != null
+                          ? '${field.pricePerHour!.toStringAsFixed(0)}'
+                          : (field.basePricePerHour != null
+                          ? '${field.basePricePerHour!.toStringAsFixed(0)}'
+                          : '0'),
+                      rating: field.rating?.average ?? 0.0,
+                      reviews: field.rating?.count ?? 0,
+                      tags: [
+                        if (field.servicesAmenities?.showers == true) "showers",
+                        if (field.servicesAmenities?.lights == true) "lights",
+                        if (field.servicesAmenities?.parking == true) "parking",
+                        if (field.servicesAmenities?.changingRooms == true) "changing rooms",
+                        if (field.servicesAmenities?.cafe == true) "cafe",
+                        if (field.servicesAmenities?.equipmentRental == true) "equipment",
+                      ],
+                    );
+                  }).toList(),
+                )
               ],
             ),
           );
