@@ -27,132 +27,147 @@ class CreatePostScreen extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 24),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.white70,
-                          radius: 20,
-                          foregroundImage:
-                              (userProfileController
-                                          .userProfileModel
-                                          ?.avatar
-                                          ?.url !=
-                                      null &&
-                                  userProfileController
-                                      .userProfileModel!
-                                      .avatar!
-                                      .url!
-                                      .isNotEmpty)
-                              ? NetworkImage(
-                                  userProfileController
-                                      .userProfileModel!
-                                      .avatar!
-                                      .url!,
-                                )
-                              : null,
-                          child: Icon(Icons.person),
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          userProfileController.userProfileModel?.name ?? '',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      maxLines: 5,
-                      decoration: context.primaryInputDecoration.copyWith(
-                        hintText: 'What\'s on your mind?',
+            Form(
+              key: createPostController.formKey,
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.white70,
+                            radius: 20,
+                            foregroundImage:
+                                (userProfileController
+                                            .userProfileModel
+                                            ?.avatar
+                                            ?.url !=
+                                        null &&
+                                    userProfileController
+                                        .userProfileModel!
+                                        .avatar!
+                                        .url!
+                                        .isNotEmpty)
+                                ? NetworkImage(
+                                    userProfileController
+                                        .userProfileModel!
+                                        .avatar!
+                                        .url!,
+                                  )
+                                : null,
+                            child: Icon(Icons.person),
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            userProfileController.userProfileModel?.name ?? '',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Obx(
-                            () => OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                backgroundColor:
-                                    createPostController.isMatchInvitation.value
-                                    ? null
-                                    : Color(0xFFE6F5F3),
+                      const SizedBox(height: 8),
+                      TextFormField(
+
+                        controller: createPostController.contentController,
+                        maxLines: 5,
+                        decoration: context.primaryInputDecoration.copyWith(
+                          hintText: 'What\'s on your mind?',
+                        ),
+                        validator: (value){
+                          if(value == null || value.isEmpty){
+                            return 'Please enter a post';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Obx(
+                              () => OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  backgroundColor:
+                                      createPostController.isMatchInvitation.value
+                                      ? null
+                                      : Color(0xFFE6F5F3),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                    side: BorderSide(color: Color(0xFF00917B)),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  createPostController.isMatchInvitation.value =
+                                      false;
+                                },
+                                child: Text('General Post'),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Obx(
+                              () => OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  backgroundColor:
+                                      createPostController.isMatchInvitation.value
+                                      ? Color(0xFFE6F5F3)
+                                      : null,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                    side: BorderSide(color: Color(0xFF00917B)),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  createPostController.isMatchInvitation.value =
+                                      true;
+                                },
+                                child: Text('Match Invitation'),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        children: [
+                          SizedBox(width: 85),
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black26,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                  side: BorderSide(color: Color(0xFF00917B)),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
                               onPressed: () {
-                                createPostController.isMatchInvitation.value =
-                                    false;
+                                Get.back();
                               },
-                              child: Text('General Post'),
+                              child: Text('Cancel'),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Obx(
-                            () => OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                backgroundColor:
-                                    createPostController.isMatchInvitation.value
-                                    ? Color(0xFFE6F5F3)
-                                    : null,
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFF00917B),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                  side: BorderSide(color: Color(0xFF00917B)),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
                               onPressed: () {
-                                createPostController.isMatchInvitation.value =
-                                    true;
+                                if(createPostController.formKey.currentState!.validate()){
+                                  createPostController.createPost();
+                                }
                               },
-                              child: Text('Match Invitation'),
+                              child: Text('Post'),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    Row(
-                      children: [
-                        SizedBox(width: 85),
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black26,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            onPressed: () {
-                              Get.back();
-                            },
-                            child: Text('Cancel'),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF00917B),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            onPressed: () {},
-                            child: Text('Post'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -171,11 +186,13 @@ class CreatePostScreen extends StatelessWidget {
                               style: TextStyle(fontSize: 16),
                             ),
                             const SizedBox(height: 16),
-                            Text('Match name'),
+                            Text('Team ID'),
                             const SizedBox(height: 8),
                             TextFormField(
+                              controller: createPostController.teamIdController,
                               decoration: context.primaryInputDecoration
-                                  .copyWith(hintText: 'Green Valley Field'),
+                                  .copyWith(hintText: 'Enter team ID'),
+
                             ),
                             const SizedBox(height: 16),
                             Row(

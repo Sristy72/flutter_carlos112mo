@@ -26,7 +26,9 @@ class ApiConstants {
   static UserEndpoints get user => UserEndpoints();
   static NotificationEndpoints get notification => NotificationEndpoints();
 
-  static TeamEndpointcs get team => TeamEndpointcs();
+  static WallEndpoints get wall => WallEndpoints();
+
+  static TeamEndpoints get team => TeamEndpoints();
   static LeagueEndpoints get league => LeagueEndpoints();
 
   static ContactEndpoints get contact => ContactEndpoints();
@@ -85,6 +87,14 @@ class NotificationEndpoints {
   final String getnotifications = '$_base/getnotifications';
 }
 
+class WallEndpoints {
+  static const String _base = '${ApiConstants.baseUrl}/wall';
+
+  final String getAllPost = '$_base/all-post';
+  final String createPost = '$_base/';
+  String postComment(String postId) => '$_base/$postId/comment';
+}
+
 class LeagueEndpoints {
   static const String _base = '${ApiConstants.baseUrl}/league';
 
@@ -114,7 +124,7 @@ class FieldEndpoints {
   String getFieldsById(String id) => '$_base/$id';
 }
 
-class TeamEndpointcs {
+class TeamEndpoints {
   static const String _base = '${ApiConstants.baseUrl}/team';
 
   final String create = '$_base';
@@ -122,4 +132,5 @@ class TeamEndpointcs {
   final String update = '$_base/update';
   final String delete = '$_base/delete';
    String getTeamsById(String id) => '$_base/$id';
+   String joinMatch(String teamId) => '$_base/$teamId';
 }
