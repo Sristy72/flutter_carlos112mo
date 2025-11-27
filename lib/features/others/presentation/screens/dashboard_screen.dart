@@ -18,7 +18,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = const [
-    Center(child: PlayerHomeScreen()),
+    Center(child: PlayerHomeScreen( )),
     Center(child: PlayerFieldsScreen()),
     Center(child: BookingsScreen()),
     Center(child: MyTeamsScreen()),
