@@ -1,92 +1,100 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:image_picker/image_picker.dart';
 
-import '../../data/models/response_model/create_field_response_model.dart';
+class TimePriceModel {
+  TextEditingController price = TextEditingController();
+  RxString startTime = "09:00 am".obs;
+  RxString endTime = "10:00 am".obs;
+  RxString date = "September 14, 2025".obs;
+}
 
 class AddFieldController extends GetxController {
   // Basic Info
-  final fieldNameController = TextEditingController();
-  final basePriceController = TextEditingController();
-  late int basePrice = int.tryParse(basePriceController.text) ?? 0;
-  final descriptionController = TextEditingController();
-  var selectedFieldType = '5v5'.obs;
+  TextEditingController fieldName = TextEditingController();
+  TextEditingController description = TextEditingController();
+  TextEditingController basePrice = TextEditingController();
+  TextEditingController address = TextEditingController();
 
-  Rx<File?> image = Rx<File?>(null);
+  // Field Type
+  RxString selectedFieldType = "".obs;
 
-  void removeImage() {
-    image.value = null;
-    images.clear();
-  }
-
-
-  void setImage(File pickedImage) {
-    image.value = pickedImage;
-    images.clear();               // Ensure only one image or multiple if needed later
-    images.add(pickedImage);      // Add to the list used for upload
-  }
-
-
-  // Time & Price
-  var pricePerHourList = <PricePerHour>[].obs;
-
-  // Location
-  final addressController = TextEditingController();
-  final latitudeController = TextEditingController();
-  final longitudeController = TextEditingController();
-
-  // Services & Amenities
-  var showers = false.obs;
-  var lights = false.obs;
-  var parking = false.obs;
-  var changingRooms = false.obs;
-  var cafe = false.obs;
-  var equipmentRental = false.obs;
-
-  // Promotion
-  var isPromotion = false.obs;
+  // Services
+  RxMap<String, bool> services = {
+    "showers": false,
+    "parking": false,
+    "cafe": false,
+    "lights": false,
+    "changing rooms": false,
+    "equipment rental": false,
+  }.obs;
 
   // Images
-  var images = <File>[].obs;
+  RxList<String> images = <String>[].obs;
 
-  // Add a new PricePerHour entry
-  void addPricePerHour(PricePerHour price) {
-    pricePerHourList.add(price);
+  // Promote
+  RxBool promote = false.obs;
+
+  // Dynamic Time & Price Cards
+  RxList<TimePriceModel> timePriceList = <TimePriceModel>[].obs;
+
+  void addTimePriceCard() {
+    timePriceList.add(TimePriceModel());
   }
 
-  // Build the CreateFieldRequest from current values
-  CreateFieldResponseModel toModel() {
-    return CreateFieldResponseModel(
-      id: '',
-      fieldName: fieldNameController.text,
-      description: descriptionController.text,
-      fieldType: selectedFieldType.value,
-      promotion: isPromotion.value,
-      basePricePerHour: pricePerHourList.isNotEmpty ? pricePerHourList[0].pricePerHour : 0,
-      pricePerHour: pricePerHourList,
-      location: Location(
-        address: addressController.text,
-        coordinates: Coordinates(
-          latitude: double.tryParse(latitudeController.text) ?? 0,
-          longitude: double.tryParse(longitudeController.text) ?? 0,
-        ),
-      ),
-      servicesAmenities: ServicesAmenities(
-        showers: showers.value,
-        lights: lights.value,
-        parking: parking.value,
-        changingRooms: changingRooms.value,
-        cafe: cafe.value,
-        equipmentRental: equipmentRental.value,
-      ),
-      images: images,
-      owner: '', // Set dynamically
-      isActive: true,
-      rating: Rating(average: 0, count: 0),
-      createdAt: '',
-      updatedAt: '',
+  void removeCard(int index) {
+    timePriceList.removeAt(index);
+  }
+
+  // Pick Time
+  Future<String?> pickTime(BuildContext context, String initial) async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
     );
+    return picked != null ? picked.format(context) : null;
+  }
+
+  // Pick Date
+  Future<String?> pickDate(BuildContext context) async {
+    final picked = await showDatePicker(
+      context: context,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+      initialDate: DateTime.now(),
+    );
+    if (picked == null) return null;
+
+    return "${picked.day}-${picked.month}-${picked.year}";
+  }
+
+  // Pick Image
+  Future pickImage() async {
+    final picker = ImagePicker();
+    final file = await picker.pickImage(source: ImageSource.gallery);
+    if (file != null) images.add(file.path);
+  }
+
+  // Create Field
+  void createField() {
+    print("Field Name: ${fieldName.text}");
+    print("Description: ${description.text}");
+    print("Address: ${address.text}");
+    print("Field Type: ${selectedFieldType.value}");
+    print("Promote: ${promote.value}");
+    print("Images: ${images.toList()}");
+
+    print("Services:");
+    services.forEach((key, value) {
+      print("  $key: $value");
+    });
+
+    print("Time & Price:");
+    for (var card in timePriceList) {
+      print("Start: ${card.startTime.value}");
+      print("End: ${card.endTime.value}");
+      print("Date: ${card.date.value}");
+      print("Price: ${card.price.text}");
+    }
   }
 }

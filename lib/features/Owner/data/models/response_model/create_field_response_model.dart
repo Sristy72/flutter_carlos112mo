@@ -1,7 +1,4 @@
-import 'dart:io';  // Added this import for File
-
 class CreateFieldResponseModel {
-  final String id;
   final String fieldName;
   final String description;
   final String fieldType;
@@ -10,15 +7,15 @@ class CreateFieldResponseModel {
   final List<PricePerHour> pricePerHour;
   final Location location;
   final ServicesAmenities servicesAmenities;
-  final List<File> images;            // Changed from List<ImageData> to List<File>
+  final List<FieldImage> images;
   final String owner;
   final bool isActive;
   final Rating rating;
-  final String createdAt;
-  final String updatedAt;
+  final String id;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   CreateFieldResponseModel({
-    required this.id,
     required this.fieldName,
     required this.description,
     required this.fieldType,
@@ -31,60 +28,35 @@ class CreateFieldResponseModel {
     required this.owner,
     required this.isActive,
     required this.rating,
+    required this.id,
     required this.createdAt,
     required this.updatedAt,
   });
 
   factory CreateFieldResponseModel.fromJson(Map<String, dynamic> json) {
     return CreateFieldResponseModel(
-      id: json['_id'],
-      fieldName: json['fieldName'] ?? '',
-      description: json['description'] ?? '',
-      fieldType: json['fieldType'] ?? '',
-      promotion: json['promotion'] ?? false,
-      basePricePerHour: json['basePricePerHour'] ?? 0,
-      pricePerHour: (json['pricePerHour'] as List<dynamic>?)
-          ?.map((e) => PricePerHour.fromJson(e))
-          .toList() ??
-          [],
+      fieldName: json['fieldName'],
+      description: json['description'],
+      fieldType: json['fieldType'],
+      promotion: json['promotion'],
+      basePricePerHour: json['basePricePerHour'],
+      pricePerHour: (json['pricePerHour'] as List)
+          .map((e) => PricePerHour.fromJson(e))
+          .toList(),
       location: Location.fromJson(json['location']),
-      servicesAmenities:
-      ServicesAmenities.fromJson(json['servicesAmenities']),
-      images: [], // Cannot reconstruct File from JSON (local files). You may want to handle this differently when parsing from API.
-      owner: json['owner'] ?? '',
-      isActive: json['isActive'] ?? false,
+      servicesAmenities: ServicesAmenities.fromJson(json['servicesAmenities']),
+      images: (json['images'] as List)
+          .map((e) => FieldImage.fromJson(e))
+          .toList(),
+      owner: json['owner'],
+      isActive: json['isActive'],
       rating: Rating.fromJson(json['rating']),
-      createdAt: json['createdAt'] ?? '',
-      updatedAt: json['updatedAt'] ?? '',
+      id: json['_id'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "_id": id,
-      "fieldName": fieldName,
-      "description": description,
-      "fieldType": fieldType,
-      "promotion": promotion,
-      "basePricePerHour": basePricePerHour,
-      "pricePerHour": pricePerHour.map((e) => e.toJson()).toList(),
-      "location": location.toJson(),
-      "servicesAmenities": servicesAmenities.toJson(),
-      // Note: Files cannot be directly serialized to JSON.
-      // Usually you upload them separately and store only URLs.
-      "images": images.map((file) => file.path).toList(), // or handle via multipart upload
-      "owner": owner,
-      "isActive": isActive,
-      "rating": rating.toJson(),
-      "createdAt": createdAt,
-      "updatedAt": updatedAt,
-    };
-  }
 }
-
-// ---------------------------------------------------------
-// All other classes remain 100% unchanged
-// ---------------------------------------------------------
 
 class PricePerHour {
   final String date;
@@ -103,22 +75,12 @@ class PricePerHour {
 
   factory PricePerHour.fromJson(Map<String, dynamic> json) {
     return PricePerHour(
-      date: json['date'] ?? '',
-      startTime: json['startTime'] ?? '',
-      endTime: json['endTime'] ?? '',
-      pricePerHour: json['pricePerHour'] ?? 0,
-      id: json['_id'] ?? '',
+      date: json['date'],
+      startTime: json['startTime'],
+      endTime: json['endTime'],
+      pricePerHour: json['pricePerHour'],
+      id: json['_id'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "date": date,
-      "startTime": startTime,
-      "endTime": endTime,
-      "pricePerHour": pricePerHour,
-      "_id": id,
-    };
   }
 }
 
@@ -135,18 +97,10 @@ class Location {
 
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
-      address: json['address'] ?? '',
+      address: json['address'],
       coordinates: Coordinates.fromJson(json['coordinates']),
       mapUrl: json['mapUrl'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "address": address,
-      "coordinates": coordinates.toJson(),
-      "mapUrl": mapUrl,
-    };
   }
 }
 
@@ -154,22 +108,13 @@ class Coordinates {
   final double latitude;
   final double longitude;
 
-  Coordinates({
-    required this.latitude,
-    required this.longitude,
-  });
+  Coordinates({required this.latitude, required this.longitude});
 
   factory Coordinates.fromJson(Map<String, dynamic> json) {
     return Coordinates(
-      latitude: (json['latitude'] ?? 0).toDouble(),
-      longitude: (json['longitude'] ?? 0).toDouble(),
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
     );
-  }
-  Map<String, dynamic> toJson() {
-    return {
-      "latitude": latitude,
-      "longitude": longitude,
-    };
   }
 }
 
@@ -192,28 +137,38 @@ class ServicesAmenities {
 
   factory ServicesAmenities.fromJson(Map<String, dynamic> json) {
     return ServicesAmenities(
-      showers: json['showers'] ?? false,
-      lights: json['lights'] ?? false,
-      parking: json['parking'] ?? false,
-      changingRooms: json['changingRooms'] ?? false,
-      cafe: json['cafe'] ?? false,
-      equipmentRental: json['equipmentRental'] ?? false,
+      showers: json['showers'],
+      lights: json['lights'],
+      parking: json['parking'],
+      changingRooms: json['changingRooms'],
+      cafe: json['cafe'],
+      equipmentRental: json['equipmentRental'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "showers": showers,
-      "lights": lights,
-      "parking": parking,
-      "changingRooms": changingRooms,
-      "cafe": cafe,
-      "equipmentRental": equipmentRental,
-    };
   }
 }
 
-// ImageData class removed completely – now using List<File> directly in CreateFieldResponseModel
+class FieldImage {
+  final String url;
+  final String originalName;
+  final DateTime uploadDate;
+  final String id;
+
+  FieldImage({
+    required this.url,
+    required this.originalName,
+    required this.uploadDate,
+    required this.id,
+  });
+
+  factory FieldImage.fromJson(Map<String, dynamic> json) {
+    return FieldImage(
+      url: json['url'],
+      originalName: json['originalName'],
+      uploadDate: DateTime.parse(json['uploadDate']),
+      id: json['_id'],
+    );
+  }
+}
 
 class Rating {
   final double average;
@@ -223,14 +178,8 @@ class Rating {
 
   factory Rating.fromJson(Map<String, dynamic> json) {
     return Rating(
-      average: (json['average'] ?? 0).toDouble(),
-      count: json['count'] ?? 0,
+      average: (json['average'] as num).toDouble(),
+      count: json['count'],
     );
-  }
-  Map<String, dynamic> toJson() {
-    return {
-      "average": average,
-      "count": count,
-    };
   }
 }
