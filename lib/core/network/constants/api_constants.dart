@@ -1,7 +1,7 @@
 class ApiConstants {
   /// [Base Configuration]
   // static const String baseDomain = 'http://10.10.5.53:8001';
-  static const String baseDomain = 'http://10.10.5.53:8001'; // Farhan
+  static const String baseDomain = 'http://10.10.5.33:8001'; // Eshita
   static const String baseUrl = '$baseDomain/api/v1';
 
   /// Dynamically generated WebSocket URL based on baseDomain
@@ -46,6 +46,7 @@ class ApiConstants {
   static RecruiterAccountApi get recruiter => RecruiterAccountApi();
 
   static FieldEndpoints get field => FieldEndpoints();
+  static OwnerEndpoints get owner => OwnerEndpoints();
   static ChatEndpoints get chat => ChatEndpoints();
 }
 
@@ -137,6 +138,15 @@ class TeamEndpointcs {
 }
 
 
+class OwnerEndpoints {
+  final String createField = '${ApiConstants.baseUrl}/field/';
+
+  // final String create = '$_base';
+  // final String getTeams = '$_base';
+  // final String update = '$_base/update';
+  // final String delete = '$_base/delete';
+  //  String getTeamsById(String id) => '$_base/$id';
+}
 class ChatEndpoints {
   static const String _base = '${ApiConstants.baseUrl}/chat';
 

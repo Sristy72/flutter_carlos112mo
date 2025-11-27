@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/core/theme/app_colors.dart';
+import 'package:flutter_carlos112mo/features/Owner/presentation/screens/field_details_screen.dart';
+import 'package:get/get.dart';
 
 class FieldCardWidget extends StatelessWidget {
+  final String id;
   final String name;
   final String address;
-  final double price;
+  final String price;
   final double rating;
   final int reviews;
   final List<String> tags;
@@ -18,7 +21,7 @@ class FieldCardWidget extends StatelessWidget {
     required this.rating,
     required this.reviews,
     required this.tags,
-    required this.imagePath,
+    required this.imagePath, required this.id,
   });
 
   @override
@@ -33,7 +36,7 @@ class FieldCardWidget extends StatelessWidget {
           // ✅ Correct image loading
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: Image.asset(
+            child: Image.network(
               imagePath,
               height: 164,
               width: double.infinity,
@@ -58,7 +61,7 @@ class FieldCardWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "\$${price.toStringAsFixed(0)}/hr",
+                      "\$$price/hr",
                       style: const TextStyle(
                         color: AppColors.primaryGreen,
                         fontWeight: FontWeight.w400,
@@ -118,7 +121,7 @@ class FieldCardWidget extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {Get.to(FieldDetailsScreen(id: id));},
                     child: const Text(
                       "View Details",
                       style: TextStyle(

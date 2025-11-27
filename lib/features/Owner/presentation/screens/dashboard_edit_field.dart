@@ -1,26 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../core/common/widgets/bottom_navigation_bar.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../player/presentation/controller/field_controller.dart';
 import '../../../profile/presentation/controllers/user_profie_controller.dart';
-import '../controllers/field_controller.dart';
 import '../widget/dashboard_field_card_widget.dart';
-import '../widget/feature_field_widget.dart';
-import '../widget/info_card_widget.dart';
 import 'add_field_screen.dart';
 import 'client_booking_screen.dart';
-import 'owner_dashboard.dart';
-import 'owner_home_screen.dart';
 
-class OwnerDashboardEditScreen extends StatelessWidget {
-  const OwnerDashboardEditScreen({super.key});
+class OwnerDashboardScreen extends StatefulWidget {
+  const OwnerDashboardScreen({super.key});
+
+  @override
+  State<OwnerDashboardScreen> createState() => _OwnerDashboardScreenState();
+}
+
+class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
+  final FieldPlayerController fieldController = Get.find<FieldPlayerController>();
+  late final UserProfileController userProfileController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    userProfileController = Get.find<UserProfileController>();
+     fieldController.fetchField();
+     // fetch fields from API
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   // Fetch both in parallel
+    //   await Future.wait([
+    //     fieldController.fetchField();
+    //     userProfileController.getUserProfile(); // ensures fresh data + text controllers
+    //   ]);
+    // });
+  }
+
+  // void fetchInitial() async {
+  //   userProfileController = Get.find<UserProfileController>();
+  //  await fieldController.fetchField();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(FieldController());
-    final UserProfileController userProfileController = Get.find<UserProfileController>();
-
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
@@ -30,19 +51,15 @@ class OwnerDashboardEditScreen extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text('Arequipa, Peru', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-                  SizedBox(width: 8),
-                  Image(
-                    height: 18,
-                    width: 18,
-                    image: AssetImage("assets/images/location_icon.png"),
-                  ),
+                  const Text('Arequipa, Peru', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                  const SizedBox(width: 8),
+                  Image(height: 18, width: 18, image: AssetImage("assets/images/location_icon.png")),
                 ],
               ),
               Row(
                 children: [
-                  Text(userProfileController.userProfileModel?.name ?? '', style: TextStyle(fontSize: 18)),
-                  SizedBox(width: 8),
+                  Text(userProfileController.userProfileModel?.name ?? '', style: const TextStyle(fontSize: 18)),
+                  const SizedBox(width: 8),
                   CircleAvatar(
                     backgroundColor: Colors.white70,
                     radius: 17,
@@ -50,9 +67,8 @@ class OwnerDashboardEditScreen extends StatelessWidget {
                         userProfileController.userProfileModel!.avatar!.url!.isNotEmpty)
                         ? NetworkImage(userProfileController.userProfileModel!.avatar!.url!)
                         : null,
-                    child: Icon(Icons.person),
+                    child: const Icon(Icons.person),
                   ),
-
                 ],
               ),
             ],
@@ -60,97 +76,129 @@ class OwnerDashboardEditScreen extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Featured Fields
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Obx(() {
+          // Loading state
+          if (fieldController.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          // Error state
+          if (fieldController.errorMessage.isNotEmpty) {
+            return Center(
+              child: Text(fieldController.errorMessage.value, style: const TextStyle(color: Colors.red)),
+            );
+          }
+
+          // No fields
+          if (fieldController.filteredFields.isEmpty) {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Icon(Icons.grid_view, color: Colors.grey[500], size: 40),
+                  const SizedBox(height: 12),
                   const Text(
-                    "Owner Dashboard",
+                    'No fields yet',
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.black87,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.primaryBlack,
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // 👉 Navigate to booking page or trigger booking action
-                      Get.to(
-                        () => BookingPageScreen(),
-                      ); // update route as needed
-                    },
+                  const SizedBox(height: 6),
+                  const Text(
+                    "You haven't added any fields to your account yet. Add your first field to start receiving bookings.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xFF969696),
+                      height: 1.4,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton.icon(
+                    onPressed: () => Get.to(() => AddFieldScreen(isEdit: true, fieldId: '', model: true,)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryGreen,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 18,
-                        vertical: 8,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
-                    child: const Text(
-                      "Field Booking",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    icon: const Icon(Icons.add, color: Colors.white),
+                    label: const Text(
+                      'Add Your First Field',
+                      style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
                     ),
                   ),
                 ],
               ),
+            );
+          }
 
-              const SizedBox(height: 12),
+          // Fields exist
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Dashboard Header
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Owner Dashboard",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black87),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => Get.to(() => BookingPageScreen()),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryGreen,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        elevation: 0,
+                      ),
+                      child: const Text("Field Booking", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
 
-              Obx(() {
-                return ListView.builder(
-                  physics:
-                      NeverScrollableScrollPhysics(), // disable scrolling inside scroll
-                  shrinkWrap: true, // take only required height
-                  itemCount: controller.fields.length,
-                  itemBuilder: (context, index) {
-                    final field = controller.fields[index];
+                Column(
+                  children: fieldController.fields.value!.fields.map((field) {
                     return DashboardFieldCardWidget(
-                      name: field.name,
-                      address: field.address,
-                      price: field.price,
-                      rating: field.rating,
-                      reviews: field.reviews,
-                      tags: field.tags,
-                      imagePath: field.imagepath,
+                      id: field.id ?? "",
+                      model: field,              // <-- Pass entire model
+                      imagePath: field.images?.isNotEmpty == true
+                          ? field.images!.first.url ?? ''
+                          : "",
+                      name: field.fieldName ?? "Unknown Field",
+                      address:
+                      '${field.fieldType ?? "N/A"} • ${field.location?.address ?? "No address"}',
+                      price: field.pricePerHour != null
+                          ? '${field.pricePerHour!.toStringAsFixed(0)}'
+                          : (field.basePricePerHour != null
+                          ? '${field.basePricePerHour!.toStringAsFixed(0)}'
+                          : '0'),
+                      rating: field.rating?.average ?? 0.0,
+                      reviews: field.rating?.count ?? 0,
+                      tags: [
+                        if (field.servicesAmenities?.showers == true) "showers",
+                        if (field.servicesAmenities?.lights == true) "lights",
+                        if (field.servicesAmenities?.parking == true) "parking",
+                        if (field.servicesAmenities?.changingRooms == true) "changing rooms",
+                        if (field.servicesAmenities?.cafe == true) "cafe",
+                        if (field.servicesAmenities?.equipmentRental == true) "equipment",
+                      ],
                     );
-                  },
-                );
-              }),
-            ],
-          ),
-        ),
+                  }).toList(),
+                )
+              ],
+            ),
+          );
+        }),
       ),
-      // bottomNavigationBar: CustomBottomNavBar(
-      //   onTap: (index) {
-      //     // Optional navigation logic
-      //     if (index == 0) {
-      //       Get.to(() => const OwnerHomeScreen());
-
-      //       // Get.toNamed('/home');
-      //     } else if (index == 1) {
-      //       Get.to(() => const OwnerDashboardEditScreen());
-      //       // Get.toNamed('/dashboard');
-      //     } else if (index == 2) {
-      //       // Get.toNamed('/myFields');
-      //       Get.to(() => AddFieldScreen());
-      //     } else if (index == 3) {
-      //       Get.toNamed('/profile');
-      //     }
-      //   },
-      // ),
     );
   }
 }

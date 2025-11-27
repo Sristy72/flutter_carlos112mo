@@ -9,4 +9,6 @@ class AppImages {
   static const String avatarImage = 'assets/images/avatar.png';
   static const String splashBubbles = 'assets/images/splash_bubbles.png';
   static const String onboardingBG = 'assets/images/onboarding_bg.png';
+  static const String star = 'assets/images/Star 6.png';
+  static const String premium = 'assets/images/Vector.png';
 }

@@ -1,3 +1,4 @@
+import 'package:flutter_carlos112mo/features/Owner/presentation/controllers/field_controller.dart';
 import 'package:flutter_carlos112mo/features/message/presentation/controller/msg_controller.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/controller/field_controller.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/controller/find_field_controller.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_carlos112mo/features/team/presentation/controller/team_c
 import 'package:flutter_carlos112mo/features/profile/presentation/controllers/user_profie_controller.dart';
 import 'package:get/get.dart';
 
+import '../../features/Owner/data/domain/field_repository.dart';
 import '../../features/auth/presentation/controller/auth_controller.dart';
 
 void setupController() {

@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/core/theme/app_colors.dart';
+import 'package:flutter_carlos112mo/features/Owner/presentation/screens/add_field_screen.dart';
+import 'package:get/get.dart';
 
 class DashboardFieldCardWidget extends StatelessWidget {
+  final String id;
   final String name;
   final String address;
-  final double price;
+  final String price;
   final double rating;
   final int reviews;
   final List<String> tags;
   final String imagePath;
 
+  // Entire model optional (BEST WAY)
+  final dynamic model;
+
   const DashboardFieldCardWidget({
     super.key,
+    required this.id,
     required this.name,
     required this.address,
     required this.price,
@@ -19,6 +26,7 @@ class DashboardFieldCardWidget extends StatelessWidget {
     required this.reviews,
     required this.tags,
     required this.imagePath,
+    this.model,
   });
 
   @override
@@ -33,7 +41,7 @@ class DashboardFieldCardWidget extends StatelessWidget {
           // ✅ Correct image loading
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: Image.asset(
+            child: Image.network(
               imagePath,
               height: 164,
               width: double.infinity,
@@ -58,7 +66,7 @@ class DashboardFieldCardWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "\$${price.toStringAsFixed(0)}/hr",
+                      "\$$price/hr",
                       style: const TextStyle(
                         color: AppColors.primaryGreen,
                         fontWeight: FontWeight.w400,
@@ -118,7 +126,13 @@ class DashboardFieldCardWidget extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(() => AddFieldScreen(
+                        isEdit: true,
+                        model: model, fieldId: id, // <-- send full field model
+                      ));
+                    },
+
                     child: const Text(
                       "Edit Field",
                       style: TextStyle(

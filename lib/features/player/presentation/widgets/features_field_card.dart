@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 class FeaturedFieldCard extends StatelessWidget {
   final String id;
-
   final String imagePath;
   final String title;
   final String details;
