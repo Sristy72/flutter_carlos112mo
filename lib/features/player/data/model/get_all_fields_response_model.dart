@@ -106,7 +106,7 @@ class Field {
   }
 }
 
-// New model for the dynamic pricing slots
+// New models for the dynamic pricing slots
 class PricePerHourSlot {
   final String? date;
   final String? startTime;

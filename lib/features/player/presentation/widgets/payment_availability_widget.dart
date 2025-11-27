@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/core/theme/app_colors.dart';
+import 'package:flutter_carlos112mo/features/player/presentation/screens/book_field_screen.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/widgets/schedule_matching_dialog.dart';
 import 'package:flutter_carlos112mo/features/team/presentation/controller/team_controller.dart';
 import 'package:get/get.dart';
@@ -216,6 +217,8 @@ class _PaymentAvailabilityState extends State<PaymentAvailability> {
                               ),
                             ),
                           );
+
+                          Get.to(() => BookFieldScreen());
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryGreen,
