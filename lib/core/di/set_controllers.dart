@@ -54,4 +54,8 @@ void setupController() {
     () => MessageController(Get.find()),
     fenix: true,
   );
+  Get.lazyPut<FieldController>(
+    () => FieldController(Get.find()),
+    fenix: true,
+  );
 }

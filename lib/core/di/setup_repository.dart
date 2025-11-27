@@ -73,4 +73,9 @@ void setupRepository() {
     () => ChatRepositoryImpl(apiClient: Get.find()),
     fenix: true,
   );
+
+  Get.lazyPut<FieldRepo>(
+    () => FieldRepositoryImplementation(apiClient: Get.find()),
+    fenix: true,
+  );
 }
