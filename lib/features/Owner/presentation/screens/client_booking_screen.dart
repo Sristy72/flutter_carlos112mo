@@ -54,22 +54,22 @@ class BookingPageScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 🔙 Back button row
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: GestureDetector(
-              onTap: () => Get.back(),
-              child: Row(
-                children: const [
-                  Icon(Icons.arrow_back_ios_new, color: Colors.black),
-                  SizedBox(width: 6),
-                  Text(
-                    "Back",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // Container(
+          //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          //   child: GestureDetector(
+          //     onTap: () => Get.back(),
+          //     child: Row(
+          //       children: const [
+          //         Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          //         SizedBox(width: 6),
+          //         Text(
+          //           "Back",
+          //           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           const SizedBox(height: 14),
 
           // 🔖 Tabs

@@ -290,6 +290,7 @@ import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../profile/presentation/controllers/user_profie_controller.dart';
+import '../../../team/presentation/controller/team_controller.dart';
 import '../controller/field_controller.dart';
 import '../widgets/features_field_card.dart';
 import 'player_fields_screen.dart';
@@ -303,6 +304,8 @@ class PlayerHomeScreen extends StatefulWidget {
 
 class _PlayerHomeScreenState extends State<PlayerHomeScreen> {
   final controller = Get.find<FieldPlayerController>();
+  final TeamController teamController = Get.find<TeamController>();
+
 
   @override
   void initState() {
@@ -562,10 +565,14 @@ class _PlayerHomeScreenState extends State<PlayerHomeScreen> {
           Positioned(
             bottom: 20,
             right: 20,
-            child: FloatingActionButton(
+            child: 
+            FloatingActionButton(
               backgroundColor: Colors.teal,
               onPressed: () {
-                Get.to(() => const MessageScreen());
+                Get.to(
+                  () =>
+                      MessageScreen(teamId: teamController.currentTeamId.value, chatId: '',),
+                );
               },
               child: Image.asset(
                 "assets/images/messageIcon.png",

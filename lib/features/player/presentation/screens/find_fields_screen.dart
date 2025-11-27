@@ -8,7 +8,8 @@ import '../widgets/payment_availability_widget.dart';
 
 class FindFieldsScreen extends StatefulWidget {
   final String id;
-  const FindFieldsScreen({super.key, required this.id});
+  final teamId;
+  const FindFieldsScreen({super.key, required this.id, this.teamId});
 
   @override
   State<FindFieldsScreen> createState() => _FindFieldsScreenState();
@@ -329,7 +330,7 @@ class _FindFieldsScreenState extends State<FindFieldsScreen> {
 
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.teal,
-        onPressed: () => Get.to(() => MessageScreen()),
+        onPressed: () => Get.to(() => MessageScreen(teamId: widget.teamId, chatId: '',)),
         child: const Icon(Icons.chat_bubble_outline, color: Colors.white),
       ),
     );
