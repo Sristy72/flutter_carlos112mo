@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/features/Owner/presentation/screens/subcription_screen.dart';
+import 'package:flutter_carlos112mo/features/auth/presentation/controller/auth_controller.dart';
 import 'package:get/get.dart';
-
 import '../../../profile/presentation/controllers/user_profie_controller.dart';
+import '../../../profile/presentation/widgets/logout_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -20,6 +21,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       TextEditingController();
   final UserProfileController userProfileController =
       Get.find<UserProfileController>();
+  final UserProfileController profileController = Get.find<UserProfileController>();
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   void dispose() {
@@ -169,124 +172,305 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Profile Picture and Name
-            Center(
-              child: Column(
-                children: [
-                  CircleAvatar(radius: 40, backgroundColor: Color(0xFFE6F5F3)),
-                  const SizedBox(height: 8),
-                  Text(
-                    userProfileController.userProfileModel?.name ?? '',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.4),
+                    blurRadius: 4,
+                    offset: Offset(0, 0),
                   ),
-                  const Text('owner', style: TextStyle(color: Colors.grey)),
                 ],
               ),
-            ),
-            const SizedBox(height: 16),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: userProfileController.profileFormKey,
+                  child: Column(
+                    children: [
+                      Stack(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.grey.shade200,
+                            radius: 50,
+                            foregroundImage:
+                            (userProfileController
+                                .userProfileModel
+                                ?.avatar
+                                ?.url !=
+                                null &&
+                                userProfileController
+                                    .userProfileModel!
+                                    .avatar!
+                                    .url!
+                                    .isNotEmpty)
+                                ? NetworkImage(
+                              userProfileController
+                                  .userProfileModel!
+                                  .avatar!
+                                  .url!,
+                            )
+                                : null,
+                            child: Icon(
+                              Icons.person,
+                              size: 80,
+                              color: Colors.grey,
+                            ),
+                          ),
+                           Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                userProfileController
+                                    .pickImage();
+                              },
+                              child: Image.asset(
+                                'assets/images/edit_circle.png',
+                                height: 35,
+                                width: 35,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        userProfileController.userProfileModel?.name ??
+                            '',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text('owner',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
 
-            // Full Name Input
-            TextField(
-              controller: fullNameController,
-              decoration: const InputDecoration(
-                labelText: 'Full Name',
-                labelStyle: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey,
-                ),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
+
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 24.0,
+                            bottom: 8.0,
+                          ),
+                          child: Text('Full Name'),
+                        ),
+                      ),
+                      TextFormField(
+                        controller:
+                        userProfileController.nameController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 16,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your name';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      SizedBox(height: 24),
+
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            minimumSize: Size(double.infinity, 48),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                          onPressed: () {
+                            if (userProfileController
+                                .profileFormKey
+                                .currentState!
+                                .validate()) {
+                              userProfileController.updateUserProfile();
+                            }
+                          },
+                          child: Text('Save Changes'),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                child: const Text('Save Changes', style: TextStyle(fontWeight: FontWeight.w600),),
               ),
+            ),
+            SizedBox(height: 16),
+
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.4),
+                    blurRadius: 4,
+                    offset: Offset(0, 0),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: userProfileController.passwordFormKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Change Password'),
+
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 24.0,
+                            bottom: 8.0,
+                          ),
+                          child: Text('Current Password'),
+                        ),
+                      ),
+                      TextFormField(
+                        controller:
+                        userProfileController.oldPasswordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 14,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your current password';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 24.0,
+                            bottom: 8.0,
+                          ),
+                          child: Text('New Password'),
+                        ),
+                      ),
+                      TextFormField(
+                        controller:
+                        userProfileController.newPasswordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 14,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your new password';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 24.0,
+                            bottom: 8.0,
+                          ),
+                          child: Text('Confirm New Password'),
+                        ),
+                      ),
+                      TextFormField(
+                        controller: userProfileController
+                            .confirmPasswordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 14,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please confirm your new password';
+                          }
+                          if (value !=
+                              userProfileController
+                                  .newPasswordController
+                                  .text) {
+                            return 'Passwords do not match';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      SizedBox(height: 24),
+
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            minimumSize: Size(double.infinity, 48),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+
+                          onPressed: () {
+                            if (userProfileController
+                                .passwordFormKey
+                                .currentState!
+                                .validate()) {
+                              userProfileController.changePassword();
+                            }
+                          },
+                          child: Text('Update Password'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            SizedBox(height: 24),
+            LogoutButton(
+              onLogout: () {
+                authController.logout();
+              },
             ),
             const SizedBox(height: 24),
-
-            // Change Password Section
-            const Text(
-              'Change Password',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: currentPasswordController,
-              decoration: const InputDecoration(
-                labelText: 'Current Password',
-                labelStyle: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey,
-                ),
-                border: OutlineInputBorder(),
-              ),
-              obscureText: true,
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: newPasswordController,
-              decoration: const InputDecoration(
-                labelText: 'New Password',
-                labelStyle: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey,
-                ),
-                border: OutlineInputBorder(),
-              ),
-              obscureText: true,
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: confirmPasswordController,
-              decoration: const InputDecoration(
-                labelText: 'Confirm New Password',
-                labelStyle: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey,
-                ),
-                border: OutlineInputBorder(),
-              ),
-              obscureText: true,
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey.shade300,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  )// disabled style
-                ),
-                child: const Text('Update Password', style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black54,
-                ),),
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Logout Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(backgroundColor: Color(0xFFDC2626),shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                )),
-                child: const Text('Logout'),
-              ),
-            ),
           ],
         ),
       ),

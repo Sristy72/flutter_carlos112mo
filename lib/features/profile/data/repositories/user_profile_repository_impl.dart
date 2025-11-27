@@ -35,7 +35,7 @@ class UserProfileRepositoryImpl implements UserProfileRepository {
       'name': name,
       'phone': phone,
       'position': position,
-      'age': age,
+      if (age.isNotEmpty) 'age': int.tryParse(age) ?? 0,
       'favorite_club': favoriteClub,
       'address': address,
       if (imagePath != null && imagePath.isNotEmpty)
