@@ -47,6 +47,13 @@ class MessageController extends BaseController {
     _client.on("message", (data) {
       DPrint.log("Raw socket message received: $data");
     });
+
+    // if (!msgs.any((m) => m.id == newMessage.id ||
+    //         (m.text == newMessage.text &&
+    //             m.sender == newMessage.sender &&
+    //             m.createdAt.difference(newMessage.createdAt).abs().inSeconds < 5))) {
+    //       msgs.add(newMessage);
+    //     }
   }
 
   // Future<void> createChats(CreateChatRequestModel request) async {
@@ -122,7 +129,7 @@ class MessageController extends BaseController {
         isLoading(false);
       },
       (success) {
-        msgs.add(success.data); // <-- Add API data into list
+        // msgs.add(success.data); // <-- Add API data into list
         isLoading(false);
         print("📩 Message Sent Successfully ✔");
       },

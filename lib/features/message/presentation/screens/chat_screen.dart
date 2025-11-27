@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_carlos112mo/core/network/services/socket_client.dart';
 import 'package:flutter_carlos112mo/core/theme/app_colors.dart';
+import 'package:flutx_core/flutx_core.dart';
 import 'package:get/get.dart';
 
 import '../../data/model/get_single_chat_response_model.dart';
@@ -11,6 +13,7 @@ import '../widget/chat_widget.dart';
 
 class ChatScreen extends StatefulWidget {
   final SingleChatResponseModel chat;
+  
   const ChatScreen({super.key, required this.chat});
 
   @override
@@ -40,7 +43,16 @@ class _ChatScreenState extends State<ChatScreen> {
         );
       }
     });
+    _joinFunction();
     msgcontroller.socketInitChat();
+  }
+
+  _joinFunction(){
+    SocketClient().emit("joinChatRoom", widget.chat.id);
+    SocketClient().on("newMassage", (data) {
+      DPrint.log("Raw socket message received: $data");
+      msgcontroller.msgs.add(Message.fromJson(data));
+    });
   }
 
   @override
@@ -87,7 +99,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   return ChatBubble(
                     message: message!,
                     currentUserId:
-                        msgcontroller.currentUserId.value, // if you have
+                        msgcontroller.currentUserId.value,
+                        chatUserName: widget.chat.name, // if you have
                   );
                 },
               );

@@ -7,12 +7,14 @@ import '../../data/model/send_message_response_model.dart';
 
 class ChatBubble extends StatelessWidget {
   final Message message;
-  final String? currentUserId; // pass current logged-in user id
+  final String? currentUserId;
+  final String chatUserName; // pass current logged-in user id
 
   const ChatBubble({
     super.key,
     required this.message,
      this.currentUserId,
+    required this.chatUserName,
   });
 
   @override
@@ -43,7 +45,8 @@ class ChatBubble extends StatelessWidget {
               // Show username for messages from others
               if (!isMe)
                 Text(
-                  message.user,
+                  // message.user,
+                  chatUserName,
                   style: const TextStyle(
                       fontSize: 13, fontWeight: FontWeight.w600),
                 ),
