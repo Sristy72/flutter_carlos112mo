@@ -1,87 +1,92 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+
+import '../../data/models/response_model/create_field_response_model.dart';
 
 class AddFieldController extends GetxController {
-  // ==== Text Controllers ====
+  // Basic Info
   final fieldNameController = TextEditingController();
+  final basePriceController = TextEditingController();
+  late int basePrice = int.tryParse(basePriceController.text) ?? 0;
   final descriptionController = TextEditingController();
-  final priceController = TextEditingController();
+  var selectedFieldType = '5v5'.obs;
+
+  Rx<File?> image = Rx<File?>(null);
+
+  void removeImage() {
+    image.value = null;
+    images.clear();
+  }
+
+
+  void setImage(File pickedImage) {
+    image.value = pickedImage;
+    images.clear();               // Ensure only one image or multiple if needed later
+    images.add(pickedImage);      // Add to the list used for upload
+  }
+
+
+  // Time & Price
+  var pricePerHourList = <PricePerHour>[].obs;
+
+  // Location
   final addressController = TextEditingController();
+  final latitudeController = TextEditingController();
+  final longitudeController = TextEditingController();
 
-  // ==== Reactive Variables ====
-  var fieldType = '5v5'.obs;
-  var selectedDate = DateTime.now().obs;
-  var startTime = TimeOfDay(hour: 9, minute: 0).obs;
-  var endTime = TimeOfDay(hour: 12, minute: 0).obs;
+  // Services & Amenities
+  var showers = false.obs;
+  var lights = false.obs;
+  var parking = false.obs;
+  var changingRooms = false.obs;
+  var cafe = false.obs;
+  var equipmentRental = false.obs;
 
-  var selectedAmenities = <String>[].obs;
-  var makePromotion = false.obs;
-  var pickedImages = <XFile>[].obs;
+  // Promotion
+  var isPromotion = false.obs;
 
-  final ImagePicker _picker = ImagePicker();
+  // Images
+  var images = <File>[].obs;
 
-  // ==== Field Type ====
-  void setFieldType(String type) => fieldType.value = type;
+  // Add a new PricePerHour entry
+  void addPricePerHour(PricePerHour price) {
+    pricePerHourList.add(price);
+  }
 
-  // ==== Date & Time Pickers ====
-  Future<void> pickDate(BuildContext context) async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate.value,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
+  // Build the CreateFieldRequest from current values
+  CreateFieldResponseModel toModel() {
+    return CreateFieldResponseModel(
+      id: '',
+      fieldName: fieldNameController.text,
+      description: descriptionController.text,
+      fieldType: selectedFieldType.value,
+      promotion: isPromotion.value,
+      basePricePerHour: pricePerHourList.isNotEmpty ? pricePerHourList[0].pricePerHour : 0,
+      pricePerHour: pricePerHourList,
+      location: Location(
+        address: addressController.text,
+        coordinates: Coordinates(
+          latitude: double.tryParse(latitudeController.text) ?? 0,
+          longitude: double.tryParse(longitudeController.text) ?? 0,
+        ),
+      ),
+      servicesAmenities: ServicesAmenities(
+        showers: showers.value,
+        lights: lights.value,
+        parking: parking.value,
+        changingRooms: changingRooms.value,
+        cafe: cafe.value,
+        equipmentRental: equipmentRental.value,
+      ),
+      images: images,
+      owner: '', // Set dynamically
+      isActive: true,
+      rating: Rating(average: 0, count: 0),
+      createdAt: '',
+      updatedAt: '',
     );
-    if (picked != null) selectedDate.value = picked;
-  }
-
-  Future<void> pickStartTime(BuildContext context) async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: startTime.value,
-    );
-    if (picked != null) startTime.value = picked;
-  }
-
-  Future<void> pickEndTime(BuildContext context) async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: endTime.value,
-    );
-    if (picked != null) endTime.value = picked;
-  }
-
-  // ==== Amenities Toggle ====
-  void toggleAmenity(String amenity, bool isSelected) {
-    if (isSelected) {
-      if (!selectedAmenities.contains(amenity)) {
-        selectedAmenities.add(amenity);
-      }
-    } else {
-      selectedAmenities.remove(amenity);
-    }
-  }
-
-  // ==== Image Picker ====
-  Future<void> pickImage() async {
-    final picked = await _picker.pickMultiImage();
-    if (picked.isNotEmpty) {
-      pickedImages.addAll(picked);
-      Get.snackbar('Success', '${picked.length} images selected!');
-    }
-  }
-
-  // ==== Add Time Slot ====
-  void addMoreSlot() {
-    Get.snackbar("Added", "New time slot added!");
-  }
-
-  @override
-  void onClose() {
-    fieldNameController.dispose();
-    descriptionController.dispose();
-    priceController.dispose();
-    addressController.dispose();
-    super.onClose();
   }
 }

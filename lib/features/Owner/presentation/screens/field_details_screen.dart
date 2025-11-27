@@ -306,33 +306,33 @@ class _FieldDetailsScreenState extends State<FieldDetailsScreen> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Check Availability Button
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primaryGreen,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                        ),
-                        icon: const Icon(
-                          Icons.calendar_today,
-                          color: Colors.white,
-                        ),
-                        label: const Text(
-                          "Check Availability",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (_) => const AvailabilityDialog(),
-                          );
-                        },
-                      ),
-                    ),
+                    // // Check Availability Button
+                    // SizedBox(
+                    //   width: double.infinity,
+                    //   child: ElevatedButton.icon(
+                    //     style: ElevatedButton.styleFrom(
+                    //       backgroundColor: AppColors.primaryGreen,
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //       ),
+                    //       padding: const EdgeInsets.symmetric(vertical: 14),
+                    //     ),
+                    //     icon: const Icon(
+                    //       Icons.calendar_today,
+                    //       color: Colors.white,
+                    //     ),
+                    //     label: const Text(
+                    //       "Check Availability",
+                    //       style: TextStyle(color: Colors.white),
+                    //     ),
+                    //     onPressed: () {
+                    //       showDialog(
+                    //         context: context,
+                    //         builder: (_) => const AvailabilityDialog(teamId: '',),
+                    //       );
+                    //     },
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

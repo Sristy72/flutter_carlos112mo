@@ -1,624 +1,422 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_carlos112mo/features/Owner/presentation/controllers/add_field_controller.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import '../../../../core/common/widgets/bottom_navigation_bar.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../profile/presentation/controllers/user_profie_controller.dart';
-import '../controllers/add_field_controller.dart';
-import '../widget/custom_text_field.dart';
-import 'dashboard_edit_field.dart';
-import 'owner_home_screen.dart';
+import '../../data/models/response_model/create_field_response_model.dart';
+import '../controllers/field_controller.dart';
+import 'package:image_picker/image_picker.dart';
 
-class AddFieldScreen extends StatefulWidget {
-  const AddFieldScreen({super.key});
+class AddFieldScreen extends StatelessWidget {
+  AddFieldScreen({super.key});
 
-  @override
-  State<AddFieldScreen> createState() => _AddFieldScreenState();
-}
-class _AddFieldScreenState extends State<AddFieldScreen> {
-  final AddFieldController controller = Get.put(AddFieldController());
-  final List<String> amenities = [
-    'showers',
-    'parking',
-    'cafe',
-    'lights',
-    'changing rooms',
-    'equipment rental',
-  ];
-
-  final Set<String> selectedAmenities = {};
-  bool makePromotion = false;
+  final FieldController _controller = Get.find<FieldController>();
+  final AddFieldController controller = AddFieldController();
 
   @override
   Widget build(BuildContext context) {
-    final UserProfileController userProfileController = Get.find<UserProfileController>();
     return Scaffold(
-      appBar: AppBar(
-        title: Obx(
-              () => Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Text('Arequipa, Peru', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-                  SizedBox(width: 8),
-                  Image(
-                    height: 18,
-                    width: 18,
-                    image: AssetImage("assets/images/location_icon.png"),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text(userProfileController.userProfileModel?.name ?? '', style: TextStyle(fontSize: 18)),
-                  SizedBox(width: 8),
-                  CircleAvatar(
-                    backgroundColor: Colors.white70,
-                    radius: 17,
-                    foregroundImage: (userProfileController.userProfileModel?.avatar?.url != null &&
-                        userProfileController.userProfileModel!.avatar!.url!.isNotEmpty)
-                        ? NetworkImage(userProfileController.userProfileModel!.avatar!.url!)
-                        : null,
-                    child: Icon(Icons.person),
-                  ),
-
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+      appBar: AppBar(title: const Text("Add New Field"), elevation: 0.5),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Add New Field',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.primaryBlack,
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // ===== Basic Info Section =====
-            _buildCard(
-              title: "Basic Information",
-              children: [
-                CustomTextField(
-                  label: "Field Name ",
-                  controller: controller.fieldNameController,
-                  hintText: "e.g. Green Valley Field",
-                  isRequired: true,
-                ),
-                CustomTextField(
-                  label: "Description ",
-                  controller: controller.descriptionController,
-                  hintText: "Describe your field...",
-                  isRequired: true,
-                ),
-                const Text(
-                  "Field Type *",
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 8),
-                Obx(
-                  () => Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: ["5v5", "6v6", "11v11"].map((type) {
-                      final isSelected = controller.fieldType.value == type;
-                      return Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: isSelected
-                                  ? AppColors.iconBg
-                                  : AppColors.primaryWhite,
-                              foregroundColor: AppColors.primaryBlack,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: const BorderSide(
-                                  color: AppColors.primaryGreen,
-                                  width: 1,
-                                ),
-                              ),
-                            ),
-                            onPressed: () => controller.setFieldType(type),
-                            child: Text(type),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 16),
-
-            // ===== Time & Price Section =====
-            _buildCard(
-              title: "Time & Date base Price",
-              children: [
-                Obx(
-                  () => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _buildTimeRow(
-                              context,
-                              "Start Time",
-                              controller.startTime.value,
-                              () => controller.pickStartTime(context),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: _buildTimeRow(
-                              context,
-                              "End Time",
-                              controller.endTime.value,
-                              () => controller.pickEndTime(context),
-                            ),
-                          ),
-                        ],
-                      ),
-                      CustomTextField(
-                        label: "Price per Hour (\$)",
-                        controller: controller.priceController,
-                        keyboardType: TextInputType.number,
-                        isRequired: true,
-                      ),
-                      _buildDatePicker(context),
-                      const SizedBox(height: 16),
-                      const Divider(
-                        color: AppColors.primaryGreen,
-                        thickness: 2,
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _buildTimeRow(
-                              context,
-                              "Start Time",
-                              controller.startTime.value,
-                              () => controller.pickStartTime(context),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: _buildTimeRow(
-                              context,
-                              "End Time",
-                              controller.endTime.value,
-                              () => controller.pickEndTime(context),
-                            ),
-                          ),
-                        ],
-                      ),
-                      CustomTextField(
-                        label: "Price per Hour (\$)",
-                        hintText: "80",
-                        controller: controller.priceController,
-                        keyboardType: TextInputType.number,
-                        isRequired: true,
-                      ),
-                      _buildDatePicker(context),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primaryGreen,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                          ),
-                          icon: const Icon(Icons.add, color: Colors.white),
-                          label: const Text(
-                            "Add More",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          onPressed: controller.addMoreSlot,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // ===== Location Section =====
-            _buildCard(
-              title: "Location",
-              children: [
-                _buildLabel('Address *'),
-                TextField(
-                  controller: controller.addressController,
-                  decoration: InputDecoration(
-                    hintText: 'Enter full address',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 10,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                _buildLabel('Map Location'),
-                Container(
-                  height: 120,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey.shade400),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Text(
-                    'Map will be displayed here after saving',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'The map location will be automatically set based on the address you provide.',
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // ===== Services & Amenities =====
-            _buildCard(
-              title: "Services & Amenities",
-              children: [
-                Obx(() {
-                  final items = amenities;
-                  final leftItems = items
-                      .take((items.length / 2).ceil())
-                      .toList();
-                  final rightItems = items
-                      .skip((items.length / 2).ceil())
-                      .toList();
-
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Left Column
-                      Expanded(
-                        child: Column(
-                          children: leftItems.map((item) {
-                            return CheckboxListTile(
-                              title: Text(
-                                item,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: AppColors.subText,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              value: controller.selectedAmenities.contains(
-                                item,
-                              ),
-                              onChanged: (value) => controller.toggleAmenity(
-                                item,
-                                value ?? false,
-                              ),
-                              controlAffinity: ListTileControlAffinity.leading,
-                              dense: true,
-                              contentPadding: EdgeInsets.zero,
-                              activeColor: AppColors.primaryGreen,
-                            );
-                          }).toList(),
-                        ),
-                      ),
-
-                      const SizedBox(width: 16),
-
-                      // Right Column
-                      Expanded(
-                        child: Column(
-                          children: rightItems.map((item) {
-                            return CheckboxListTile(
-                              title: Text(
-                                item,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: AppColors.subText,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              value: controller.selectedAmenities.contains(
-                                item,
-                              ),
-                              onChanged: (value) => controller.toggleAmenity(
-                                item,
-                                value ?? false,
-                              ),
-                              controlAffinity: ListTileControlAffinity.leading,
-                              dense: true,
-                              contentPadding: EdgeInsets.zero,
-                              activeColor: AppColors.primaryGreen,
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ],
-                  );
-                }),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // ===== Images =====
-            _buildCard(
-              title: "Images",
-
-              children: [
-                GestureDetector(
-                  onTap: controller.pickImage,
-                  child: Container(
-                    height: 120,
-                    width: 140,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade400),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.image_outlined, color: Colors.grey),
-                          SizedBox(height: 8),
-                          Text(
-                            'Add Image',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Upload high-quality images of your field. At least one image is required.',
-                  style: TextStyle(
-                    color: AppColors.subText,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // ===== Make Promotion =====
+            // ---------- BASIC INFORMATION ----------
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey.shade300),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Make Promotion",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Obx(
-                    () => CheckboxListTile(
-                      value: controller.makePromotion.value,
-                      onChanged: (value) =>
-                          controller.makePromotion.value = value ?? false,
-                      title: const Text(
-                        'Select and promote to all',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppColors.subText,
-                          fontWeight: FontWeight.w400,
-                        ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Basic Information",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
                       ),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      dense: true,
-                      activeColor: AppColors.primaryGreen,
-                      tileColor: Colors.transparent,
-                      contentPadding: EdgeInsets.zero,
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 10),
+                    _inputField(
+                      "Field Name",
+                      "e.g. Bosco Valley Field",
+                      controller: controller.fieldNameController,
+                    ),
+                    const SizedBox(height: 12),
+                    _inputField(
+                      "Description",
+                      "Describe your field...",
+                      maxLines: 4,
+                      controller: controller.descriptionController,
+                    ),
+                    const SizedBox(height: 12),
+                    const Text("Field Type"),
+                    const SizedBox(height: 8),
+
+                    /// 👉 Field Type Buttons
+                    Row(
+                      children: ['5v5', '7v7', '11v11'].map((type) {
+                        return Obx(() {
+                          bool selected =
+                              controller.selectedFieldType.value == type;
+                          return GestureDetector(
+                            onTap: () =>
+                                controller.selectedFieldType.value = type,
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 10),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: selected
+                                    ? Color(0xFFE6F5F3)
+                                    : Colors.white,
+                                border: Border.all(color: Colors.grey.shade400),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                type,
+                                style: TextStyle(
+                                  color: selected
+                                      ? Color(0xFF00917B)
+                                      : Colors.black,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          );
+                        });
+                      }).toList(),
+                    ),
+                    SizedBox(height: 5,),
+
+                    _inputField(
+                      "Base Price Per Hour",
+                      "Base Price Per Hour",
+                      controller: controller.basePriceController,
+                    ),
+                  ],
+                ),
               ),
             ),
 
             const SizedBox(height: 30),
 
-            // ===== Create Field Button =====
-            SizedBox(
+            // ---------- TIME & PRICE ----------
+            const Text(
+              "Time & Date Base Price",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 12),
+
+            Obx(() {
+              // If list is empty, add a default empty PricePerHour temporarily
+              if (controller.pricePerHourList.isEmpty) {
+                controller.pricePerHourList.add(
+                  PricePerHour(
+                    date: DateTime.now().toIso8601String(),
+                    startTime: '',
+                    endTime: '',
+                    pricePerHour: 0,
+                    id: DateTime.now().toString(),
+                  ),
+                );
+              }
+
+              return Column(
+                children: [
+                  // Show all existing PricePerHour cards
+                  for (int i = 0; i < controller.pricePerHourList.length; i++)
+                    _timePriceCard(controller.pricePerHourList[i], i),
+
+                  const SizedBox(height: 10),
+
+                  // Add More button
+                  ElevatedButton(
+                    onPressed: () {
+                      // controller.addPricePerHour(PricePerHour(
+                      //   date: DateTime.now().toIso8601String(),
+                      //   startTime: '',
+                      //   endTime: '',
+                      //   pricePerHour: 0,
+                      //   id: DateTime.now().toString(),
+                      // ));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.teal,
+                      minimumSize: const Size(double.infinity, 48),
+                    ),
+                    child: const Text("+ Add More"),
+                  ),
+                ],
+              );
+            }),
+
+            const SizedBox(height: 30),
+
+            // ---------- LOCATION ----------\
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  children: [
+                    const Text(
+                      "Location",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _inputField(
+                      "Address",
+                      "Enter full address",
+                      controller: controller.addressController,
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Map placeholder
+                    Container(
+                      height: 150,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.grey.shade300),
+                      ),
+                      child: const Center(
+                        child: Text("Map will be displayed here"),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            // ---------- SERVICES ----------
+            Container(
               width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Services & Amenities",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Wrap(
+                      spacing: 15,
+                      runSpacing: 8,
+                      children: [
+                        _checkItem("Showers", controller.showers),
+                        _checkItem("Parking", controller.parking),
+                        _checkItem("Cafe", controller.cafe),
+                        _checkItem("Lights", controller.lights),
+                        _checkItem("Changing Rooms", controller.changingRooms),
+                        _checkItem(
+                          "Equipment Rental",
+                          controller.equipmentRental,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Images",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Obx(() {
+                      return GestureDetector(
+                        onTap: () async {
+                          if (controller.image.value == null) {
+                            await _pickImage();
+                          }
+                        },
+                        child: Container(
+                          height: 250,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey.shade300),
+                          ),
+                          child: controller.image.value == null
+                              ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.image_outlined,
+                                  size: 50,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  "Add Image",
+                                  style: TextStyle(color: Colors.grey.shade600),
+                                ),
+                              ],
+                            ),
+                          )
+                              : Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.file(
+                                  controller.image.value!,
+                                  width: double.infinity,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned(
+                                top: 8,
+                                right: 8,
+                                child: GestureDetector(
+                                  onTap: controller.removeImage,
+                                  child: const Icon(
+                                    Icons.close,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+                    const SizedBox(height: 5),
+                    Text(
+                      'Upload a high-quality image of your field. At least one image is required.',
+                      style: TextStyle(color: Colors.grey.shade600),
+                    ),
+                  ],
+                ),
+              ),
+            )
+            ,
+
+            const SizedBox(height: 20),
+
+            /// 👉 Promotion Checkbox
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Make promotion',
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                    ),
+                    Row(
+                      children: [
+                        Obx(
+                          () => Checkbox(
+                            value: controller.isPromotion.value,
+                            onChanged: (v) =>
+                                controller.isPromotion.value = v ?? false,
+                          ),
+                        ),
+                        const Text("Select and promote to all"),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // CREATE BUTTON
+            Obx(
+              () => ElevatedButton.icon(
+                onPressed: _controller.isLoading.value ? null : _createField,
+                label: Text(
+                  _controller.isLoading.value ? "Creating..." : "Create Field",
+                ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryGreen,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  backgroundColor: Colors.teal,
+                  minimumSize: const Size(double.infinity, 55),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text(
-                  'Create Field',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
               ),
             ),
-
             const SizedBox(height: 50),
           ],
         ),
       ),
-
-      // bottomNavigationBar: CustomBottomNavBar(
-      //   onTap: (index) {
-      //     // Optional navigation logic
-      //     if (index == 0) {
-      //       Get.to(() => const OwnerHomeScreen());
-
-      //       // Get.toNamed('/home');
-      //     } else if (index == 1) {
-      //       Get.to(() => const OwnerDashboardEditScreen());
-      //       // Get.toNamed('/dashboard');
-      //     } else if (index == 2) {
-      //       // Get.toNamed('/myFields');
-      //       Get.to(() => AddFieldScreen());
-      //     } else if (index == 3) {
-      //       Get.toNamed('/profile');
-      //     }
-      //   },
-      // ),
     );
   }
 
-  // ===== Helper Widgets =====
-
-  Widget _buildCard({required String title, required List<Widget> children}) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 1,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
-                color: AppColors.primaryBlack,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 12),
-            ...children,
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTimeRow(
-    BuildContext context,
-    String label,
-    TimeOfDay time,
-    VoidCallback onTap,
-  ) {
+  Widget _inputField(
+      String title,
+      String? hint, {
+        int maxLines = 1,
+        TextEditingController? controller,
+      }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontWeight: FontWeight.w400,
-            color: AppColors.primaryBlack,
-            fontSize: 14,
-          ),
-        ),
+        Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
         const SizedBox(height: 6),
-        InkWell(
-          onTap: onTap,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.grey.shade400),
+        TextField(
+          controller: controller,
+          maxLines: maxLines,
+          decoration: InputDecoration(
+            hintText: hint,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Colors.grey), // Normal border
             ),
-            child: Row(
-              children: [
-                const Icon(Icons.access_time, size: 18),
-                const SizedBox(width: 8),
-                Text(
-                  time.format(context),
-                  style: const TextStyle(fontSize: 15),
-                ),
-              ],
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Colors.blue, width: 2), // Focused border
             ),
-          ),
-        ),
-        const SizedBox(height: 12),
-      ],
-    );
-  }
-
-  Widget _buildDatePicker(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Date",
-          style: TextStyle(
-            fontWeight: FontWeight.w400,
-            color: AppColors.primaryBlack,
-            fontSize: 14,
-          ),
-        ),
-        const SizedBox(height: 8),
-        InkWell(
-          onTap: () => controller.pickDate(context),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.grey.shade400),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.calendar_today_outlined,
-                      size: 18,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      DateFormat(
-                        'MMMM d, yyyy',
-                      ).format(controller.selectedDate.value),
-                      style: const TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
-                const Icon(Icons.arrow_drop_down, color: Colors.grey),
-              ],
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
           ),
         ),
@@ -626,17 +424,83 @@ class _AddFieldScreenState extends State<AddFieldScreen> {
     );
   }
 
-  Widget _buildLabel(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontWeight: FontWeight.w500,
-          color: Colors.black,
-          fontSize: 14,
-        ),
+
+  Widget _timePriceCard(PricePerHour price, int index) {
+    final startController = TextEditingController();
+    final endController = TextEditingController();
+    final priceController = TextEditingController();
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        children: [
+          _inputField("Start Time", "09:00", controller: startController),
+          const SizedBox(height: 8),
+          _inputField("End Time", "18:00", controller: endController),
+          const SizedBox(height: 8),
+          _inputField("Price per Hour (\$)", '',  controller: priceController),
+          const SizedBox(height: 8),
+        ],
       ),
     );
+  }
+
+  Widget _checkItem(String title, RxBool value) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Obx(
+          () => Checkbox(
+            value: value.value,
+            onChanged: (v) => value.value = v ?? false,
+          ),
+        ),
+        Text(title),
+      ],
+    );
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      controller.setImage(File(picked.path));
+    }
+  }
+
+
+  Future<void> _createField() async {
+    final location = Location(
+      address: controller.addressController.text,
+      coordinates: Coordinates(latitude: 0.0, longitude: 0.0),
+    );
+
+    final servicesAmenities = ServicesAmenities(
+      showers: controller.showers.value,
+      lights: controller.lights.value,
+      parking: controller.parking.value,
+      cafe: controller.cafe.value,
+      changingRooms: controller.changingRooms.value,
+      equipmentRental: controller.equipmentRental.value,
+    );
+
+    // await _controller.createField(
+    //   // controller.fieldNameController.text,
+    //   // controller.descriptionController.text,
+    //   // controller.selectedFieldType.value,
+    //   // controller.isPromotion.value,
+    //   // controller.basePrice,
+    //   // controller.pricePerHourList.isNotEmpty
+    //   //     ? controller.pricePerHourList[0].pricePerHour
+    //   //     : 0,
+    //   // location,
+    //   // servicesAmenities,
+    //   // controller.images,
+    // );
   }
 }

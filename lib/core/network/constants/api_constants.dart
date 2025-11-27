@@ -1,7 +1,7 @@
 class ApiConstants {
   /// [Base Configuration]
   // static const String baseDomain = 'http://10.10.5.53:8001';
-  static const String baseDomain = 'http://10.10.5.53:8001'; // Farhan
+  static const String baseDomain = 'http://10.10.5.33:8001'; // Eshita
   static const String baseUrl = '$baseDomain/api/v1';
 
   /// [Headers]
@@ -35,6 +35,7 @@ class ApiConstants {
   static RecruiterAccountApi get recruiter => RecruiterAccountApi();
 
   static FieldEndpoints get field => FieldEndpoints();
+  static OwnerEndpoints get owner => OwnerEndpoints();
 }
 
 class RecruiterAccountApi {
@@ -122,4 +123,15 @@ class TeamEndpointcs {
   final String update = '$_base/update';
   final String delete = '$_base/delete';
    String getTeamsById(String id) => '$_base/$id';
+}
+
+
+class OwnerEndpoints {
+  final String createField = '${ApiConstants.baseUrl}/field/';
+
+  // final String create = '$_base';
+  // final String getTeams = '$_base';
+  // final String update = '$_base/update';
+  // final String delete = '$_base/delete';
+  //  String getTeamsById(String id) => '$_base/$id';
 }

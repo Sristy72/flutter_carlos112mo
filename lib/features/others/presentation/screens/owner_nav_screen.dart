@@ -17,11 +17,11 @@ class OwnerNavScreen extends StatefulWidget {
 class _OwnerNavScreenState extends State<OwnerNavScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = const [
-    Center(child: OwnerHomeScreen()),
-    Center(child: OwnerDashboardScreen()),
+  final List<Widget> _screens = [
+    const Center(child: OwnerHomeScreen()),
+    const Center(child: OwnerDashboardScreen()),
     Center(child: AddFieldScreen()),
-    Center(child: ProfileScreen()),
+    const Center(child: ProfileScreen()),
    
   ];
 

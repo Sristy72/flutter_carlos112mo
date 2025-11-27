@@ -33,7 +33,6 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
 
       appBar: AppBar(
         title: Obx(
@@ -77,7 +76,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const SizedBox(height: 20),
 
-            LogoutButton(onLogout: () => authcontroller.logout()),
+            // LogoutButton(onLogout: () => authcontroller.logout()),
 
             // 🔰 Main Card
             Container(
@@ -202,31 +201,38 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                 return const Text("No fields available");
               }
 
-              return ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: controller.fields.value!.fields.length,
-                itemBuilder: (context, index) {
-                  final field = controller.fields.value!.fields[index];
-
+              return Column(
+                children: controller.fields.value!.fields.map((field) {
                   return FieldCardWidget(
                     id: field.id,
-                    name: field.fieldName,
-                    address: field.location.address,
-                    price: "\$${field.pricePerHour}/hr",
-                    rating: field.rating.average,
-                    reviews: field.rating.count,
-                    imagePath: field.images.isNotEmpty ? field.images.first.url : "",
+                    imagePath: field.images?.isNotEmpty == true
+                        ? field.images!.first.url ?? ''
+                        : "",
+                    name: field.fieldName ?? "Unknown Field",
+                    address: '${field.fieldType ?? "N/A"} • ${field.location?.address ?? "No address"}',
+                    price: field.pricePerHour != null
+                        ? '\$${field.pricePerHour!.toStringAsFixed(0)}/hr'
+                        : (field.basePricePerHour != null
+                        ? '\$${field.basePricePerHour!.toStringAsFixed(0)}/hr'
+                        : 'Price TBD'),
+                    rating: field.rating?.average ?? 0.0,
+                    reviews: field.rating?.count ?? 0,
                     tags: [
-                      if (field.servicesAmenities.showers) "showers",
-                      if (field.servicesAmenities.lights) "lights",
-                      if (field.servicesAmenities.parking) "parking",
-                      if (field.servicesAmenities.changingRooms) "changing rooms",
-                      if (field.servicesAmenities.cafe) "cafe",
-                      if (field.servicesAmenities.equipmentRental) "equipment",
+                      if (field.servicesAmenities?.showers == true)
+                        "showers",
+                      if (field.servicesAmenities?.lights == true)
+                        "lights",
+                      if (field.servicesAmenities?.parking == true)
+                        "parking",
+                      if (field.servicesAmenities?.changingRooms == true)
+                        "changing rooms",
+                      if (field.servicesAmenities?.cafe == true) "cafe",
+                      if (field.servicesAmenities?.equipmentRental ==
+                          true)
+                        "equipment",
                     ],
                   );
-                },
+                }).toList(),
               );
             }),
           ]),

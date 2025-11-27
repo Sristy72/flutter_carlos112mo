@@ -22,9 +22,23 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
   @override
   void initState() {
     super.initState();
+
     userProfileController = Get.find<UserProfileController>();
-    fieldController.fetchField(); // fetch fields from API
+     fieldController.fetchField();
+     // fetch fields from API
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   // Fetch both in parallel
+    //   await Future.wait([
+    //     fieldController.fetchField();
+    //     userProfileController.getUserProfile(); // ensures fresh data + text controllers
+    //   ]);
+    // });
   }
+
+  // void fetchInitial() async {
+  //   userProfileController = Get.find<UserProfileController>();
+  //  await fieldController.fetchField();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -151,31 +165,40 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
                 ),
                 const SizedBox(height: 12),
 
-                // Field List
-                ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: fieldController.filteredFields.length,
-                  itemBuilder: (context, index) {
-                    final field = fieldController.filteredFields[index];
-                    return DashboardFieldCardWidget(
-                      name: field.fieldName,
-                      address: field.location.address,
-                      price: "\$${field.pricePerHour}/hr",
-                      rating: field.rating.average,
-                      reviews: field.rating.count,
-                      tags: [
-                        if (field.servicesAmenities.showers) "showers",
-                        if (field.servicesAmenities.lights) "lights",
-                        if (field.servicesAmenities.parking) "parking",
-                        if (field.servicesAmenities.changingRooms) "changing rooms",
-                        if (field.servicesAmenities.cafe) "cafe",
-                        if (field.servicesAmenities.equipmentRental) "equipment",
-                      ],
-                      imagePath: field.images.isNotEmpty ? field.images.first.url : "",
-                    );
-                  },
-                ),
+              Column(
+                children: fieldController.fields.value!.fields.map((field) {
+                  return DashboardFieldCardWidget(
+                    id: field.id,
+                    imagePath: field.images?.isNotEmpty == true
+                        ? field.images!.first.url ?? ''
+                        : "",
+                    name: field.fieldName ?? "Unknown Field",
+                    address:
+                    '${field.fieldType ?? "N/A"} • ${field.location?.address ?? "No address"}',
+                    price: field.pricePerHour != null
+                        ? '\$${field.pricePerHour!.toStringAsFixed(0)}/hr'
+                        : (field.basePricePerHour != null
+                        ? '\$${field.basePricePerHour!.toStringAsFixed(0)}/hr'
+                        : 'Price TBD'),
+                    rating: field.rating?.average ?? 0.0,
+                    reviews: field.rating?.count ?? 0,
+                    tags: [
+                      if (field.servicesAmenities?.showers == true)
+                        "showers",
+                      if (field.servicesAmenities?.lights == true)
+                        "lights",
+                      if (field.servicesAmenities?.parking == true)
+                        "parking",
+                      if (field.servicesAmenities?.changingRooms == true)
+                        "changing rooms",
+                      if (field.servicesAmenities?.cafe == true) "cafe",
+                      if (field.servicesAmenities?.equipmentRental ==
+                          true)
+                        "equipment",
+                    ],
+                  );
+                }).toList(),
+              )
               ],
             ),
           );

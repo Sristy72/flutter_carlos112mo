@@ -20,7 +20,7 @@ class DashboardFieldCardWidget extends StatelessWidget {
     required this.rating,
     required this.reviews,
     required this.tags,
-    required this.imagePath,
+    required this.imagePath, required String id,
   });
 
   @override
