@@ -103,7 +103,11 @@ class ChatBubble extends StatelessWidget {
     );
   }
 
-  String _formatTime(DateTime time) {
-    return "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
-  }
+ String _formatTime(DateTime time) {
+  final localTime = time.toLocal(); // convert to device's local time
+  final hour = localTime.hour.toString().padLeft(2, '0');
+  final minute = localTime.minute.toString().padLeft(2, '0');
+  return "$hour:$minute";
+}
+
 }

@@ -565,7 +565,8 @@ class _PlayerHomeScreenState extends State<PlayerHomeScreen> {
           Positioned(
             bottom: 20,
             right: 20,
-            child: FloatingActionButton(
+            child: 
+            FloatingActionButton(
               backgroundColor: Colors.teal,
               onPressed: () {
                 Get.to(

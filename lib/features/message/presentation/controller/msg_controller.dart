@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/features/message/data/model/get_single_chat_response_model.dart';
 import 'package:flutter_carlos112mo/features/message/data/model/send_message_request_model.dart';
 import 'package:flutter_carlos112mo/features/message/data/model/send_message_response_model.dart';
+import 'package:flutx_core/core/debug_print.dart';
 import 'package:get/get.dart';
 import '../../../../core/network/services/auth_storage_service.dart';
+import '../../../../core/network/services/socket_client.dart';
 import '../../data/model/create_chat_request_model.dart';
 import '../../data/model/create_chat_response_model.dart';
 import '../../data/model/message_response_model.dart';
@@ -28,12 +30,23 @@ class MessageController extends BaseController {
   var isLoading = false.obs;
 
   var isSending = false.obs;
-  var chatMessages = <SendMessageResponseModel>[].obs; // store API messages
+
+  String chatId = '';
+  var chatMessages = <SendMessageResponseModel>[].obs;
+  SocketClient _client = SocketClient(); // store API messages
 
   @override
   void onInit() {
     super.onInit();
     loadCurrentUserId(); // ← Load it once when controller starts
+  }
+
+  Future<void> socketInitChat() async {
+    _client.emit("join", chatId);
+
+    _client.on("message", (data) {
+      DPrint.log("Raw socket message received: $data");
+    });
   }
 
   // Future<void> createChats(CreateChatRequestModel request) async {
@@ -68,6 +81,8 @@ class MessageController extends BaseController {
         return null;
       },
       (success) {
+
+         chatId = success.data.id;
         chats.add(success.data);
         isLoading(false);
 

@@ -3,6 +3,7 @@ import 'package:flutter_carlos112mo/core/theme/app_colors.dart';
 import 'package:get/get.dart';
 
 import '../../data/model/get_single_chat_response_model.dart';
+import '../../data/model/message_response_model.dart';
 import '../../data/model/send_message_request_model.dart';
 import '../controller/chat_controller.dart';
 import '../controller/msg_controller.dart';
@@ -20,6 +21,7 @@ class _ChatScreenState extends State<ChatScreen> {
   // final ChatController controller = Get.put(ChatController());
 
   final MessageController msgcontroller = Get.find<MessageController>();
+  final ScrollController _scrollController = ScrollController();
 
   final TextEditingController msg = TextEditingController();
 
@@ -28,6 +30,17 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     // Fetch messages from API
     msgcontroller.getChatById(widget.chat.id);
+    // Scroll to bottom whenever messages change
+    ever(msgcontroller.msgs, (_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+    msgcontroller.socketInitChat();
   }
 
   @override
@@ -65,14 +78,16 @@ class _ChatScreenState extends State<ChatScreen> {
           Expanded(
             child: Obx(() {
               return ListView.builder(
-                reverse: true, // latest message at bottom
+                controller: _scrollController,
+                // latest message at bottom
                 padding: const EdgeInsets.all(16),
                 itemCount: msgcontroller.msgs.length,
                 itemBuilder: (_, index) {
                   final message = msgcontroller.msgs[index];
                   return ChatBubble(
                     message: message!,
-                    currentUserId: msgcontroller.currentUserId.value, // if you have
+                    currentUserId:
+                        msgcontroller.currentUserId.value, // if you have
                   );
                 },
               );
@@ -149,20 +164,29 @@ class _ChatScreenState extends State<ChatScreen> {
                   onTap: () async {
                     if (msg.text.trim().isEmpty) return;
 
-                    // 1️⃣ Local instant UI update
-                    // msgcontroller.sendMessage(msg.text);
+                    // 1️⃣ Instant UI update
+                    msgcontroller.msgs.insert(
+                      0,
+                      Message(
+                        text: msg.text,
+                        user: msgcontroller.currentUserId.value,
+                        date: DateTime.now(),
+                        read: false,
+                        accept: false,
+                        id: '',
+                      ),
+                    );
 
-                    // 2️⃣ API request model
                     final req = SendMessageRequestModel(
                       chatId: widget.chat.id,
                       message: msg.text,
                     );
 
-                    // 3️⃣ Hit API
                     await msgcontroller.sendChats(req);
 
                     msg.clear();
                   },
+
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     child: Image.asset(
