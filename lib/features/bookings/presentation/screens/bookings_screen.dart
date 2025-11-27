@@ -3,6 +3,10 @@ import 'package:flutter_carlos112mo/features/bookings/presentation/widgets/booki
 import 'package:flutter_carlos112mo/features/bookings/presentation/widgets/bookings_tab_selector.dart';
 import 'package:flutter_carlos112mo/features/bookings/presentation/widgets/upcoming_empty_state.dart';
 import 'package:flutter_carlos112mo/features/bookings/presentation/widgets/reservation_card.dart';
+import 'package:get/get.dart';
+
+import '../../../player/presentation/screens/message_screen.dart';
+import '../../../team/presentation/controller/team_controller.dart';
 
 class BookingsScreen extends StatefulWidget {
   const BookingsScreen({super.key});
@@ -12,7 +16,8 @@ class BookingsScreen extends StatefulWidget {
 }
 
 class _BookingsScreenState extends State<BookingsScreen> {
-  bool isUpcomingSelected = false; // Set to false for Past tab by default
+  bool isUpcomingSelected = false; 
+  final TeamController teamController = Get.find<TeamController>();// Set to false for Past tab by default
 
   @override
   Widget build(BuildContext context) {
@@ -63,16 +68,22 @@ class _BookingsScreenState extends State<BookingsScreen> {
       // Floating Chat Button
       floatingActionButton: Container(
         margin: EdgeInsets.only(bottom: 16),
-        child: FloatingActionButton(
-          onPressed: () {
-            // Handle chat
-          },
-          child: Image.asset(
-            "assets/images/messageIcon.png",
-            height: 30,
-            width: 30,
-          ),
-        ),
+        child: 
+        
+         FloatingActionButton(
+              backgroundColor: Colors.teal,
+              onPressed: () {
+                Get.to(
+                  () =>
+                      MessageScreen(teamId: teamController.currentTeamId.value, chatId: '',),
+                );
+              },
+              child: Image.asset(
+                "assets/images/messageIcon.png",
+                height: 30,
+                width: 30,
+              ),
+            ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
