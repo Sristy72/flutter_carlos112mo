@@ -141,7 +141,7 @@ class _FieldDetailsScreenState extends State<FieldDetailsScreen> {
                         const SizedBox(width: 6),
                         Expanded(
                           child: Text(
-                            venue.location.address ?? "Address not provided",
+                            venue.location?.address ?? "Address not provided",
                             style: const TextStyle(
                               fontSize: 14,
                               color: AppColors.subText,
@@ -210,7 +210,7 @@ class _FieldDetailsScreenState extends State<FieldDetailsScreen> {
                       spacing: 20,
                       runSpacing: 10,
                       children: [
-                        if (venue.servicesAmenities.showers)
+                        if (venue.servicesAmenities?.showers ?? false)
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: const [
@@ -219,7 +219,7 @@ class _FieldDetailsScreenState extends State<FieldDetailsScreen> {
                               Text("Showers"),
                             ],
                           ),
-                        if (venue.servicesAmenities.lights)
+                        if (venue.servicesAmenities?.lights ?? false)
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: const [
@@ -228,7 +228,7 @@ class _FieldDetailsScreenState extends State<FieldDetailsScreen> {
                               Text("Lights"),
                             ],
                           ),
-                        if (venue.servicesAmenities.parking)
+                        if (venue.servicesAmenities?.parking ?? false)
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: const [
@@ -237,7 +237,7 @@ class _FieldDetailsScreenState extends State<FieldDetailsScreen> {
                               Text("Parking"),
                             ],
                           ),
-                        if (venue.servicesAmenities.changingRooms)
+                        if (venue.servicesAmenities?.changingRooms ?? false)
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: const [
@@ -246,7 +246,7 @@ class _FieldDetailsScreenState extends State<FieldDetailsScreen> {
                               Text("Changing Rooms"),
                             ],
                           ),
-                        if (venue.servicesAmenities.cafe)
+                        if (venue.servicesAmenities?.cafe ?? false)
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: const [
@@ -255,7 +255,7 @@ class _FieldDetailsScreenState extends State<FieldDetailsScreen> {
                               Text("Cafe"),
                             ],
                           ),
-                        if (venue.servicesAmenities.equipmentRental)
+                        if (venue.servicesAmenities?.equipmentRental ?? false)
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: const [
@@ -281,7 +281,7 @@ class _FieldDetailsScreenState extends State<FieldDetailsScreen> {
                       height: 80,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
-                        itemCount: venue.images.length ?? 0,
+                        itemCount: venue.images?.length ?? 0,
                         separatorBuilder: (_, __) => const SizedBox(width: 8),
                         itemBuilder: (context, index) {
                           final imageUrl = venue.images?[index].url ?? "";
