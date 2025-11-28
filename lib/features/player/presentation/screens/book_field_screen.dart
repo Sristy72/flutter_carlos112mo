@@ -27,8 +27,10 @@ class BookFieldScreen extends StatelessWidget {
     final venue = findFieldController.venue.value;
     final List<int> hours = [1, 2, 3];
     String formattedDate = DateFormat('MMMM d, yyyy').format(selectedDate);
-    String formattedTime =
-        "${selectedTime.toString().padLeft(2, '0')}:00 - ${(selectedTime + 1).toString().padLeft(2, '0')}:00";
+    String formatRange(int start, int duration) {
+      final end = start + duration;
+      return "${start.toString().padLeft(2, '0')}:00 - ${end.toString().padLeft(2, '0')}:00";
+    }
     return AppScaffold(
       showDefaultAppBar: true,
       body: Column(
@@ -116,17 +118,22 @@ class BookFieldScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Text('Time'),
                   const SizedBox(height: 8),
-                  TextFormField(
-                    readOnly: true,
-                    controller: TextEditingController(text: formattedTime),
-                    decoration: context.primaryInputDecoration.copyWith(
-                      prefixIcon: Icon(
-                        Icons.access_time,
-                        size: 20,
-                        color: AppColors.borderGrey,
+                  Obx(() {
+                    String timeRange = formatRange(selectedTime, bookFieldController.selectedHour.value);
+
+                    return TextFormField(
+                      readOnly: true,
+                      controller: TextEditingController(text: timeRange),
+                      decoration: context.primaryInputDecoration.copyWith(
+                        prefixIcon: Icon(
+                          Icons.access_time,
+                          size: 20,
+                          color: AppColors.borderGrey,
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  }),
+
                   const SizedBox(height: 16),
                   Text('Duration'),
                   const SizedBox(height: 8),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/features/profile/presentation/controllers/user_profie_controller.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
+import 'package:latlong2/latlong.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../player/presentation/controller/find_field_controller.dart';
 import '../../../player/presentation/widgets/availability_dialog.dart';
-
 
 class FieldDetailsScreen extends StatefulWidget {
   final String id;
@@ -29,16 +30,22 @@ class _FieldDetailsScreenState extends State<FieldDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final UserProfileController userProfileController = Get.find<UserProfileController>();
+    final UserProfileController userProfileController =
+        Get.find<UserProfileController>();
+
+
     return Scaffold(
       appBar: AppBar(
         title: Obx(
-              () => Row(
+          () => Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
-                  Text('Arequipa, Peru', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                  Text(
+                    'Arequipa, Peru',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  ),
                   SizedBox(width: 8),
                   Image(
                     height: 18,
@@ -49,18 +56,31 @@ class _FieldDetailsScreenState extends State<FieldDetailsScreen> {
               ),
               Row(
                 children: [
-                  Text(userProfileController.userProfileModel?.name ?? '', style: TextStyle(fontSize: 18)),
+                  Text(
+                    userProfileController.userProfileModel?.name ?? '',
+                    style: TextStyle(fontSize: 18),
+                  ),
                   SizedBox(width: 8),
                   CircleAvatar(
                     backgroundColor: Colors.white70,
                     radius: 17,
-                    foregroundImage: (userProfileController.userProfileModel?.avatar?.url != null &&
-                        userProfileController.userProfileModel!.avatar!.url!.isNotEmpty)
-                        ? NetworkImage(userProfileController.userProfileModel!.avatar!.url!)
+                    foregroundImage:
+                        (userProfileController.userProfileModel?.avatar?.url !=
+                                null &&
+                            userProfileController
+                                .userProfileModel!
+                                .avatar!
+                                .url!
+                                .isNotEmpty)
+                        ? NetworkImage(
+                            userProfileController
+                                .userProfileModel!
+                                .avatar!
+                                .url!,
+                          )
                         : null,
                     child: Icon(Icons.person),
                   ),
-
                 ],
               ),
             ],
@@ -71,12 +91,16 @@ class _FieldDetailsScreenState extends State<FieldDetailsScreen> {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
-
         final venue = controller.venue.value;
+
         if (venue == null) {
           return const Center(child: Text("No data found"));
         }
-
+        final mapCenter = LatLng(
+          // 23.7104, 90.4074
+          venue.location?.coordinates?.latitude ?? 0.0,
+          venue.location?.coordinates?.longitude ?? 0.0,
+        );
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -341,16 +365,35 @@ class _FieldDetailsScreenState extends State<FieldDetailsScreen> {
 
               // Map placeholder
               Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Container(
-                    height: 200,
-                    color: Colors.grey.shade200,
-                    child: const Center(child: Text("Map placeholder")),
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(color: Colors.grey.shade300),
+                  child: FlutterMap(
+                    options: MapOptions(
+                      initialCenter: mapCenter,
+                      initialZoom: 18,
+                    ),
+                    children: [
+                      TileLayer(
+                        urlTemplate:
+                        "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                        userAgentPackageName: 'com.example.flutter_carlos112mo',
+                      ),
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            width: 80,
+                            height: 80,
+                            point: mapCenter,
+                            child: Icon(
+                              Icons.location_pin,
+                              size: 40,
+                              color: Colors.red.shade400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),

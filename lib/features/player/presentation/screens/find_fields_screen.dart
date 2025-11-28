@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/screens/message_screen.dart';
 import 'package:flutter_carlos112mo/features/profile/presentation/controllers/user_profie_controller.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
+import 'package:latlong2/latlong.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../controller/find_field_controller.dart';
 import '../widgets/payment_availability_widget.dart';
@@ -28,6 +30,12 @@ class _FindFieldsScreenState extends State<FindFieldsScreen> {
   @override
   Widget build(BuildContext context) {
     final userProfileController = Get.find<UserProfileController>();
+    final venue = controller.venue.value;
+    final mapCenter = LatLng(
+      // 23.7104, 90.4074
+      venue?.location?.coordinates?.latitude ?? 0.0,
+      venue?.location?.coordinates?.longitude ?? 0.0,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -89,7 +97,6 @@ class _FindFieldsScreenState extends State<FindFieldsScreen> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final venue = controller.venue.value;
         if (venue == null) return const Center(child: Text("No data found"));
 
         return SingleChildScrollView(
@@ -314,14 +321,38 @@ class _FindFieldsScreenState extends State<FindFieldsScreen> {
 
               const SizedBox(height: 20),
 
-              // Map Placeholder
-              Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(12),
+              Card(
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(color: Colors.grey.shade300),
+                  child: FlutterMap(
+                    options: MapOptions(
+                      initialCenter: mapCenter,
+                      initialZoom: 18,
+                    ),
+                    children: [
+                      TileLayer(
+                        urlTemplate:
+                            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                        userAgentPackageName: 'com.example.flutter_carlos112mo',
+                      ),
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            width: 80,
+                            height: 80,
+                            point: mapCenter,
+                            child: Icon(
+                              Icons.location_pin,
+                              size: 40,
+                              color: Colors.red.shade400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                child: const Center(child: Text("Map Placeholder")),
               ),
             ],
           ),
@@ -330,7 +361,8 @@ class _FindFieldsScreenState extends State<FindFieldsScreen> {
 
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.teal,
-        onPressed: () => Get.to(() => MessageScreen(teamId: widget.teamId, chatId: '',)),
+        onPressed: () =>
+            Get.to(() => MessageScreen(teamId: widget.teamId, chatId: '')),
         child: const Icon(Icons.chat_bubble_outline, color: Colors.white),
       ),
     );

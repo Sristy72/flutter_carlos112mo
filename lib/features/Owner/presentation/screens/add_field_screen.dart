@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/features/Owner/presentation/controllers/add_field_controller.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
+import 'package:latlong2/latlong.dart';
 
 class AddFieldScreen extends StatelessWidget {
   final bool isEdit;
@@ -13,6 +15,8 @@ class AddFieldScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mapCenter = LatLng(
+        48.8566, 2.3522);
     return Scaffold(
       appBar: AppBar(title: const Text("Add New Field"), elevation: 0.5),
       body: SingleChildScrollView(
@@ -128,8 +132,18 @@ class AddFieldScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: Colors.grey.shade300),
                       ),
-                      child: const Center(
-                        child: Text("Map will be displayed here after saving"),
+                      child: FlutterMap(
+                        options: MapOptions(
+                          initialCenter: mapCenter,
+                          initialZoom: 18,
+                        ),
+                        children: [
+                          TileLayer(
+                            urlTemplate:
+                            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                            userAgentPackageName: 'com.example.flutter_carlos112mo',
+                          ),
+                        ],
                       ),
                     ),
                   ],
