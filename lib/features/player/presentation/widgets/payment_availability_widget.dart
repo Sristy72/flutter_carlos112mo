@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/core/theme/app_colors.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/screens/book_field_screen.dart';
-import 'package:flutter_carlos112mo/features/player/presentation/widgets/schedule_matching_dialog.dart';
 import 'package:flutter_carlos112mo/features/team/presentation/controller/team_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -9,7 +8,6 @@ import 'package:intl/intl.dart';
 class PaymentAvailability extends StatefulWidget {
   final preselectedDate;
   final preselectedTime;
-
 
   const PaymentAvailability({
     super.key,
@@ -52,8 +50,8 @@ class _PaymentAvailabilityState extends State<PaymentAvailability> {
     selectedDate = widget.preselectedDate ?? days.first;
     selectedHour = widget.preselectedTime;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-    controller.fetchSingleTeam();
-  });
+      controller.fetchSingleTeam();
+    });
   }
 
   @override
@@ -201,15 +199,6 @@ class _PaymentAvailabilityState extends State<PaymentAvailability> {
                       : () {
                           Navigator.pop(context); // CLOSE AvailabilityDialog
 
-                          // showDialog(
-                          //   context: context,
-                          //   barrierDismissible: true,
-                          //   builder: (_) => ScheduleMatchDialog(
-                          //     selectedDate: selectedDate,
-                          //     selectedHour: selectedHour!,
-                          //   ),
-                          // );
-
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -218,7 +207,10 @@ class _PaymentAvailabilityState extends State<PaymentAvailability> {
                             ),
                           );
 
-                          Get.to(() => BookFieldScreen());
+                          Get.to(() => BookFieldScreen(
+                            selectedDate: selectedDate,
+                            selectedTime: selectedHour!,
+                          ));
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryGreen,

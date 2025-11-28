@@ -1,5 +1,6 @@
 import 'package:flutter_carlos112mo/features/Owner/presentation/controllers/field_controller.dart';
 import 'package:flutter_carlos112mo/features/message/presentation/controller/msg_controller.dart';
+import 'package:flutter_carlos112mo/features/player/presentation/controller/book_field_controller.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/controller/field_controller.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/controller/find_field_controller.dart';
 import 'package:flutter_carlos112mo/features/team/presentation/controller/team_controller.dart';
@@ -57,5 +58,10 @@ void setupController() {
   Get.lazyPut<FieldController>(
     () => FieldController(Get.find()),
     fenix: true,
+  );
+
+  Get.lazyPut<BookFieldController>(
+      () => BookFieldController(),
+    fenix: true
   );
 }
