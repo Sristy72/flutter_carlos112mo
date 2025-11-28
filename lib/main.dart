@@ -7,6 +7,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:get/utils.dart';
 import 'core/common/constants/stripe_key.dart';
+import 'core/init/app_bindings.dart';
 import 'core/init/app_initializer.dart';
 import 'core/theme/app_theme.dart';
 import 'features/Owner/presentation/screens/add_field_screen.dart';
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
       // home : SignupScreen(),
        home: SplashScreen(),
       // home : OwnerHomeScreen(),
+      initialBinding: AppBindings(),
     );
   }
 }

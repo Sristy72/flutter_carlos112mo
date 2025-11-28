@@ -6,6 +6,7 @@ import 'package:flutter_carlos112mo/core/network/network_result.dart';
 import 'package:flutter_carlos112mo/features/profile/data/models/user_profile_response_model.dart';
 import 'package:flutter_carlos112mo/features/profile/domain/repositories/user_profile_repository.dart';
 
+import '../../../Owner/data/model/change_password_request.dart';
 import '../models/user_profile_request_model.dart';
 
 class UserProfileRepositoryImpl implements UserProfileRepository {
@@ -27,4 +28,16 @@ class UserProfileRepositoryImpl implements UserProfileRepository {
   ) {
    return _apiClient.patch(ApiConstants.user.updateProfile, data: jsonEncode(userProfileRequestModel.toJson()), fromJsonT: (json) => {});
   }
+
+  @override
+  NetworkResult<dynamic> changePassword(ChangePasswordRequest request) {
+    return _apiClient.post<dynamic>(
+      ApiConstants.auth.changePassword,
+      data: request.toJson(),
+      fromJsonT: (json) => json, // we don't really use the response body
+    );
+  }
+
+
+
 }

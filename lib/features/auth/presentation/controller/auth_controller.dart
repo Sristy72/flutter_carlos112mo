@@ -195,7 +195,31 @@ class AuthController extends BaseController {
   }
 
   Future<void> logout() async {
-    await _authStorageService.clearAuthData();
-    Get.offAll(() => LoginScreen());
+    setLoading(true);
+    setError('');
+
+    final result = await _authRepository.logout();
+
+    result.fold(
+          (failure) {
+        setError(failure.message);
+        setLoading(false);
+        Get.snackbar(
+          'Error',
+          'Failed to logout: ${failure.message}',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      },
+          (success) async {
+        // Clear everything we stored locally
+        await _authStorageService.clearAuthData();
+
+        setLoading(false);
+
+        // Go to login and remove all previous routes
+        Get.offAll(() => LoginScreen());
+      },
+    );
   }
+
 }

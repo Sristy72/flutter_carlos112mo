@@ -19,6 +19,7 @@ class UserProfileResponseModel {
   String? position;
   String? phone;
 
+
   UserProfileResponseModel(
       {this.avatar,
         this.location,
