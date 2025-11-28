@@ -3,6 +3,7 @@ import 'package:flutter_carlos112mo/features/Owner/data/domain/field_repository.
 import '../../../../core/network/api_client.dart';
 import '../../../../core/network/constants/api_constants.dart';
 import '../../../../core/network/network_result.dart';
+import '../model/change_password_request.dart';
 import '../models/response_model/create_field_response_model.dart';
 
 
@@ -30,14 +31,15 @@ class FieldRepositoryImplementation implements FieldRepo {
     );
   }
 
-  // @override
-  // NetworkResult<void> changePass(ChangePasswordRequest request) {
-  //   return _apiClient.post(
-  //     ApiConstants.auth.changePassword,
-  //     data: request.toJson(),
-  //     fromJsonT: (json) => [],
-  //   );
-  // }
+  @override
+  NetworkResult<dynamic> changePass(ChangePasswordRequest request) {
+    return _apiClient.post<dynamic>(
+      ApiConstants.auth.changePassword,
+      data: request.toJson(),
+      fromJsonT: (json) => json, // we don't really care about body
+    );
+  }
+
   //
   // @override
   // NetworkResult<UserResponse> uploadPhoto(FormData request) {

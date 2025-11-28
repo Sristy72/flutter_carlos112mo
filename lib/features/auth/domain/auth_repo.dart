@@ -17,4 +17,5 @@ abstract class AuthRepository {
   NetworkResult<ForgotPassResponseModel> forgotPassword(ForgotPassRequestModel request);
  NetworkResult<VerifyMailOtpResponseModel> verifyOtp(VerifyMailOtpRequest request);
  NetworkResult<RefreshTokenResponseModel> refreshToken(RefreshTokenRequestModel request);
+  NetworkResult<dynamic> logout();
 }

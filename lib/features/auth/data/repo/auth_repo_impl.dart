@@ -71,5 +71,14 @@ class AuthRepositoryImpl implements AuthRepository {
     );
   }
 
+  @override
+  NetworkResult<dynamic> logout() {
+    // no body, matches Postman
+    return _apiClient.post<dynamic>(
+      ApiConstants.auth.logout,
+      fromJsonT: (json) => json, // we don’t care about response data
+    );
+  }
+
 
 }

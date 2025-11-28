@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_carlos112mo/core/base/base_controller.dart';
+import 'package:flutter_carlos112mo/features/Owner/data/model/change_password_request.dart';
 import 'package:flutter_carlos112mo/features/profile/data/models/user_profile_request_model.dart';
 import 'package:flutter_carlos112mo/features/profile/data/models/user_profile_response_model.dart';
 import 'package:flutter_carlos112mo/features/profile/domain/repositories/user_profile_repository.dart';
@@ -8,8 +9,9 @@ import 'package:get/get.dart';
 class UserProfileController extends BaseController {
   final UserProfileRepository _userProfileRepository;
   final Rx<UserProfileResponseModel?> _userProfileModel =
-      Rx<UserProfileResponseModel?>(null);
+  Rx<UserProfileResponseModel?>(null);
   UserProfileResponseModel? get userProfileModel => _userProfileModel.value;
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late final TextEditingController nameController;
   late final TextEditingController phoneNumberController;
@@ -18,6 +20,11 @@ class UserProfileController extends BaseController {
   late final TextEditingController locationController;
   RxString position = ''.obs;
   RxBool isFieldEditable = false.obs;
+
+  // 🔹 for change password button loading
+  final RxBool isChangingPassword = false.obs;
+
+  UserProfileController(this._userProfileRepository);
 
   @override
   void onInit() {
@@ -45,14 +52,12 @@ class UserProfileController extends BaseController {
     position.value = newPosition;
   }
 
-  UserProfileController(this._userProfileRepository);
-
   Future<void> getUserProfile() async {
     setError('');
     setLoading(true);
     final result = await _userProfileRepository.getUserProfile();
     result.fold(
-      (failure) {
+          (failure) {
         setError(failure.message);
         setLoading(false);
         Get.snackbar(
@@ -61,7 +66,7 @@ class UserProfileController extends BaseController {
           snackPosition: SnackPosition.BOTTOM,
         );
       },
-      (success) {
+          (success) {
         _userProfileModel.value = success.data;
         initializeControllers();
         position.value = success.data.position ?? '';
@@ -89,21 +94,61 @@ class UserProfileController extends BaseController {
     );
 
     final result = await _userProfileRepository.updateUserProfile(request);
-    result.fold((failure) {
-      setError(failure.message);
-      setLoading(false);
-      Get.snackbar(
-        'Error',
-        'Failed to update user profile: ${failure.message}',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    }, (success) {
-      getUserProfile();
-      setLoading(false);
-      Get.snackbar(
-        'Success',
-        'User profile updated successfully',
-        snackPosition: SnackPosition.BOTTOM,);
-    });
+    result.fold(
+          (failure) {
+        setError(failure.message);
+        setLoading(false);
+        Get.snackbar(
+          'Error',
+          'Failed to update user profile: ${failure.message}',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      },
+          (success) {
+        getUserProfile();
+        setLoading(false);
+        Get.snackbar(
+          'Success',
+          'User profile updated successfully',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      },
+    );
+  }
+
+  // 🔥 NEW: change password
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    setError('');
+    isChangingPassword.value = true;
+
+    final request = ChangePasswordRequest(
+      oldPassword: currentPassword,
+      newPassword: newPassword,
+    );
+
+    final result = await _userProfileRepository.changePassword(request);
+
+    result.fold(
+          (failure) {
+        setError(failure.message);
+        Get.snackbar(
+          'Error',
+          'Failed to change password: ${failure.message}',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      },
+          (success) {
+        Get.snackbar(
+          'Success',
+          'Password changed successfully',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      },
+    );
+
+    isChangingPassword.value = false;
   }
 }

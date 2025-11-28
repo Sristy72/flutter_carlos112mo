@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_carlos112mo/features/Owner/presentation/screens/subcription_screen.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
+import '../../../auth/presentation/controller/auth_controller.dart';
 import '../../../profile/presentation/controllers/user_profie_controller.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -21,6 +25,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final UserProfileController userProfileController =
       Get.find<UserProfileController>();
 
+  final AuthController authController = Get.find<AuthController>();
+
+  // Local state for password values
+  String currentPassword = '';
+  String newPassword = '';
+  String confirmPassword = '';
+
   @override
   void dispose() {
     fullNameController.dispose();
@@ -29,6 +40,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     confirmPasswordController.dispose();
     super.dispose();
   }
+
+  File? _pickedImage; //  add this
+
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? picked = await picker.pickImage(source: ImageSource.gallery);
+
+    if (picked != null) {
+      setState(() {
+        _pickedImage = File(picked.path);
+      });
+    }
+  }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,26 +87,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: const TextStyle(fontSize: 18),
                   ),
                   const SizedBox(width: 8),
-                  CircleAvatar(
-                    backgroundColor: Colors.white70,
-                    radius: 17,
-                    foregroundImage:
-                        (userProfileController.userProfileModel?.avatar?.url !=
-                                null &&
-                            userProfileController
-                                .userProfileModel!
-                                .avatar!
-                                .url!
-                                .isNotEmpty)
-                        ? NetworkImage(
-                            userProfileController
-                                .userProfileModel!
-                                .avatar!
-                                .url!,
-                          )
-                        : null,
-                    child: const Icon(Icons.person),
+                  Center(
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          onTap: _pickImage, //  tap to change photo
+                          child: CircleAvatar(
+                            backgroundColor: Colors.grey,
+                            radius: 40,
+                            backgroundImage: _pickedImage != null
+                                ? FileImage(_pickedImage!)
+                                : (userProfileController.userProfileModel?.avatar?.url != null &&
+                                userProfileController
+                                    .userProfileModel!.avatar!.url!.isNotEmpty)
+                                ? NetworkImage(
+                              userProfileController.userProfileModel!.avatar!.url!,
+                            ) as ImageProvider
+                                : null,
+                            child: _pickedImage == null &&
+                                (userProfileController
+                                    .userProfileModel?.avatar?.url ==
+                                    null ||
+                                    userProfileController
+                                        .userProfileModel!.avatar!.url!.isEmpty)
+                                ? const Icon(Icons.person)
+                                : null,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          userProfileController.userProfileModel?.name ?? '',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const Text('owner', style: TextStyle(color: Colors.grey)),
+                      ],
+                    ),
                   ),
+
                 ],
               ),
             ],
@@ -122,58 +167,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: 24),
 
-            Text(
-              'Total Rent Count',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            SizedBox(height: 8),
 
-            // Rent Count
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Color(0xFFE6F5F3),
-              ),
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-
-              child: Center(
-                child: Text(
-                  '30',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            Text(
-              'My Amount',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            SizedBox(height: 8),
-            // My Amount
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Color(0xFFE6F5F3),
-              ),
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-
-              child: Center(
-                child: Text(
-                  '\$5000',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
 
             // Profile Picture and Name
+
             Center(
               child: Column(
                 children: [
-                  CircleAvatar(radius: 40, backgroundColor: Color(0xFFE6F5F3)),
+                  CircleAvatar(
+                    backgroundColor: Colors.grey,
+                    radius: 40,
+                    foregroundImage:
+                    (userProfileController.userProfileModel?.avatar?.url != null &&
+                        userProfileController.userProfileModel!.avatar!.url!.isNotEmpty)
+                        ? NetworkImage(
+                      userProfileController.userProfileModel!.avatar!.url!,
+                    )
+                        : null,
+                    child: const Icon(Icons.person),
+                  ),
+
                   const SizedBox(height: 8),
                   Text(
                     userProfileController.userProfileModel?.name ?? '',
@@ -201,7 +214,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  userProfileController.updateUserProfile();
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.teal,
                   shape: RoundedRectangleBorder(
@@ -211,6 +226,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: const Text('Save Changes', style: TextStyle(fontWeight: FontWeight.w600),),
               ),
             ),
+
+
             const SizedBox(height: 24),
 
             // Change Password Section
@@ -258,35 +275,100 @@ class _ProfileScreenState extends State<ProfileScreen> {
               obscureText: true,
             ),
             const SizedBox(height: 12),
+
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey.shade300,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  )// disabled style
-                ),
-                child: const Text('Update Password', style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black54,
-                ),),
-              ),
+              child: Obx(() {
+                return ElevatedButton(
+                  onPressed: userProfileController.isChangingPassword.value
+                      ? null
+                      : () async {
+                    final current = currentPasswordController.text.trim();
+                    final newPass = newPasswordController.text.trim();
+                    final confirm = confirmPasswordController.text.trim();
+
+                    if (current.isEmpty || newPass.isEmpty || confirm.isEmpty) {
+                      Get.snackbar(
+                        'Error',
+                        'All password fields are required',
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                      return;
+                    }
+
+                    if (newPass != confirm) {
+                      Get.snackbar(
+                        'Error',
+                        'New password and confirm password do not match',
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                      return;
+                    }
+
+                    await userProfileController.changePassword(
+                      currentPassword: current,
+                      newPassword: newPass,
+                    );
+
+                    currentPasswordController.clear();
+                    newPasswordController.clear();
+                    confirmPasswordController.clear();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: userProfileController.isChangingPassword.value
+                        ? Colors.grey.shade300
+                        : Colors.teal,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  child: userProfileController.isChangingPassword.value
+                      ? const SizedBox(
+                    height: 18,
+                    width: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                      : const Text(
+                    'Update Password',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              }),
             ),
+
+
             const SizedBox(height: 24),
 
             // Logout Button
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(backgroundColor: Color(0xFFDC2626),shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                )),
-                child: const Text('Logout'),
-              ),
+              child: Obx(() {
+                return ElevatedButton(
+                  onPressed: authController.isLoading.value
+                      ? null
+                      : () async {
+                    await authController.logout();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFDC2626),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  child: authController.isLoading.value
+                      ? const SizedBox(
+                    height: 18,
+                    width: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                      : const Text('Logout'),
+                );
+              }),
             ),
+
           ],
         ),
       ),

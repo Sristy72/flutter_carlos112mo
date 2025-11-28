@@ -1,7 +1,8 @@
 class ApiConstants {
   /// [Base Configuration]
   // static const String baseDomain = 'http://10.10.5.53:8001';
-  static const String baseDomain = 'http://10.10.5.33:8001'; // Eshita
+  // static const String baseDomain = 'http://10.10.5.33:8001'; // Eshita
+  static const String baseDomain = 'http://10.10.5.33:8001'; // abu sayed
   static const String baseUrl = '$baseDomain/api/v1';
 
   /// [Headers]
@@ -50,6 +51,7 @@ class AuthEndpoints {
   final String register = '$_base/register';
   final String verify = '$_base/verify';
   final String refreshToken = '$_base/refresh-token';
+  final String logout = '$_base/logout';
 
   // Password Reset Flow
   final String resetPass = '$_base/forget'; // Send OTP for forgot password
