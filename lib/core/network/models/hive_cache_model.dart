@@ -1,12 +1,12 @@
 // lib/core/network/models/hive_cache_model.dart
 
 import 'package:hive/hive.dart';
-import 'package:json_annotation/json_annotation.dart';
+
 
 part 'hive_cache_model.g.dart';
 
 @HiveType(typeId: 1)
-@JsonSerializable()
+// @JsonSerializable()
 class HiveCacheModel {
   @HiveField(0)
   final String responseBody;

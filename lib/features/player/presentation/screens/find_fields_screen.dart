@@ -25,17 +25,18 @@ class _FindFieldsScreenState extends State<FindFieldsScreen> {
     super.initState();
     controller.selectedFieldId.value = widget.id;
     controller.fetchSingleField();
+    
   }
 
   @override
   Widget build(BuildContext context) {
     final userProfileController = Get.find<UserProfileController>();
-    final venue = controller.venue.value;
+
     final mapCenter = LatLng(
-      // 23.7104, 90.4074
-      venue?.location?.coordinates?.latitude ?? 0.0,
-      venue?.location?.coordinates?.longitude ?? 0.0,
-    );
+          // 23.7104, 90.4074
+          controller.venue.value?.location?.coordinates?.latitude ?? 0.0,
+          controller.venue.value?.location?.coordinates?.longitude ?? 0.0,
+        );
 
     return Scaffold(
       appBar: AppBar(
@@ -96,6 +97,10 @@ class _FindFieldsScreenState extends State<FindFieldsScreen> {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
+
+        final venue = controller.venue.value;
+
+        
 
         if (venue == null) return const Center(child: Text("No data found"));
 
