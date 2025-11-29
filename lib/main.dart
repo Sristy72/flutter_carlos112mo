@@ -3,7 +3,7 @@ import 'package:flutter_carlos112mo/features/Owner/presentation/screens/owner_ho
 import 'package:flutter_carlos112mo/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_carlos112mo/features/auth/presentation/screens/splash_screen.dart';
 import 'package:flutter_carlos112mo/features/player/presentation/screens/player_fields_screen.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
+
 import 'package:get/get.dart';
 import 'package:get/utils.dart';
 import 'core/common/constants/stripe_key.dart';

@@ -9,7 +9,7 @@ class FindFieldController extends GetxController {
   final FindFieldRepository _findfieldRepository;
   FindFieldController(this._findfieldRepository);
 
-  var venue = Rx<SingleFieldsResponseModel?>(null);
+  final Rx<SingleFieldsResponseModel?> venue = Rx<SingleFieldsResponseModel?>(null);
   final selectedFieldId = "".obs;
   var isLoading = false.obs;
   var errorMessage = "".obs;
