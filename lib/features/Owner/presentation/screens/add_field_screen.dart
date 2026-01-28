@@ -123,29 +123,31 @@ class AddFieldScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     const SizedBox(height: 10),
-                    _inputField("Address", "Enter full address", controller: c.address),
+                    _inputField("Address", "Enter full address", controller: c.address /* change c.address after updating backend */),
                     const SizedBox(height: 12),
-                    Container(
-                      height: 150,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.grey.shade300),
-                      ),
-                      child: FlutterMap(
-                        options: MapOptions(
-                          initialCenter: mapCenter,
-                          initialZoom: 18,
-                        ),
-                        children: [
-                          TileLayer(
-                            urlTemplate:
-                            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                            userAgentPackageName: 'com.example.flutter_carlos112mo',
-                          ),
-                        ],
-                      ),
-                    ),
+                    _inputField("Google Maps Link", "Paste the Google Maps location link", controller: c.address ),
+                    // const SizedBox(height: 12),
+                    // Container(
+                    //   height: 150,
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.grey.shade200,
+                    //     borderRadius: BorderRadius.circular(8),
+                    //     border: Border.all(color: Colors.grey.shade300),
+                    //   ),
+                    //   child: FlutterMap(
+                    //     options: MapOptions(
+                    //       initialCenter: mapCenter,
+                    //       initialZoom: 18,
+                    //     ),
+                    //     children: [
+                    //       TileLayer(
+                    //         urlTemplate:
+                    //         "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                    //         userAgentPackageName: 'com.example.flutter_carlos112mo',
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

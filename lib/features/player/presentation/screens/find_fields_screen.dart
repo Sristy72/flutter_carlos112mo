@@ -4,6 +4,7 @@ import 'package:flutter_carlos112mo/features/profile/presentation/controllers/us
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../controller/find_field_controller.dart';
 import '../widgets/payment_availability_widget.dart';
@@ -326,36 +327,18 @@ class _FindFieldsScreenState extends State<FindFieldsScreen> {
 
               const SizedBox(height: 20),
 
-              Card(
-                child: Container(
-                  height: 200,
-                  decoration: BoxDecoration(color: Colors.grey.shade300),
-                  child: FlutterMap(
-                    options: MapOptions(
-                      initialCenter: mapCenter,
-                      initialZoom: 18,
+              GestureDetector(
+                onTap: _openMap,
+                child: Card(
+                  child: Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('assets/images/google_maps.jpg'),
+                        fit: BoxFit.cover
+                      ),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    children: [
-                      TileLayer(
-                        urlTemplate:
-                            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                        userAgentPackageName: 'com.example.flutter_carlos112mo',
-                      ),
-                      MarkerLayer(
-                        markers: [
-                          Marker(
-                            width: 80,
-                            height: 80,
-                            point: mapCenter,
-                            child: Icon(
-                              Icons.location_pin,
-                              size: 40,
-                              color: Colors.red.shade400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
                   ),
                 ),
               ),
@@ -372,6 +355,13 @@ class _FindFieldsScreenState extends State<FindFieldsScreen> {
       ),
     );
   }
+
+Future<void> _openMap() async{
+    Uri url = Uri.parse('https://maps.app.goo.gl/xwdbirrR8NrJVzEB6');
+    if(!await launchUrl(url, mode: LaunchMode.externalApplication)){
+      throw 'Could not launch $url';
+    }
+}
 }
 
 /// 🔥 Amenities builder widget
